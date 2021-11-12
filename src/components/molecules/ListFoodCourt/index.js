@@ -1,10 +1,10 @@
 import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {Counter, Like, Price} from '../..';
+import {Counter, Gap, Like, Price} from '../..';
 import {DummyFoodCourt2} from '../../../assets';
 
-const ListFoodCourt = () => {
+const ListFoodCourt = ({type}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -18,7 +18,17 @@ const ListFoodCourt = () => {
         </Text>
         <Price />
         <View>
-          <Like />
+          {type ? (
+            <View style={styles.subBox}>
+              <Text style={styles.description}>FoodCourt A</Text>
+              <Gap width={10} />
+              <Like />
+            </View>
+          ) : (
+            <>
+              <Like />
+            </>
+          )}
         </View>
       </View>
       <View>
@@ -67,5 +77,10 @@ const styles = StyleSheet.create({
     color: '#8D92A3',
     fontSize: 13,
     fontFamily: 'Poppins-Regular',
+  },
+  subBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
   },
 });

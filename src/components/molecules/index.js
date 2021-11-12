@@ -4,7 +4,7 @@ import Carousel from './Carousel';
 import ShortProfile from './ShortProfile';
 import PosterHome from './PosterHome';
 import OptionUser from './OptionUser';
-import FoodCard from './FoodCard';
+import BestSeller from './BestSeller';
 import DetailCanteen from './DetailCanteen';
 import DetailFoodCourt from './DetailFoodCourt';
 import TabViewHome from './TabViewHome';
@@ -22,7 +22,13 @@ import ProfileTabSection from './ProfileTabSection';
 import ItemListMenu from './ItemListMenu';
 import DropOffLocation from './DropOffLocation';
 import ItemDelivery from './ItemDelivery';
+import ListFoodCourt from './ListFoodCourt';
+import RatingFeedback from './RatingFeedback';
+import Rating from './Rating';
 export {
+  Rating,
+  RatingFeedback,
+  ListFoodCourt,
   ItemDelivery,
   DropOffLocation,
   ItemListMenu,
@@ -40,7 +46,7 @@ export {
   DetailFoodCourt,
   DetailCanteen,
   TabViewHome,
-  FoodCard,
+  BestSeller,
   Header,
   OptionUser,
   PosterHome,

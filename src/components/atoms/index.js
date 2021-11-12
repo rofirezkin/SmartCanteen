@@ -11,8 +11,10 @@ import Counter from './Counter';
 import Box from './Box';
 import SelectedBox from './SelectedBox';
 import Link from './Link';
+import HistorySearch from './HistorySearch';
 
 export {
+  HistorySearch,
   Link,
   SelectedBox,
   Box,

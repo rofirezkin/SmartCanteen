@@ -54,7 +54,7 @@ const PastOrder = () => {
         type="past-orders"
         date="Jun 12, 14:00"
         statusOrder="Success"
-        onPress={() => navigation.navigate('')}
+        onPress={() => navigation.navigate('FeedbackPage')}
       />
       <ItemListFood
         items={3}
@@ -62,7 +62,7 @@ const PastOrder = () => {
         totalOrder="3.000.000"
         type="past-orders"
         statusOrder="Cancelled"
-        onPress={() => navigation.navigate('')}
+        onPress={() => navigation.navigate('FeedbackPage')}
       />
       <ItemListFood
         type="past-orders"
@@ -70,7 +70,7 @@ const PastOrder = () => {
         items={3}
         statusOrder="Cancelled"
         totalOrder="3.000.000"
-        onPress={() => navigation.navigate('')}
+        onPress={() => navigation.navigate('FeedbackPage')}
       />
     </View>
   );

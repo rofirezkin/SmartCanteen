@@ -23,7 +23,11 @@ import LogoSmartCanteen from './logo.png';
 import ICRemovePhoto from './removePhoto.svg';
 import ICAddPhoto from './addPhoto.svg';
 import ICLocation from './location.svg';
+import ICStartActive from './StarActive.svg';
+import ICStartNonActive from './StarNonActive.svg';
 export {
+  ICStartActive,
+  ICStartNonActive,
   ICLocation,
   LogoSmartCanteen,
   Next,

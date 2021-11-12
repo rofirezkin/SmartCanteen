@@ -13,6 +13,7 @@ import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {DummyFood1, DummyFood2} from '../../assets';
 
 import {
+  BestSeller,
   FoodCard,
   Gap,
   OptionUser,
@@ -65,9 +66,12 @@ const Home = ({navigation}) => {
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.foodCardContainer}>
               <Gap width={18} />
-              <FoodCard avatar={DummyFood1} />
-              <FoodCard avatar={DummyFood2} />
-              <FoodCard avatar={DummyFood1} />
+              <BestSeller
+                avatar={DummyFood1}
+                onPress={() => navigation.navigate('DetailFoodItem')}
+              />
+              <BestSeller avatar={DummyFood2} />
+              <BestSeller avatar={DummyFood1} />
               <Gap />
             </View>
           </ScrollView>

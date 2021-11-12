@@ -51,6 +51,7 @@ const Carousel = ({data, navigation}) => {
           }}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {x: scrollX}}}],
+            {useNativeDriver: false},
             {listener: event => console.log(event)},
           )}
         />

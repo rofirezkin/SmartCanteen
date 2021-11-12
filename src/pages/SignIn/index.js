@@ -1,8 +1,24 @@
-import React from 'react';
+import {Axios} from 'axios';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button, Gap, Header, TextInput} from '../../components';
+import {useForm} from '../../utils';
 
 const SignIn = ({navigation}) => {
+  const [form, setForm] = useForm({
+    email: '',
+    password: '',
+  });
+
+  const onSubmit = () => {
+    console.log('email', form);
+    Axios.post('//', form)
+      .then(res => {
+        console.log('success', res);
+      })
+      .catch(err => {});
+  };
+
   return (
     <View style={styles.page}>
       <Header
@@ -15,11 +31,19 @@ const SignIn = ({navigation}) => {
         <TextInput
           label="Email Address"
           placeholder="Type your email address"
+          value={form.email}
+          onChangeText={value => setForm('email', value)}
         />
         <Gap height={16} />
-        <TextInput label="Password" placeholder="Type your password" />
+        <TextInput
+          value={form.password}
+          onChangeText={value => setForm('password', value)}
+          label="Password"
+          placeholder="Type your password"
+          secureTextEntry
+        />
         <Gap height={24} />
-        <Button label="Sign In" />
+        <Button label="Sign In" onPress={onSubmit} />
         <Gap height={13} />
         <Button
           label="Create New Account"

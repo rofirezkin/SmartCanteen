@@ -3,7 +3,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {DummyFood1, IcStartOff, IcStartOn} from '../../../assets';
 import Rating from '../Rating';
 
-const FoodCard = ({avatar, onPress}) => {
+const BestSeller = ({avatar, onPress}) => {
   return (
     <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
       <View style={styles.container}>
@@ -18,7 +18,7 @@ const FoodCard = ({avatar, onPress}) => {
   );
 };
 
-export default FoodCard;
+export default BestSeller;
 
 const styles = StyleSheet.create({
   container: {

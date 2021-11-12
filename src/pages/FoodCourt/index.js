@@ -24,7 +24,7 @@ const FoodCourt = ({navigation}) => {
         </View>
         <Gap height={20} />
         <View style={styles.container}>
-          <SearchInput />
+          <SearchInput onPress={() => navigation.navigate('SearchSection')} />
           <Gap height={10} />
           <Text style={styles.title}>Welcome to A-Canteen Food Court!</Text>
         </View>

@@ -9,8 +9,9 @@ import DummyCanteen from './dummyDetailCanteen.png';
 import DummyFoodCourt from './foodcourt.png';
 import PhotoProfileUser from './profileUser.png';
 import DummyFoodCourt2 from './foodcourt2.png';
-
+import DummyCoverDetail from './coverDetail.png';
 export {
+  DummyCoverDetail,
   PhotoProfileUser,
   DummyFoodCourt2,
   DummyFoodCourt,

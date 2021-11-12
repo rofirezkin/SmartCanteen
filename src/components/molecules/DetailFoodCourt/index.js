@@ -3,7 +3,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {DummyFoodCourt} from '../../../assets';
 import Rating from '../Rating';
 
-const DetailFoodCourt = ({onPress}) => {
+const DetailFoodCourt = ({onPress, type}) => {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <View style={styles.container}>
@@ -14,7 +14,15 @@ const DetailFoodCourt = ({onPress}) => {
             <Text style={styles.description}>
               Pecel Ayam, ikan Bakar, Mie Ayam...
             </Text>
-            <Text style={styles.statusText}>Open</Text>
+            {type ? (
+              <View>
+                <Text style={styles.description}>Kantin Fakultas Teknik</Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={styles.statusText}>Open</Text>
+              </View>
+            )}
             <Rating />
           </View>
         </View>

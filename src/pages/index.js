@@ -18,8 +18,14 @@ import SuccessOrder from './SuccessOrder';
 import EditProfile from './EditProfile';
 import OrderDetail from './OrderDetail';
 import Delivery from './Delivery';
+import SearchSection from './SearchSection';
+import FeedbackPage from './FeedbackPage';
+import DetailFoodItem from './DetailFoodItem';
 
 export {
+  DetailFoodItem,
+  FeedbackPage,
+  SearchSection,
   Delivery,
   EditProfile,
   OrderDetail,

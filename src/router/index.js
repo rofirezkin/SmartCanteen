@@ -24,6 +24,9 @@ import {
   SplashScreen,
   SuccessOrder,
   SuccessSignUp,
+  SearchSection,
+  FeedbackPage,
+  DetailFoodItem,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -49,7 +52,7 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}
@@ -63,6 +66,11 @@ const Router = () => {
       <Stack.Screen
         name="ChooseFood"
         component={ChooseFood}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SearchSection"
+        component={SearchSection}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -113,6 +121,16 @@ const Router = () => {
       <Stack.Screen
         name="SignUp"
         component={SignUp}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailFoodItem"
+        component={DetailFoodItem}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="FeedbackPage"
+        component={FeedbackPage}
         options={{headerShown: false}}
       />
       <Stack.Screen

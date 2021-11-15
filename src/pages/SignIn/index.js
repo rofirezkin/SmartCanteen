@@ -1,11 +1,11 @@
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Alert, StyleSheet, Text, View} from 'react-native';
 import {Button, Gap, Header, TextInput} from '../../components';
-import {apiUtils, useForm} from '../../utils';
-import { ENDPOINT, ENDPOINT_PROFILE, ENDPOINT_ROLE, useRequest, useRequestLogin, useRequestWithToken } from '../../utils/API/httpClient';
+import {useForm} from '../../utils';
+import { ENDPOINT, ENDPOINT_PROFILE, ENDPOINT_ROLE, useRequestLogin, useRequestWithToken } from '../../utils/API/httpClient';
 import { setUser } from '../../utils/AsyncStoreServices';
-import { skeletonSignIn } from '../../components/skeleton/skeletonSignIn';
+
+
 
 const SignIn = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -46,6 +46,7 @@ const SignIn = ({navigation}) => {
         studyProgram: issueProfile.studyprogram,
         faculty: issueProfile.faculty,
         studentClass: issueProfile.studentclass,
+        photo: issueProfile.photo,
         authenticated: true
       })
 
@@ -54,10 +55,10 @@ const SignIn = ({navigation}) => {
   };
 
   return (
+    
     <View style={styles.page}>
       <Header
         title="Sign In"
-        onBack={() => {}}
         onPress={() => navigation.goBack()}
         subtTitle="Enter Your Username SSO And Password"
       />

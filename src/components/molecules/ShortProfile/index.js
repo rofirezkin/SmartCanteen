@@ -3,12 +3,12 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import {IcNotif, UserDummy} from '../../../assets';
 import { normalizeFont } from '../../../utils/normalizeFont';
 
-const ShortProfile = ({fullName,role}) => {
+const ShortProfile = ({fullName,role,url}) => {
 
   return (
     <View style={styles.container}>
       <View style={styles.boxProfile}>
-        <Image source={UserDummy} style={styles.avatar} />
+        <Image source={{ uri: url }} style={styles.avatar} />
         <View style={styles.textBox}>
           <Text style={styles.name}>{fullName}</Text>
           <Text style={styles.status}>{role}</Text>

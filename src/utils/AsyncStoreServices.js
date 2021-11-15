@@ -10,6 +10,7 @@ const DEFAULT_USER = {
   faculty: '',
   studentClass: '',
   role: '',
+  photo: '',
   authenticated: false,
 };
 

@@ -21,6 +21,9 @@ import {
   ShortProfile,
   TabViewHome,
 } from '../../components';
+import { normalizeFont } from '../../utils/normalizeFont';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import { skeletonHome } from '../../components/skeleton/skeletonHome';
 
 const Home = ({navigation}) => {
 
@@ -35,21 +38,24 @@ const Home = ({navigation}) => {
 
     const user = async () => {
       const dataUser = await getUser()
-      console.log(dataUser)
 
-      
       setProfile({
         fullName: dataUser.fullName,
-        role: dataUser.role
-      })
+        role: dataUser.role,
+        photo: dataUser.photo
+        })
       }
   
     useEffect(() => {
       user()
-      
     },[])
 
   return (
+  <SkeletonContent
+      containerStyle={{ flex: 1 }}
+      isLoading={false}
+      layout={skeletonHome}
+    >
     <ScrollView>
       <View style={styles.page}>
         <View style={styles.container}>
@@ -57,6 +63,7 @@ const Home = ({navigation}) => {
             <ShortProfile 
                 fullName={profile.fullName}
                 role={profile.role}
+                url={profile.photo}
             />
             <Gap height={15} />
 
@@ -111,7 +118,8 @@ const Home = ({navigation}) => {
           </View>
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+  </SkeletonContent>
   );
 };
 
@@ -132,7 +140,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   textHome: {
-    fontSize: 16,
+    fontSize: normalizeFont(16),
     fontFamily: 'Poppins-Medium',
   },
   wrapperFeature: {
@@ -147,6 +155,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     marginLeft: 19,
     marginTop: 19,
-    fontSize: 16,
+    fontSize: normalizeFont(16),
   },
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,9 +9,9 @@ import {
   View,
 } from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-
 import {DummyFood1, DummyFood2} from '../../assets';
-
+import { getUser } from '../../utils/AsyncStoreServices';
+import { useDispatch } from 'react-redux';
 import {
   BestSeller,
   FoodCard,
@@ -23,12 +23,40 @@ import {
 } from '../../components';
 
 const Home = ({navigation}) => {
+
+    const[profile,setProfile] = useState({
+        fullName: '',
+        numberId: '',
+        studyProgram: '',
+        faculty: '',
+        studentClass: '',
+        role: ''
+    })
+
+    const user = async () => {
+      const dataUser = await getUser()
+
+      
+      setProfile({
+        fullName: dataUser.fullName,
+      
+      })
+      }
+  
+    useEffect(() => {
+      user()
+      
+    },[])
+
   return (
     <ScrollView>
       <View style={styles.page}>
         <View style={styles.container}>
           <View style={styles.cardHome}>
-            <ShortProfile />
+            <ShortProfile 
+                fullName={profile.fullName}
+                role={profile.role}
+            />
             <Gap height={15} />
 
             <PosterHome />

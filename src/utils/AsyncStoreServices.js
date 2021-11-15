@@ -3,11 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const STORAGE_KEY = '@user_information';
 const DEFAULT_USER = {
   token: '',
+  token_expired: '',
   fullName: '',
   numberId: '',
   studyProgram: '',
   faculty: '',
   studentClass: '',
+  role: '',
   authenticated: false,
 };
 

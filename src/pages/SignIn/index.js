@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, StyleSheet, Text, View} from 'react-native';
 import {Button, Gap, Header, TextInput} from '../../components';
 import {apiUtils, useForm} from '../../utils';
-import { ENDPOINT, useRequest, useRequestLogin } from '../../utils/API/httpClient';
+import { ENDPOINT, ENDPOINT_PROFILE, ENDPOINT_ROLE, useRequest, useRequestLogin, useRequestWithToken } from '../../utils/API/httpClient';
 import { setUser } from '../../utils/AsyncStoreServices';
 import { skeletonSignIn } from '../../components/skeleton/skeletonSignIn';
 
@@ -22,28 +22,60 @@ const SignIn = ({navigation}) => {
   // },[])
 
   const onSubmit =  async () => {
+
+
     setLoading(true)
 
-    const payload = {
+    const payload = JSON.stringify({
       username: form.username,
       password: form.password
-    }
+    })
 
-    const result = await useRequest(ENDPOINT,'post',payload) // without token
+    const result = await useRequestLogin(ENDPOINT,'post',payload) // without token
     console.log('res', result)
 
     if(result.hasOwnProperty('message')){
-      // error command
+      // Handing Error
       setLoading(false)
       Alert.alert('Oops!', result.message)
     }else{
-      // success command
+      // Handling Success
       setLoading(false)
+
+      const resToken = await result.token;
+      // await setUser({
+      //   token: 
+      //   fullName: form.username,
+      // })
+
+      const issueProfile = await useRequestWithToken(ENDPOINT_PROFILE,resToken,'get')
+      console.log('res profie', issueProfile)
+      const resultRole = await useRequestWithToken(ENDPOINT_ROLE,resToken,'get')
+      console.log(resultRole)
+
+      // User Profile
+      const dataUserProfile = {
+        token: resToken,
+        token_expired: result.expired,
+        role: resultRole[0].role,
+        fullName: issueProfile.fullname,
+        numberId: issueProfile.numberid,
+        studyProgram: issueProfile.studyprogram,
+        faculty: issueProfile.faculty,
+        studentClass: issueProfile.studentclass,
+        authenticated: true
+      }
+
+      await setUser({
+        dataUserProfile
+      })
+
+      console.log('data user profile',dataUserProfile)
+      navigation.navigate('MainApp')
     }
   };
 
   return (
-
     <View style={styles.page}>
       <Header
         title="Sign In"

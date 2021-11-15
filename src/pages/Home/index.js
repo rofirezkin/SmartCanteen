@@ -35,11 +35,12 @@ const Home = ({navigation}) => {
 
     const user = async () => {
       const dataUser = await getUser()
+      console.log(dataUser)
 
       
       setProfile({
         fullName: dataUser.fullName,
-      
+        role: dataUser.role
       })
       }
   

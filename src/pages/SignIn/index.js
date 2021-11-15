@@ -15,15 +15,7 @@ const SignIn = ({navigation}) => {
 
   const[loading,setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false)
-  //   },2000)
-  // },[])
-
   const onSubmit =  async () => {
-
-
     setLoading(true)
 
     const payload = JSON.stringify({
@@ -32,7 +24,6 @@ const SignIn = ({navigation}) => {
     })
 
     const result = await useRequestLogin(ENDPOINT,'post',payload) // without token
-    console.log('res', result)
 
     if(result.hasOwnProperty('message')){
       // Handing Error
@@ -43,18 +34,10 @@ const SignIn = ({navigation}) => {
       setLoading(false)
 
       const resToken = await result.token;
-      // await setUser({
-      //   token: 
-      //   fullName: form.username,
-      // })
-
       const issueProfile = await useRequestWithToken(ENDPOINT_PROFILE,resToken,'get')
-      console.log('res profie', issueProfile)
       const resultRole = await useRequestWithToken(ENDPOINT_ROLE,resToken,'get')
-      console.log(resultRole)
 
-      // User Profile
-      const dataUserProfile = {
+      await setUser({
         token: resToken,
         token_expired: result.expired,
         role: resultRole[0].role,
@@ -64,14 +47,9 @@ const SignIn = ({navigation}) => {
         faculty: issueProfile.faculty,
         studentClass: issueProfile.studentclass,
         authenticated: true
-      }
-
-      await setUser({
-        dataUserProfile
       })
 
-      console.log('data user profile',dataUserProfile)
-      navigation.navigate('MainApp')
+      navigation.reset({index: 0, routes:[{name:'MainApp'}]})
     }
   };
 

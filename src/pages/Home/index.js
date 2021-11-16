@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -25,7 +26,15 @@ import { normalizeFont } from '../../utils/normalizeFont';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import { skeletonHome } from '../../components/skeleton/skeletonHome';
 
+
+const wait = (timeout) => {
+  return new Promise (resolve => setTimeout(resolve, timeout))
+}
+
 const Home = ({navigation}) => {
+
+    const[loading,setLoading] = useState(true)
+    const[refresh,setRefresh] = useState(false)
 
     const[profile,setProfile] = useState({
         fullName: '',
@@ -35,9 +44,18 @@ const Home = ({navigation}) => {
         studentClass: '',
         role: ''
     })
+    
+    const onRefresh = React.useCallback(() => {
+      setLoading(true)
+      setRefresh(true);
+      wait(2000)
+      .then(() => setRefresh(false))
+      .then(() => setLoading(false))
+    }, [])
 
     const user = async () => {
       const dataUser = await getUser()
+      setLoading(false)
 
       setProfile({
         fullName: dataUser.fullName,
@@ -51,12 +69,21 @@ const Home = ({navigation}) => {
     },[])
 
   return (
-  <SkeletonContent
+  <ScrollView 
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refresh}
+          onRefresh={onRefresh}
+        />
+      }
+      >
+    <SkeletonContent
       containerStyle={{ flex: 1 }}
-      isLoading={false}
+      isLoading={loading}
       layout={skeletonHome}
     >
-    <ScrollView>
+    
       <View style={styles.page}>
         <View style={styles.container}>
           <View style={styles.cardHome}>
@@ -118,8 +145,9 @@ const Home = ({navigation}) => {
           </View>
         </View>
       </View>
-      </ScrollView>
-  </SkeletonContent>
+    </SkeletonContent>
+  </ScrollView>
+  
   );
 };
 

@@ -56,5 +56,118 @@ export const skeletonHome = [
         height: 20,
         width: 200,
         marginLeft: 20,
+    },
+    {
+        key: 'method',
+        marginTop: 15,
+        marginLeft: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        children: [
+            {
+                key: 'optionUser',
+                marginTop: 5,
+                children: [
+                    {
+                        key: 'contentUser',
+                        width: 62,
+                        height: 62
+                    },
+                    {
+                        key: 'textOptionUser',
+                        marginTop: 10,
+                        width: 62,
+                        height: 15
+                    }
+                ]
+            },
+            {
+                key: 'optionUser2',
+                marginTop: 5,
+                children: [
+                    {
+                        key: 'contentUser2',
+                        width: 62,
+                        height: 62
+                    },
+                    {
+                        key: 'textOptionUser2',
+                        marginTop: 10,
+                        width: 62,
+                        height: 15
+                    }
+                ]
+            },
+            {
+                key: 'optionUser3',
+                marginTop: 5,
+                children: [
+                    {
+                        key: 'contentUser3',
+                        width: 62,
+                        height: 62
+                    },
+                    {
+                        key: 'textOptionUser3',
+                        marginTop: 10,
+                        width: 62,
+                        height: 15
+                    }
+                ]
+            },
+            {
+                key: 'optionUser4',
+                marginTop: 5,
+                marginRight: 20,
+                children: [
+                    {
+                        key: 'contentUser4',
+                        width: 62,
+                        height: 62
+                    },
+                    {
+                        key: 'textOptionUser4',
+                        marginTop: 10,
+                        width: 62,
+                        height: 15
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        key: 'textBestSeller',
+        marginTop: 25,
+        marginLeft: 20,
+        width:120,
+        height: 20
+    },
+    {
+        key: 'contentBestSeller',
+        marginTop: 10,
+        marginLeft: 20,
+        flexDirection: 'row',
+        children:[
+            {
+                key: 'cardBestSeller',
+                width: 200,
+                height: 240,
+                marginRight: 10
+            },
+            {
+                key: 'cardBestSeller2',
+                width: 200,
+                height: 240,
+            }
+        ]
+    },
+    {
+        key: 'tabView',
+        marginTop: 25,
+        flexDirection: 'row',
+        flex: 1,
+        width: 'auto',
+        height: 300
     }
+    
 ];

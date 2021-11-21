@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Gap} from '../..';
 import {IcDelivery, IcDineIn, IcQuickOrder, IcTakeAway} from '../../../assets';
+import { normalizeFont } from '../../../utils/normalizeFont';
 
 const OptionUser = ({
   iconData,
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
   }),
 
   text: {
-    fontSize: 12,
+    fontSize: normalizeFont(12),
     fontFamily: 'Poppins-Medium',
     textAlign: 'center',
   },
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   textProfile: {
-    fontSize: 15,
+    fontSize: normalizeFont(15),
     fontFamily: 'Poppins-Medium',
     textAlignVertical: 'center',
     marginLeft: 14,

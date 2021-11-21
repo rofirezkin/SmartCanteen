@@ -12,6 +12,7 @@ import Box from './Box';
 import SelectedBox from './SelectedBox';
 import Link from './Link';
 import HistorySearch from './HistorySearch';
+import Typography from './Typography';
 
 export {
   HistorySearch,
@@ -28,4 +29,5 @@ export {
   Select,
   TextInput,
   SearchInput,
+  Typography
 };

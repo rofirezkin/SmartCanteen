@@ -15,6 +15,7 @@ const renderTabBar = props => (
     renderLabel={({route, focused, color}) => (
       <Text style={styles.tabText(focused)}>{route.title}</Text>
     )}
+    tabStyle={{elevation: 0}}
   />
 );
 

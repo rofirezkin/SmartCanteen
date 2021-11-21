@@ -1,13 +1,23 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {LogoSmartCanteen} from '../../assets';
+import { getUser } from '../../utils/AsyncStoreServices';
 
 const SplashScreen = ({navigation}) => {
+
+
+  const[loading,setLoading] = useState(false)
+
+  const checkAuth = async () => {
+      const user = await getUser();
+      const isAuth = user.authenticated;
+
+      return isAuth !== false ? navigation.reset({index: 0, routes:[{name: 'MainApp'}]}) : navigation.replace('SignIn')
+  }
+
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('GetStarted');
-    }, 2000);
-  }, [navigation]);
+      checkAuth()
+  },[])
 
   return (
     <View style={styles.page}>

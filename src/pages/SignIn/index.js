@@ -1,38 +1,73 @@
-import {Axios} from 'axios';
 import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import {Button, Gap, Header, TextInput} from '../../components';
 import {useForm} from '../../utils';
+import { ENDPOINT, ENDPOINT_PROFILE, ENDPOINT_ROLE, useRequestLogin, useRequestWithToken } from '../../utils/API/httpClient';
+import { setUser } from '../../utils/AsyncStoreServices';
+
+
 
 const SignIn = ({navigation}) => {
   const [form, setForm] = useForm({
-    email: '',
+    username: '',
     password: '',
   });
 
-  const onSubmit = () => {
-    console.log('email', form);
-    Axios.post('//', form)
-      .then(res => {
-        console.log('success', res);
+  const[loading,setLoading] = useState(false);
+
+  const onSubmit =  async () => {
+    setLoading(true)
+
+    const payload = JSON.stringify({
+      username: form.username,
+      password: form.password
+    })
+
+    const result = await useRequestLogin(ENDPOINT,'post',payload) // without token
+
+    if(result.hasOwnProperty('message')){
+      // Handing Error
+      setLoading(false)
+      Alert.alert('Oops!', result.message)
+    }else{
+      // Handling Success
+      setLoading(false)
+
+      const resToken = await result.token;
+      const issueProfile = await useRequestWithToken(ENDPOINT_PROFILE,resToken,'get')
+      const resultRole = await useRequestWithToken(ENDPOINT_ROLE,resToken,'get')
+
+      await setUser({
+        token: resToken,
+        token_expired: result.expired,
+        role: resultRole[0].role,
+        fullName: issueProfile.fullname,
+        numberId: issueProfile.numberid,
+        studyProgram: issueProfile.studyprogram,
+        faculty: issueProfile.faculty,
+        studentClass: issueProfile.studentclass,
+        photo: issueProfile.photo,
+        authenticated: true
       })
-      .catch(err => {});
+
+      navigation.reset({index: 0, routes:[{name:'MainApp'}]})
+    }
   };
 
   return (
+    
     <View style={styles.page}>
       <Header
         title="Sign In"
-        onBack={() => {}}
         onPress={() => navigation.goBack()}
-        subtTitle="Enter Your Email And Password"
+        subtTitle="Enter Your Username SSO And Password"
       />
       <View style={styles.container}>
         <TextInput
-          label="Email Address"
-          placeholder="Type your email address"
+          label="Username SSO"
+          placeholder="Type your Username SSO"
           value={form.email}
-          onChangeText={value => setForm('email', value)}
+          onChangeText={value => setForm('username', value)}
         />
         <Gap height={16} />
         <TextInput
@@ -43,7 +78,11 @@ const SignIn = ({navigation}) => {
           secureTextEntry
         />
         <Gap height={24} />
-        <Button label="Sign In" onPress={onSubmit} />
+        <Button 
+          label={loading ? 'Loading...' : 'Sign In'}
+          onPress={onSubmit}
+          disabled={loading ? true : false} 
+          />
         <Gap height={13} />
         <Button
           label="Create New Account"
@@ -52,6 +91,8 @@ const SignIn = ({navigation}) => {
         />
       </View>
     </View>
+  
+    
   );
 };
 

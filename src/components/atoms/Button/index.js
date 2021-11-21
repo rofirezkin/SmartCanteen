@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 const Button = ({
+  disabled = false,
   label,
   color = '#ED212B',
   onPress,
@@ -9,7 +10,7 @@ const Button = ({
   textColor = 'white',
 }) => {
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress} disabled={disabled}>
       <View style={styles.container(color, double)}>
         <Text style={styles.text(textColor)}>{label}</Text>
       </View>

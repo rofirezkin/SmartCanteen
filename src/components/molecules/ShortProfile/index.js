@@ -1,15 +1,17 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {IcNotif, UserDummy} from '../../../assets';
+import { normalizeFont } from '../../../utils/normalizeFont';
 
-const ShortProfile = () => {
+const ShortProfile = ({fullName,role,url}) => {
+
   return (
     <View style={styles.container}>
       <View style={styles.boxProfile}>
-        <Image source={UserDummy} style={styles.avatar} />
+        <Image source={{ uri: url }} style={styles.avatar} />
         <View style={styles.textBox}>
-          <Text style={styles.name}>Rita Hutami</Text>
-          <Text style={styles.status}>Student</Text>
+          <Text style={styles.name}>{fullName}</Text>
+          <Text style={styles.status}>{role}</Text>
         </View>
       </View>
       <View>
@@ -41,10 +43,11 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 15,
+    fontSize: normalizeFont(12),
+    width: 200,
   },
   status: {
-    fontSize: 14,
-    fontFamily: 'Poppins-Regular',
+    fontSize: normalizeFont(11),
+    fontFamily: 'Poppins-Bold',
   },
 });

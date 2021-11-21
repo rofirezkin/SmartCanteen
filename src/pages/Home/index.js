@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -9,9 +10,9 @@ import {
   View,
 } from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-
 import {DummyFood1, DummyFood2} from '../../assets';
-
+import { getUser } from '../../utils/AsyncStoreServices';
+import { useDispatch } from 'react-redux';
 import {
   BestSeller,
   FoodCard,
@@ -21,14 +22,76 @@ import {
   ShortProfile,
   TabViewHome,
 } from '../../components';
+import { normalizeFont } from '../../utils/normalizeFont';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import { skeletonHome } from '../../components/skeleton/skeletonHome';
+
+
+const wait = (timeout) => {
+  return new Promise (resolve => setTimeout(resolve, timeout))
+}
 
 const Home = ({navigation}) => {
+
+    const[loading,setLoading] = useState(true)
+    const[refresh,setRefresh] = useState(false)
+
+    const[profile,setProfile] = useState({
+        fullName: '',
+        numberId: '',
+        studyProgram: '',
+        faculty: '',
+        studentClass: '',
+        role: ''
+    })
+    
+    const onRefresh = React.useCallback(() => {
+      setLoading(true)
+      setRefresh(true);
+      wait(2000)
+      .then(() => setRefresh(false))
+      .then(() => setLoading(false))
+    }, [])
+
+    const user = async () => {
+      const dataUser = await getUser()
+      setLoading(false)
+
+      setProfile({
+        fullName: dataUser.fullName,
+        role: dataUser.role,
+        photo: dataUser.photo
+        })
+      }
+  
+    useEffect(() => {
+      user()
+    },[])
+
   return (
-    <ScrollView>
+  <ScrollView 
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refresh}
+          onRefresh={onRefresh}
+        />
+      }
+      >
+    <SkeletonContent
+      containerStyle={{ flex: 1 }}
+      isLoading={loading}
+      layout={skeletonHome}
+    >
+    
       <View style={styles.page}>
         <View style={styles.container}>
           <View style={styles.cardHome}>
-            <ShortProfile />
+            <ShortProfile 
+                fullName={profile.fullName}
+                role={profile.role}
+                url={profile.photo}
+            />
             <Gap height={15} />
 
             <PosterHome />
@@ -82,7 +145,9 @@ const Home = ({navigation}) => {
           </View>
         </View>
       </View>
-    </ScrollView>
+    </SkeletonContent>
+  </ScrollView>
+  
   );
 };
 
@@ -103,7 +168,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   textHome: {
-    fontSize: 16,
+    fontSize: normalizeFont(16),
     fontFamily: 'Poppins-Medium',
   },
   wrapperFeature: {
@@ -118,6 +183,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     marginLeft: 19,
     marginTop: 19,
-    fontSize: 16,
+    fontSize: normalizeFont(16),
   },
 });

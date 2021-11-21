@@ -1,124 +1,135 @@
-import React from 'react';
-import {Image, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
-import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-import {DummyList1} from '../../../assets';
-import ItemListFood from '../ItemListFood';
-import Rating from '../Rating';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/core';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ItemListFood, ListFoodCourt} from '..';
+import {Button, Gap} from '../..';
 
-const renderTabBar = props => (
-  <TabBar
-    {...props}
-    indicatorStyle={styles.indicatorStyle}
-    style={styles.barTop}
-    tabStyle={styles.tabStyle}
-    renderLabel={({route, focused, color}) => (
-      <Text style={styles.tabText(focused)}>{route.title}</Text>
-    )}
-  />
-);
-
-const InProgress = () => {
-  const navigation = useNavigation();
-  return (
-    <View>
-      <ItemListFood
-        onPress={() => navigation.navigate('OrderDetail')}
-        items={3}
-        type="in-progress"
-        totalOrder="3.000.000"
-      />
-      <ItemListFood
-        items={3}
-        totalOrder="3.000.000"
-        type="in-progress"
-        onPress={() => navigation.navigate('OrderDetail')}
-      />
-      <ItemListFood
-        items={3}
-        totalOrder="3.000.000"
-        type="in-progress"
-        onPress={() => navigation.navigate('OrderDetail')}
-      />
-    </View>
-  );
-};
-
-const PastOrder = () => {
-  const navigation = useNavigation();
-  return (
-    <View>
-      <ItemListFood
-        items={3}
-        totalOrder="3.000.000"
-        type="past-orders"
-        date="Jun 12, 14:00"
-        statusOrder="Success"
-        onPress={() => navigation.navigate('FeedbackPage')}
-      />
-      <ItemListFood
-        items={3}
-        date="Jun 12, 14:00"
-        totalOrder="3.000.000"
-        type="past-orders"
-        statusOrder="Cancelled"
-        onPress={() => navigation.navigate('FeedbackPage')}
-      />
-      <ItemListFood
-        type="past-orders"
-        date="Jun 12, 14:00"
-        items={3}
-        statusOrder="Cancelled"
-        totalOrder="3.000.000"
-        onPress={() => navigation.navigate('FeedbackPage')}
-      />
-    </View>
-  );
-};
-
-const renderScene = SceneMap({
-  1: InProgress,
-  2: PastOrder,
-});
 const OrderTabSection = () => {
-  const layout = useWindowDimensions();
+  const navigation = useNavigation();
+  const [data, setData] = useState('onProgress');
+  const [onProgress, setOnProgress] = useState('red');
+  const [pastOrder, setPastOrder] = useState('#909090');
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {key: '1', title: 'In Progress'},
-    {key: '2', title: 'Past Order'},
-  ]);
+  useEffect(() => {
+    if (data === 'onProgress') {
+      setOnProgress('red');
+      setPastOrder('#909090');
+    } else if (data === 'pastOrder') {
+      setOnProgress('#909090');
+      setPastOrder('red');
+    }
+  }, [data]);
+
+  const getData = value => {
+    setData(value);
+  };
+
+  const AllFood = () => {
+    if (data === 'onProgress') {
+      return (
+        <ScrollView>
+          <ItemListFood
+            type="in-progress"
+            date="Jun 12, 14:00"
+            items={3}
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('OrderDetail')}
+          />
+          <ItemListFood
+            type="in-progress"
+            date="Jun 12, 14:00"
+            items={3}
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('OrderDetail')}
+          />
+          <ItemListFood
+            type="in-progress"
+            date="Jun 12, 14:00"
+            items={3}
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('OrderDetail')}
+          />
+          <ItemListFood
+            type="in-progress"
+            date="Jun 12, 14:00"
+            items={3}
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('OrderDetail')}
+          />
+          <ItemListFood
+            type="in-progress"
+            date="Jun 12, 14:00"
+            items={3}
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('OrderDetail')}
+          />
+          <ItemListFood
+            type="in-progress"
+            date="Jun 12, 14:00"
+            items={3}
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('OrderDetail')}
+          />
+          <ItemListFood
+            type="in-progress"
+            date="Jun 12, 14:00"
+            items={3}
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('OrderDetail')}
+          />
+          <ItemListFood
+            type="in-progress"
+            date="Jun 12, 14:00"
+            items={3}
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('OrderDetail')}
+          />
+        </ScrollView>
+      );
+    } else if (data === 'pastOrder') {
+      return (
+        <ScrollView>
+          <ItemListFood
+            type="past-orders"
+            date="Jun 12, 14:00"
+            items={3}
+            statusOrder="Cancelled"
+            totalOrder="3.000.000"
+            onPress={() => navigation.navigate('FeedbackPage')}
+          />
+        </ScrollView>
+      );
+    }
+  };
+
   return (
-    <TabView
-      renderTabBar={renderTabBar}
-      navigationState={{index, routes}}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{width: layout.width}}
-      style={styles.tabView}
-    />
+    <View>
+      <View style={styles.buttonSection}>
+        <Button
+          color={onProgress}
+          costumerOrder
+          label="In Progress"
+          onPress={() => getData('onProgress')}
+        />
+        <Button
+          color={pastOrder}
+          costumerOrder
+          label="Past Order"
+          onPress={() => getData('pastOrder')}
+        />
+      </View>
+      <Gap height={15} />
+      <AllFood />
+    </View>
   );
 };
 
 export default OrderTabSection;
 
 const styles = StyleSheet.create({
-  tabView: {backgroundColor: 'white'},
-  barTop: {
-    backgroundColor: 'white',
-    elevation: 0,
-    shadowOpacity: 0,
-    borderBottomColor: '#F2F2F2',
-    borderBottomWidth: 1,
-    paddingLeft: 10,
+  buttonSection: {
+    marginTop: 10,
+    paddingHorizontal: 19,
+    flexDirection: 'row',
   },
-  indicatorStyle: {
-    backgroundColor: '#020202',
-    marginLeft: 10,
-  },
-  tabStyle: {width: 'auto'},
-  tabText: focused => ({
-    fontFamily: 'Poppins-Medium',
-    color: focused ? '#020202' : '#8D92A3',
-  }),
 });

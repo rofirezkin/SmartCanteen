@@ -3,6 +3,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {BottomNavigator} from '../components';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   Canteen,
   Cash,
@@ -12,7 +14,6 @@ import {
   FoodCourt,
   GetStarted,
   Home,
-  Order,
   OrderDetail,
   Payment,
   Profile,
@@ -27,24 +28,28 @@ import {
   SearchSection,
   FeedbackPage,
   DetailFoodItem,
+  Transaction,
+  MyCart,
+  Notification,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const MainApp = () => {
+const MainApp = ({route}) => {
+  const routingData = route.params;
   return (
     <Tab.Navigator tabBar={props => <BottomNavigator {...props} />}>
-      <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
+      <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
       <Tab.Screen
-        name="Order"
-        component={Order}
         options={{headerShown: false}}
+        name="Order"
+        component={Transaction}
       />
       <Tab.Screen
+        options={{headerShown: false}}
         name="Profile"
         component={Profile}
-        options={{headerShown: false}}
       />
     </Tab.Navigator>
   );
@@ -76,6 +81,16 @@ const Router = () => {
       <Stack.Screen
         name="OrderDetail"
         component={OrderDetail}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="MyCart"
+        component={MyCart}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
         options={{headerShown: false}}
       />
       <Stack.Screen

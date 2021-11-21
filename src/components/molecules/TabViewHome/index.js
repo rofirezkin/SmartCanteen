@@ -23,7 +23,7 @@ const NewTaste = () => {
   const navigation = useNavigation();
   return (
     <View>
-      <ItemListFood onPress={() => navigation.navigate('')} />
+      <ItemListFood onPress={() => navigation.navigate('DetailFoodItem')} />
       <ItemListFood onPress={() => navigation.navigate('')} />
       <ItemListFood onPress={() => navigation.navigate('')} />
     </View>

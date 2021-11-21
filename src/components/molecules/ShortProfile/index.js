@@ -1,21 +1,33 @@
+import {useNavigation} from '@react-navigation/core';
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
-import {IcNotif, UserDummy} from '../../../assets';
-import { normalizeFont } from '../../../utils/normalizeFont';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Gap} from '../..';
+import {ICCArtHome, ICCartShopping, IcNotif, UserDummy} from '../../../assets';
+import {normalizeFont} from '../../../utils/normalizeFont';
 
-const ShortProfile = ({fullName,role,url}) => {
-
+const ShortProfile = ({fullName, role, url}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.boxProfile}>
-        <Image source={{ uri: url }} style={styles.avatar} />
+        <Image source={{uri: url}} style={styles.avatar} />
         <View style={styles.textBox}>
           <Text style={styles.name}>{fullName}</Text>
           <Text style={styles.status}>{role}</Text>
         </View>
       </View>
-      <View>
-        <IcNotif />
+      <View
+        style={{
+          flexDirection: 'row',
+          paddingHorizontal: 7,
+        }}>
+        <TouchableOpacity onPress={() => navigation.navigate('MyCart')}>
+          <Image source={ICCArtHome} style={styles.carthome} />
+        </TouchableOpacity>
+        <Gap width={20} />
+        <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
+          <IcNotif />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -49,5 +61,9 @@ const styles = StyleSheet.create({
   status: {
     fontSize: normalizeFont(11),
     fontFamily: 'Poppins-Bold',
+  },
+  carthome: {
+    width: 25,
+    height: 25,
   },
 });

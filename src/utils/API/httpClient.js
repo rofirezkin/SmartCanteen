@@ -24,10 +24,6 @@ export const useRequestLogin = async (url, method, payload) => {
   })
     .then((res) => res.json())
     .then((responseJson) => responseJson)
-    .catch((err) => {
-      console.log('error', err);
-    });
-
   return Promise.resolve(request);
 };
 

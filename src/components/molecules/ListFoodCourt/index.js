@@ -1,13 +1,16 @@
 import {useNavigation} from '@react-navigation/core';
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter, Gap, Like, Price} from '../..';
 import {DummyFoodCourt2} from '../../../assets';
 
 const ListFoodCourt = ({type}) => {
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      activeOpacity={0.6}
+      style={styles.container}
+      onPress={() => navigation.navigate('DetailFoodItem')}>
       <View>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Chicken Katsu</Text>
@@ -33,11 +36,8 @@ const ListFoodCourt = ({type}) => {
       </View>
       <View>
         <Image source={DummyFoodCourt2} style={styles.image} />
-        <View>
-          <Counter onPress={() => navigation.navigate('Payment')} />
-        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -45,8 +45,8 @@ export default ListFoodCourt;
 
 const styles = StyleSheet.create({
   image: {
-    width: 73,
-    height: 60,
+    width: 100,
+    height: 80,
     resizeMode: 'cover',
     borderRadius: 13,
   },

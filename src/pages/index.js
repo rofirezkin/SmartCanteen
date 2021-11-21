@@ -3,7 +3,7 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import SignUpAddress from './SignUpAddress';
 import SuccessSignUp from './SuccessSignUp';
-import Order from './Order';
+import Transaction from './Transaction';
 import Profile from './Profile';
 import Home from './Home';
 import GetStarted from './GetStarted';
@@ -21,8 +21,11 @@ import Delivery from './Delivery';
 import SearchSection from './SearchSection';
 import FeedbackPage from './FeedbackPage';
 import DetailFoodItem from './DetailFoodItem';
-
+import MyCart from './MyCart';
+import Notification from './Notification';
 export {
+  MyCart,
+  Notification,
   DetailFoodItem,
   FeedbackPage,
   SearchSection,
@@ -40,7 +43,7 @@ export {
   SignIn,
   GetStarted,
   Home,
-  Order,
+  Transaction,
   Profile,
   SignUp,
   SuccessSignUp,

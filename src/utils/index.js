@@ -1,4 +1,2 @@
-import useForm from './useForm';
-
-
-export {useForm};
+export * from './useForm';
+export * from './fonts';

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {EmptyOrder, Header, OrderTabSection} from '../../components';
 
-const Order = () => {
+const Transaction = () => {
   const [isEmpty] = useState(false);
   return (
     <View style={styles.page(isEmpty)}>
@@ -20,7 +20,7 @@ const Order = () => {
   );
 };
 
-export default Order;
+export default Transaction;
 
 const styles = StyleSheet.create({
   page: isEmpty => ({

@@ -1,11 +1,16 @@
 import React, {useState} from 'react';
 import {Alert, StyleSheet, Text, View} from 'react-native';
 import {Button, Gap, Header, TextInput} from '../../components';
-import {useForm} from '../../utils';
-import { ENDPOINT, ENDPOINT_PROFILE, ENDPOINT_ROLE, useRequestLogin, useRequestWithToken } from '../../utils/API/httpClient';
-import { setUser } from '../../utils/AsyncStoreServices';
 
-
+import {
+  ENDPOINT,
+  ENDPOINT_PROFILE,
+  ENDPOINT_ROLE,
+  useRequestLogin,
+  useRequestWithToken,
+} from '../../utils/API/httpClient';
+import {setUser} from '../../utils/AsyncStoreServices';
+import useForm from '../../utils/useForm';
 
 const SignIn = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -13,29 +18,37 @@ const SignIn = ({navigation}) => {
     password: '',
   });
 
-  const[loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit =  async () => {
-    setLoading(true)
+  const onSubmit = async () => {
+    setLoading(true);
 
     const payload = JSON.stringify({
       username: form.username,
-      password: form.password
-    })
+      password: form.password,
+    });
 
-    const result = await useRequestLogin(ENDPOINT,'post',payload) // without token
+    const result = await useRequestLogin(ENDPOINT, 'post', payload); // without token
 
-    if(result.hasOwnProperty('message')){
+    if (result.hasOwnProperty('message')) {
       // Handing Error
-      setLoading(false)
-      Alert.alert('Oops!', result.message)
-    }else{
+      setLoading(false);
+      Alert.alert('Oops!', result.message);
+    } else {
       // Handling Success
-      setLoading(false)
+      setLoading(false);
 
       const resToken = await result.token;
-      const issueProfile = await useRequestWithToken(ENDPOINT_PROFILE,resToken,'get')
-      const resultRole = await useRequestWithToken(ENDPOINT_ROLE,resToken,'get')
+      const issueProfile = await useRequestWithToken(
+        ENDPOINT_PROFILE,
+        resToken,
+        'get',
+      );
+      const resultRole = await useRequestWithToken(
+        ENDPOINT_ROLE,
+        resToken,
+        'get',
+      );
 
       await setUser({
         token: resToken,
@@ -47,15 +60,14 @@ const SignIn = ({navigation}) => {
         faculty: issueProfile.faculty,
         studentClass: issueProfile.studentclass,
         photo: issueProfile.photo,
-        authenticated: true
-      })
+        authenticated: true,
+      });
 
-      navigation.reset({index: 0, routes:[{name:'MainApp'}]})
+      navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
     }
   };
 
   return (
-    
     <View style={styles.page}>
       <Header
         title="Sign In"
@@ -78,11 +90,11 @@ const SignIn = ({navigation}) => {
           secureTextEntry
         />
         <Gap height={24} />
-        <Button 
+        <Button
           label={loading ? 'Loading...' : 'Sign In'}
           onPress={onSubmit}
-          disabled={loading ? true : false} 
-          />
+          disabled={loading ? true : false}
+        />
         <Gap height={13} />
         <Button
           label="Create New Account"
@@ -91,8 +103,6 @@ const SignIn = ({navigation}) => {
         />
       </View>
     </View>
-  
-    
   );
 };
 

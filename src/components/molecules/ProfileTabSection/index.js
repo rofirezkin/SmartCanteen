@@ -22,21 +22,49 @@ const Account = () => {
   return (
     <View>
       <ItemListMenu
-        label="Edit Profile"
+        icon="edit-profile"
+        name="Data Akun anda"
+        desc="Lihat dan edit akun anda"
         onPress={() => navigation.navigate('EditProfile')}
       />
-      <ItemListMenu label="Home Address" />
-      <ItemListMenu label="Log Out" />
+      <ItemListMenu
+        name="Bantuan Admin"
+        icon="tutup-buka"
+        desc="Hubungi admin jika ada masalah"
+        icon="bantuan"
+      />
+      <ItemListMenu
+        label="Log Out"
+        name="Log Out"
+        desc="Keluar dari akun anda"
+        icon="logout"
+      />
     </View>
   );
 };
 
 const SmartCanteen = () => {
+  const navigation = useNavigation();
   return (
     <View>
-      <ItemListMenu label="Rate App" />
-      <ItemListMenu label="Help Center" />
-      <ItemListMenu label="Term & Condition" />
+      <ItemListMenu
+        icon="edit-profile"
+        name="Tentang SmartCanteen"
+        desc="Lihat Profile SmartCanten"
+        onPress={() => navigation.navigate('EditProfile')}
+      />
+      <ItemListMenu
+        name="Bantuan Admin"
+        icon="tutup-buka"
+        desc="Hubungi admin jika ada masalah"
+        icon="bantuan"
+      />
+      <ItemListMenu
+        label="Log Out"
+        name="Log Out"
+        desc="Keluar dari akun anda"
+        icon="tutup-buka"
+      />
     </View>
   );
 };

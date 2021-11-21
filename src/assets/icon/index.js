@@ -25,7 +25,18 @@ import ICAddPhoto from './addPhoto.svg';
 import ICLocation from './location.svg';
 import ICStartActive from './StarActive.svg';
 import ICStartNonActive from './StarNonActive.svg';
+import ICCart from './IcCart.svg';
+import ICUserAccount from './userAccount.svg';
+import ICGeneral from './userGeneral.svg';
+import ICLogout from './logout.svg';
+
+import ICCArtHome from './cartHome.png';
 export {
+  ICCArtHome,
+  ICUserAccount,
+  ICGeneral,
+  ICLogout,
+  ICCart,
   ICStartActive,
   ICStartNonActive,
   ICLocation,

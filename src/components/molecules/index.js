@@ -25,7 +25,13 @@ import ItemDelivery from './ItemDelivery';
 import ListFoodCourt from './ListFoodCourt';
 import RatingFeedback from './RatingFeedback';
 import Rating from './Rating';
+import OrderList from './OrderList';
+import CustomTab from './CustomTab';
+import NotificationSection from './NotificationSection';
 export {
+  NotificationSection,
+  OrderList,
+  CustomTab,
   Rating,
   RatingFeedback,
   ListFoodCourt,

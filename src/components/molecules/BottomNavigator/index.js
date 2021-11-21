@@ -1,22 +1,23 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
-  IcHomeOff,
-  IcHomeOn,
-  IcOrderOff,
+  IcHome,
+  IcHomeActive,
   IcOrderOn,
-  IcProfileOff,
-  IcProfileOn,
+  IcProfile,
+  IcProfileActive,
+  IcTransaction,
+  IcTransactionActive,
 } from '../../../assets';
 
 const Icon = ({label, focus}) => {
   switch (label) {
     case 'Home':
-      return focus ? <IcHomeOn /> : <IcHomeOff />;
+      return focus ? <IcHomeActive /> : <IcHome />;
     case 'Order':
-      return focus ? <IcOrderOn /> : <IcOrderOff />;
+      return focus ? <IcTransactionActive /> : <IcTransaction />;
     case 'Profile':
-      return focus ? <IcProfileOn /> : <IcProfileOff />;
+      return focus ? <IcProfileActive /> : <IcProfile />;
     default:
       return <IcOrderOn />;
   }
@@ -79,9 +80,8 @@ const styles = StyleSheet.create({
   bottomNav: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    paddingTop: 15,
-    paddingBottom: 13,
-    paddingHorizontal: 50,
+    paddingVertical: 5,
+    paddingHorizontal: 40,
     justifyContent: 'space-between',
     shadowColor: 'black',
     shadowOffset: {width: 0, height: 10},

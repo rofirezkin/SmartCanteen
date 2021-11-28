@@ -9,14 +9,17 @@ import {
   Text,
   useWindowDimensions,
   View,
+  TouchableOpacity
 } from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-import {DummyFood1, DummyFood2} from '../../assets';
+import {DummyCanteen, DummyFood1, DummyFood2} from '../../assets';
 import {getUser} from '../../utils/AsyncStoreServices';
 import {useDispatch} from 'react-redux';
 import {
   BestSeller,
   Button,
+  CategoryMenu,
+  DetailCanteen,
   FoodCard,
   Gap,
   ItemListFood,
@@ -28,6 +31,10 @@ import {
 import {normalizeFont} from '../../utils/normalizeFont';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import {skeletonHome} from '../../components/skeleton/skeletonHome';
+import { useSelector } from 'react-redux';
+import { getDataMenuByTypes, getDataMenuSeveralByTypes } from '../../redux/action/menuAction';
+import CardCanteen from '../../components/molecules/CardCanteen/CardCanteen';
+
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -38,6 +45,9 @@ const Home = ({navigation}) => {
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const [foodMenu, setFoodMenu] = useState('all');
+  const dispatch = useDispatch()
+  const{severalRecommended, severalNewTaste, severalPopular} = useSelector(state => state.menuReducer)
+  var titleMenu = '';
 
   const [profile, setProfile] = useState({
     fullName: '',
@@ -67,28 +77,13 @@ const Home = ({navigation}) => {
     });
   };
 
-
-  const dataForm = new FormData();
-  
-
-  const dataInput = [
-    {
-      id: 1,
-      nama: 'adad'
-    },
-    {
-      id: 2,
-      name: 'adadadzzz'
-    }
-  ]
-
-
-  const onSubmitTrans = () => {
-    console.log(dataInput)
-  }
+ 
 
   useEffect(() => {
     user();
+    dispatch(getDataMenuSeveralByTypes('Recommended'))
+    dispatch(getDataMenuSeveralByTypes('New Taste'))
+    dispatch(getDataMenuSeveralByTypes('Popular'))
   }, []);
 
   return (
@@ -115,11 +110,6 @@ const Home = ({navigation}) => {
               <View>
                 <Gap height={20} />
                 <Text style={styles.textHome}>Yes, I am ready to order</Text>
-                        <Button
-                  label="Create New Account"
-                  color="#8D92A3"
-                  onPress={onSubmitTrans}
-                />
                 <Gap height={11} />
                 <View style={styles.wrapperFeature}>
                   <OptionUser
@@ -162,27 +152,99 @@ const Home = ({navigation}) => {
                 <Gap />
               </View>
             </ScrollView>
+            <Text style={styles.textCanteen}>Choose Canteen By Faculty</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={styles.foodCardContainer}>
+                <Gap width={18} />
+                    <CardCanteen avatar={DummyCanteen} name="Kantin Fakultas Teknik"/>
+                    <CardCanteen avatar={DummyCanteen} name="Kantin Fakultas Ilmu Terapan"/>
+                    <CardCanteen avatar={DummyCanteen} name="Kantin Fakultas Ekonomi Bisnis"/>
+                <Gap />
+              </View>
+            </ScrollView>
           </View>
           <View style={styles.tabContainer}>
-            <TabViewHome />
-            {/* <View style={styles.buttonSection}>
-              <Button
-                costumerOrder
-                label="All"
-                onPress={() => getFoodData('all')}
-              />
-              <Button
-                costumerOrder
-                label="Food"
-                onPress={() => getFoodData('food')}
-              />
-              <Button
-                costumerOrder
-                onPress={() => getFoodData('baverages')}
-                label="Baverages"
-              />
+            <View style={styles.foodCardContainer}>
+              <View style={styles.containerCardMenu}> 
+                  <View style={styles.header}>
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={styles.title}>Recommended Menu</Text>
+                    </View>
+                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', titleMenu="Recommended Menu")}>
+                        <Text style={styles.desc}>Lihat Semua</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      {severalRecommended.map(data => {
+                        const nameCanteen = `${data.name} - ${data.nama_tenant}`
+                        var result = `${data.id}`;
+                        var characters = '012345';
+                        var charactersLength = characters.length;
+                        
+                         for ( var i = 0; i < charactersLength; i++ ) {
+                            result += characters.charAt(Math.floor(Math.random() * 
+                            charactersLength));
+                          }
+
+                        const idKey = `${data.id}001`
+                        return(
+                            <CategoryMenu key={idKey} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath}  />
+                        )
+                      })}
+                    </ScrollView>
+                </View>
+              </View>
             </View>
-            <AllFood /> */}
+
+            <View style={styles.foodCardContainer}>
+              <View style={styles.containerCardMenu}> 
+                  <View style={styles.header}>
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={styles.title}>New Taste Menu</Text>
+                    </View>
+                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', titleMenu="New Taste Menu")}>
+                        <Text style={styles.desc}>Lihat Semua</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      {severalNewTaste.map(data => {
+                        const nameCanteen = `${data.name} - ${data.nama_tenant}`
+                        const idKey = `${data.id}001`
+                        return(
+                             <CategoryMenu key={idKey} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath}  />
+                        )
+                      })}
+                    </ScrollView>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.foodCardContainer}>
+              <View style={styles.containerCardMenu}> 
+                  <View style={styles.header}>
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={styles.title}>Popular Menu</Text>
+                    </View>
+                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', titleMenu="Popular Menu")}>
+                        <Text style={styles.desc}>Lihat Semua</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      {severalPopular.map(data => {
+                        const nameCanteen = `${data.name} - ${data.nama_tenant}`
+                        const idKey = `${data.id}`
+                        return(
+                             <CategoryMenu key={idKey} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath}  />
+                        )
+                      })}
+                    </ScrollView>
+                </View>
+              </View>
+            </View>  
+            {/* <TabViewHome /> */}
           </View>
         </View>
       </SkeletonContent>
@@ -195,6 +257,7 @@ export default Home;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
+    backgroundColor: '#ECECEC'
   },
   container: {
     marginTop: 20,
@@ -216,7 +279,6 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flex: 1,
-    backgroundColor: 'white',
   },
   textBestSeller: {
     fontFamily: 'Poppins-Medium',
@@ -224,4 +286,27 @@ const styles = StyleSheet.create({
     marginTop: 19,
     fontSize: normalizeFont(16),
   },
+  textCanteen: {
+    fontFamily: 'Poppins-Medium',
+    marginLeft: 19,
+    fontSize: normalizeFont(16),
+  },
+  containerCardMenu:{
+        flex: 1,
+        backgroundColor: 'white',
+        paddingHorizontal: 15
+  },
+  header:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingTop: 15
+  },
+  title:{
+        fontSize: normalizeFont(14),
+        fontFamily: 'Poppins-SemiBold'
+    },
+  desc:{
+        fontSize: normalizeFont(12),
+        fontFamily: 'Poppins-Light'
+    },
 });

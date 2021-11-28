@@ -136,7 +136,8 @@ const styles = StyleSheet.create({
     color: '#8D92A3',
   },
   container: {
-    marginLeft: 7,
+    marginLeft: 10,
+
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -4,10 +4,7 @@ import {LogoSmartCanteen} from '../../assets';
 import { getUser } from '../../utils/AsyncStoreServices';
 
 const SplashScreen = ({navigation}) => {
-
-
   const[loading,setLoading] = useState(false)
-
   const checkAuth = async () => {
       const user = await getUser();
       const isAuth = user.authenticated;

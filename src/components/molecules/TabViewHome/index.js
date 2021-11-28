@@ -30,8 +30,6 @@ const NewTaste = () => {
 
   useEffect(() => {
     dispatch(getDataMenuByTypes('New Taste'))
-
-    console.log(newTaste)
   },[])
   return (
     <View>
@@ -50,29 +48,63 @@ const NewTaste = () => {
             )
         })}
       </ScrollView>
-     
-
     </View>
   );
 };
 
 const Popular = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const {popular} = useSelector(state => state.menuReducer)
+
+  useEffect(() => {
+    dispatch(getDataMenuByTypes('Popular'))
+  },[])
   return (
     <View>
-      <ItemListFood onPress={() => navigation.navigate('')} />
-      <ItemListFood onPress={() => navigation.navigate('')} />
-      <ItemListFood onPress={() => navigation.navigate('')} />
+      <ScrollView>
+        {popular.map(data => {
+          return(
+            <ItemListFood
+            key={data.id} 
+            name={data.name}
+            ingredients={data.ingredients}
+            price={data.price}
+            canteen={data.lokasi_kantin}
+            rating={data.rating}
+            urlPhoto={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/` + data.picturePath }}
+            onPress={() => navigation.navigate('DetailFoodItem')} />
+            )
+        })}
+      </ScrollView>
     </View>
   );
 };
 const Recommended = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const {recommended} = useSelector(state => state.menuReducer)
+
+  useEffect(() => {
+    dispatch(getDataMenuByTypes('Recommended'))
+  },[])
   return (
     <View>
-      <ItemListFood onPress={() => navigation.navigate('')} />
-      <ItemListFood onPress={() => navigation.navigate('')} />
-      <ItemListFood onPress={() => navigation.navigate('')} />
+      
+        {recommended.map(data => {
+          return(
+            <ItemListFood
+            key={data.id} 
+            name={data.name}
+            ingredients={data.ingredients}
+            price={data.price}
+            canteen={data.lokasi_kantin}
+            rating={data.rating}
+            urlPhoto={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/` + data.picturePath }}
+            onPress={() => navigation.navigate('DetailFoodItem')} />
+            )
+        })}
+      
     </View>
   );
 };

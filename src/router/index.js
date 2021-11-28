@@ -31,6 +31,7 @@ import {
   Transaction,
   MyCart,
   Notification,
+  AllMenuByCategory,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -171,6 +172,11 @@ const Router = () => {
       <Stack.Screen
         name="SuccessSignUp"
         component={SuccessSignUp}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AllMenuByCategory"
+        component={AllMenuByCategory}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

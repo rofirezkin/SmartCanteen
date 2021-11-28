@@ -2,14 +2,14 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {IcStartOff, IcStartOn} from '../../../assets';
 
-const Rating = ({ratingCard}) => {
+const Rating = ({ratingCard, rating}) => {
   if (ratingCard) {
     return (
       <View style={styles.ratingContainer}>
         <View style={styles.startContainer}>
           <IcStartOn />
         </View>
-        <Text>4.5</Text>
+        <Text>{rating}</Text>
       </View>
     );
   }

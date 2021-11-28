@@ -1,16 +1,21 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {DummyList1, Next} from '../../../assets';
+import Number from '../../../utils/Number/Number';
 import Rating from '../Rating';
 
 const ItemListFood = ({
   onPress,
+  name,
+  ingredients,
+  canteen,
   date,
-  statusOrder,
   price,
+  statusOrder,
   type,
   items,
   totalOrder,
+  urlPhoto,
   rating,
 }) => {
   const renderContent = () => {
@@ -19,10 +24,10 @@ const ItemListFood = ({
         return (
           <View style={styles.container}>
             <View>
-              <Text style={styles.title}>Soup Bumil</Text>
-              <Text style={styles.subTitle}>Nasi, Telur, Ayam ...</Text>
+              <Text style={styles.title}>{name}</Text>
+              <Text style={styles.subTitle}>{ingredients}</Text>
               <Text style={styles.subTitle}>
-                Kantin Fak. Teknik, Foodcourt A
+                {canteen}
               </Text>
               <Text style={styles.subTitle}>
                 {items} Item . Rp{totalOrder}
@@ -74,15 +79,15 @@ const ItemListFood = ({
         return (
           <View style={styles.container}>
             <View>
-              <Text style={styles.title}>Soup Bumil</Text>
-              <Text style={styles.subTitle}>Nasi, Telur, Ayam ...</Text>
+              <Text style={styles.title}>{name}</Text>
+              <Text style={styles.subTitle}>{ingredients}</Text>
               <Text style={styles.subTitle}>
-                Kantin Fak. Teknik, Foodcourt A
+                {canteen}
               </Text>
-              <Text style={styles.subTitle}>Rp20.000</Text>
+              <Number style={styles.subTitle} number={price} />
             </View>
             <View>
-              <Rating ratingCard />
+              <Rating ratingCard rating={rating}/>
             </View>
           </View>
         );
@@ -92,7 +97,7 @@ const ItemListFood = ({
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <View style={styles.tabview}>
-        <Image source={DummyList1} style={styles.avatar} />
+        <Image source={urlPhoto} style={styles.avatar} />
         {renderContent()}
       </View>
     </TouchableOpacity>

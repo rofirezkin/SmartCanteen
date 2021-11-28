@@ -1,10 +1,14 @@
-import React from 'react';
-import {Image, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
+import React, { useEffect } from 'react';
+import {Image, ScrollView, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {DummyList1} from '../../../assets';
 import ItemListFood from '../ItemListFood';
 import Rating from '../Rating';
 import {useNavigation} from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { getDataMenuByTypes } from '../../../redux/action/menuAction';
+import { useSelector } from 'react-redux';
+import { ENDPOINT_SMART_CANTEEN } from '../../../utils/API/httpClient';
 
 const renderTabBar = props => (
   <TabBar
@@ -21,11 +25,33 @@ const renderTabBar = props => (
 
 const NewTaste = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const {newTaste} = useSelector(state => state.menuReducer)
+
+  useEffect(() => {
+    dispatch(getDataMenuByTypes('New Taste'))
+
+    console.log(newTaste)
+  },[])
   return (
     <View>
-      <ItemListFood onPress={() => navigation.navigate('DetailFoodItem')} />
-      <ItemListFood onPress={() => navigation.navigate('')} />
-      <ItemListFood onPress={() => navigation.navigate('')} />
+      <ScrollView>
+        {newTaste.map(data => {
+          return(
+            <ItemListFood
+            key={data.id} 
+            name={data.name}
+            ingredients={data.ingredients}
+            price={data.price}
+            canteen={data.lokasi_kantin}
+            rating={data.rating}
+            urlPhoto={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/` + data.picturePath }}
+            onPress={() => navigation.navigate('DetailFoodItem')} />
+            )
+        })}
+      </ScrollView>
+     
+
     </View>
   );
 };

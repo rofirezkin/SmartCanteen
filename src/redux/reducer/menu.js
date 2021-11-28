@@ -2,7 +2,10 @@ const initFilterMenu = {
     all: [],
     newTaste: [],
     popular: [],
-    recommended: []
+    recommended: [],
+    severalNewTaste: [],
+    severalPopular: [],
+    severalRecommended: []
 }
 
 export const menuReducer = (state= initFilterMenu, action) => {
@@ -36,6 +39,31 @@ export const menuReducer = (state= initFilterMenu, action) => {
         return{
             ...state,
             recommended: action.value
+        }
+    }
+
+    
+    if(action.type === 'SET_SEVERAL_RECOMMENDED')
+    {
+        return{
+            ...state,
+            severalRecommended: action.value
+        }
+    }
+
+    if(action.type === 'SET_SEVERAL_NEW_TASTE')
+    {
+        return{
+            ...state,
+            severalNewTaste: action.value
+        }
+    }
+
+    if(action.type === 'SET_SEVERAL_POPULAR')
+    {
+        return{
+            ...state,
+            severalPopular: action.value
         }
     }
 

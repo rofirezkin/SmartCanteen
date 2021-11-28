@@ -28,6 +28,8 @@ import Rating from './Rating';
 import OrderList from './OrderList';
 import CustomTab from './CustomTab';
 import NotificationSection from './NotificationSection';
+import CategoryMenu from './CategoryMenu/CategoryMenu';
+
 export {
   NotificationSection,
   OrderList,
@@ -59,4 +61,5 @@ export {
   ShortProfile,
   Carousel,
   BottomNavigator,
+  CategoryMenu
 };

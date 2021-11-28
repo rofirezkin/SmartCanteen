@@ -23,6 +23,8 @@ import FeedbackPage from './FeedbackPage';
 import DetailFoodItem from './DetailFoodItem';
 import MyCart from './MyCart';
 import Notification from './Notification';
+import AllMenuByCategory from './AllMenuByCategory/AllMenuByCategory';
+
 export {
   MyCart,
   Notification,
@@ -49,4 +51,5 @@ export {
   SuccessSignUp,
   SignUpAddress,
   SplashScreen,
+  AllMenuByCategory
 };

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -31,6 +32,7 @@ import {skeletonHome} from '../../components/skeleton/skeletonHome';
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
+
 
 const Home = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -65,6 +67,26 @@ const Home = ({navigation}) => {
     });
   };
 
+
+  const dataForm = new FormData();
+  
+
+  const dataInput = [
+    {
+      id: 1,
+      nama: 'adad'
+    },
+    {
+      id: 2,
+      name: 'adadadzzz'
+    }
+  ]
+
+
+  const onSubmitTrans = () => {
+    console.log(dataInput)
+  }
+
   useEffect(() => {
     user();
   }, []);
@@ -93,6 +115,11 @@ const Home = ({navigation}) => {
               <View>
                 <Gap height={20} />
                 <Text style={styles.textHome}>Yes, I am ready to order</Text>
+                        <Button
+                  label="Create New Account"
+                  color="#8D92A3"
+                  onPress={onSubmitTrans}
+                />
                 <Gap height={11} />
                 <View style={styles.wrapperFeature}>
                   <OptionUser

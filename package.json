@@ -33,6 +33,7 @@
     "react-native-svg-transformer": "^0.14.3",
     "react-native-tab-view": "^2.15.2",
     "react-native-vector-icons": "^9.0.0",
+    "react-number-format": "^4.8.0",
     "react-redux": "^7.2.5",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0"

@@ -1,21 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter1, Counter2} from '../../../assets';
 
-const Counter = ({payment, onPress}) => {
-  const addCounter = () => {
-    console.log('halo');
-  };
+const Counter = ({payment,onValueChange, onPress}) => {
+  const [value,setValue] = useState(1);
+  
+  useEffect(() => {
+    onValueChange(value);
+  }, [])
+
+  const onCount =(type) => {
+    let result = value;
+    if(type === 'plus')
+    {
+      result = value+1;
+
+    }if(type === 'minus')
+    {
+      if(value > 1){
+       result = value-1;
+      }
+    }
+
+    setValue(result)
+    onValueChange(result)
+  }
+
   if (payment) {
     return (
       <View style={styles.counter}>
-        <TouchableOpacity onPress={addCounter} style={styles.containerCounter}>
+        <TouchableOpacity onPress={() => onCount('minus')} style={styles.containerCounter}>
           <Counter2 />
         </TouchableOpacity>
         <View>
-          <Text>12 Items</Text>
+          <Text>{`${value} Items`}</Text>
         </View>
-        <TouchableOpacity onPress={addCounter} style={styles.containerCounter}>
+        <TouchableOpacity onPress={() => onCount('plus')} style={styles.containerCounter}>
           <Counter1 />
         </TouchableOpacity>
       </View>

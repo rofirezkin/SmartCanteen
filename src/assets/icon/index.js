@@ -29,6 +29,7 @@ import ICCart from './IcCart.svg';
 import ICUserAccount from './userAccount.svg';
 import ICGeneral from './userGeneral.svg';
 import ICLogout from './logout.svg';
+import IcLocation from './ic_location.svg'
 
 import ICCArtHome from './cartHome.png';
 export {
@@ -64,4 +65,5 @@ export {
   IcProfileOn,
   ICRemovePhoto,
   ICAddPhoto,
+  IcLocation
 };

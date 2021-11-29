@@ -5,7 +5,7 @@ import { ENDPOINT_API_SMART_CANTEEN } from "../../utils/API/httpClient"
 export const getDataMenuByTypes =  (types) => async (dispatch) => {
         const result = await axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch?category_menu=${types}`)
             .then(res => {
-                if(types === 'New Taste')
+                if(types === 'New Menu')
                 {
                     dispatch({type: 'SET_NEW_TASTE', value: res.data.data})
                 }
@@ -27,7 +27,7 @@ export const getDataMenuByTypes =  (types) => async (dispatch) => {
 export const getDataMenuSeveralByTypes =  (types) => async (dispatch) => {
         const result = await axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/several?category_menu=${types}`)
             .then(res => {
-                if(types === 'New Taste')
+                if(types === 'New Menu')
                 {
                     dispatch({type: 'SET_SEVERAL_NEW_TASTE', value: res.data.data.data})
                 }

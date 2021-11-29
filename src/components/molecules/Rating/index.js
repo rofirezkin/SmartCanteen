@@ -1,28 +1,41 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {IcStartOff, IcStartOn} from '../../../assets';
+import Number from '../../../utils/Number/Number';
 
-const Rating = ({ratingCard, rating}) => {
+const Rating = ({ratingCard, rating, number}) => {
+
+  const renderStar = () => {
+    let star = [];
+    for(let i = 1 ; i<=5 ; i++)
+    {
+      if(i <= number){
+        star.push(<IcStartOn key={i} />)
+      }else{
+        star.push(<IcStartOff key={i} />)
+      }
+    }
+
+    return star;
+  }
+
+
   if (ratingCard) {
     return (
       <View style={styles.ratingContainer}>
         <View style={styles.startContainer}>
           <IcStartOn />
         </View>
-        <Text>{rating}</Text>
+        <Number type="decimal" number={number} style={styles.text} />
       </View>
     );
   }
   return (
     <View style={styles.ratingContainer}>
       <View style={styles.startContainer}>
-        <IcStartOn />
-        <IcStartOn />
-        <IcStartOn />
-        <IcStartOn />
-        <IcStartOff />
+          {renderStar()}
       </View>
-      <Text>4.5</Text>
+      <Number type="decimal" number={number} style={styles.text} />
     </View>
   );
 };

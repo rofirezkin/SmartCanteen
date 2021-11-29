@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -8,14 +8,25 @@ import {
 } from 'react-native';
 import {DummyCoverDetail, IcBackFoodCourt} from '../../assets';
 import {Button, Counter, Rating} from '../../components';
+import { ENDPOINT_SMART_CANTEEN } from '../../utils/API/httpClient';
+import Number from '../../utils/Number/Number';
 
-const DetailFoodItem = ({navigation}) => {
+const DetailFoodItem = ({navigation, route}) => {
+
+  const params = route.params;
+  const [totalItem, setTotalItem] = useState(1);
+  const onCounterChange = value => {
+    setTotalItem(value);
+
+  };
+  
+
   return (
     <View style={styles.page}>
-      <ImageBackground source={DummyCoverDetail} style={styles.cover}>
+      <ImageBackground source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${params.picturePath}` }} style={styles.cover}>
         <View style={styles.back}>
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate('AllMenuByCategory', params)}
             activeOpacity={0.5}>
             <IcBackFoodCourt />
           </TouchableOpacity>
@@ -25,21 +36,24 @@ const DetailFoodItem = ({navigation}) => {
         <View style={styles.mainContent}>
           <View style={styles.productContainer}>
             <View>
-              <Text style={styles.title}>halo item</Text>
-              <Rating />
+              <Text style={styles.title}>{params.name}</Text>
+              <Rating number={params.ratingMenu} />
             </View>
-            <Counter payment />
+            <Counter payment onValueChange={onCounterChange} />
           </View>
+          <Text style={styles.label}>Deskripsi Makanan </Text>
           <Text style={styles.description}>
-            Makanan khas bandung yang cukup sering dipesan oleh anak muda dengan
-            pola yang cukup tinggi dengan mengutamakan diet yang sehat dan
-            teratur
+            {params.ingredients}
           </Text>
-          <Text style={styles.label}>Ingredients : </Text>
-          <Text style={styles.description}>Saledri, bawang, sambal, madu</Text>
+          
           <View>
-            <Text style={styles.label}>Tota Price</Text>
-            <Text style={styles.description}>Rp20.000</Text>
+            <Text style={styles.label}>Harga</Text>
+            <Text style={styles.description}><Number number={params.price}  /> </Text>
+          </View>
+
+            <View>
+            <Text style={styles.label}>Total Harga</Text>
+            <Text style={styles.descriptionTotal}><Number number={params.price * totalItem}  /> </Text>
           </View>
         </View>
 
@@ -68,6 +82,7 @@ const styles = StyleSheet.create({
   },
   cover: {
     height: 330,
+    resizeMode: 'cover'
   },
   back: {
     position: 'absolute',
@@ -94,6 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins-Regular',
     color: '#020202',
+    width: 250
   },
   productContainer: {
     flexDirection: 'row',
@@ -105,6 +121,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Poppins-Regular',
     color: '#8D92A3',
+    marginBottom: 10,
+  },
+  descriptionTotal: {
+    fontSize: 14,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#ED212B',
     marginBottom: 10,
   },
   label: {

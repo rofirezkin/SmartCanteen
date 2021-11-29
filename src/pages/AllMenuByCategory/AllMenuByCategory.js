@@ -1,45 +1,93 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { FlatList, StyleSheet, Text, View, Image } from 'react-native'
+import { FlatList, StyleSheet, Text, View, Image , ScrollView, ActivityIndicator, TouchableOpacity} from 'react-native'
+import { IcLocation, ILBannerRec } from '../../assets';
+import { Gap, Rating } from '../../components';
 import { ENDPOINT_API_SMART_CANTEEN, ENDPOINT_SMART_CANTEEN } from '../../utils/API/httpClient';
 import { normalizeFont } from '../../utils/normalizeFont';
 
-const AllMenuByCategory = ({route}) => {
+const AllMenuByCategory = ({route, navigation}) => {
     const title = route.params;
+
     const [items,setItems] = useState([])
-    
+    const [currentPage, setCurrentPage] = useState(1)
+    const [isLoading, setIsLoading] = useState(false)
+
     const getItems = () => {
-        axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch?page=1&category_menu=Recommended`)
+        setIsLoading(true)
+        axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch?page=${currentPage}&category_menu=${title[1]}`)
               .then(res => {
-                setItems(res.data.data.data)
+                setItems([...items, ...res.data.data.data])
+                setIsLoading(false)
               }).catch(err => {
                   console.log(err.message)
               })
     }
 
     const renderItem = ({item}) => {
+        const nameCanteen = `${item.name} - ${item.nama_tenant}`
+        var length = 60;
+        if(nameCanteen.length > 60)
+        {
+            var trimmedString = nameCanteen.substring(0, length);
+            var result = `${trimmedString}...`
+        }else{
+            var result = `${item.name} - ${item.nama_tenant}`
+        }
         return (
-            <View style={styles.wrapperItem}>
+            <TouchableOpacity style={styles.wrapperItem} onPress={() => navigation.navigate('DetailFoodItem', item)}>
                 <Image style={styles.imageItems} source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${item.picturePath}` }} />
-                <Text>{item.name}</Text>
-                
-            </View>
+                 
+                <View style={styles.itemContent}>
+                  
+                    <Text style={styles.titleConten}>{result}</Text>
+                    <Text style={styles.descConten}>{item.category}</Text>
+                    <View style={{ flexDirection: 'row', flex: 1 }}>
+                        <IcLocation style={{ marginRight: 5, marginTop: 2}}/>
+                        <Text style={styles.descContenlokasi}>{item.lokasi_kantin}</Text>
+                    </View>
+                    <Rating number={item.ratingMenu} />
+                    
+                </View>
+            </TouchableOpacity>
+            
         )
+    }
+
+    const renderLoader = () => {
+        return (
+            isLoading ? 
+            <View style={{ marginVertical: 16, alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#aaa" />
+            </View> : null
+            )
+    }
+
+    const loadMoreItem = () => {
+        setCurrentPage(currentPage + 1)
     }
 
     useEffect(() => {
        getItems()
-
-      
-    },[])
+       
+    },[currentPage])
     return (
         <View style={styles.container}>
+            <Image source={ILBannerRec} style={{ width: "100%", resizeMode: 'cover', backgroundColor: '#ED212B' }}/>
+            <Gap height={10} />
             <View style={styles.title}>
-                <Text style={styles.textTitle}>{title}</Text>
-                <Text style={styles.desc}>Pilih menu favorite kamu dibawah ini</Text>
+                <Text style={styles.textTitle}>{title[0]}</Text>
+                <Text style={styles.desc}>Pilih menu favorite kamu dibawah ini, semua tersaji secara higenis dan terasa nikmat</Text>
             </View>
             <View style={styles.content}>
-                 <FlatList data={items} renderItem={renderItem} />
+                    <FlatList 
+                        data={items} 
+                        renderItem={renderItem}
+                        keyExtractor={items => items.kode_menu}
+                        ListFooterComponent={renderLoader}
+                        onEndReached={loadMoreItem}
+                        onEndReachedThreshold={0}
+                    />
             </View>
         </View>
     )
@@ -54,10 +102,15 @@ const styles = StyleSheet.create({
     },
     title:{
         paddingHorizontal: 20
+    
+    },
+    content:{
+        flex: 1
     },
     desc:{
         fontSize: normalizeFont(12),
-        fontFamily: 'Poppins-Light'
+        fontFamily: 'Poppins-Regular',
+        color: '#8D92A3'
     },
     textTitle:{
         fontSize: normalizeFont(15),
@@ -76,5 +129,24 @@ const styles = StyleSheet.create({
         height: 90,
         marginRight: 16,
         resizeMode: 'cover'
+    },
+    itemContent:{
+        flex: 1,
+        justifyContent: 'center'
+    },
+    titleConten: {
+        fontSize: normalizeFont(13),
+        fontFamily: 'Poppins-SemiBold'
+    },
+    descConten: {
+        fontSize : normalizeFont(11),
+        fontFamily : 'Poppins-Regular',
+        color: '#8D92A3'
+    },
+    descContenlokasi:{
+        fontSize : normalizeFont(11),
+        fontFamily : 'Poppins-Regular',
+        color: '#8D92A3',
+        alignItems: 'center', justifyContent: 'center'
     }
 })

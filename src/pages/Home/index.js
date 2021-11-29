@@ -12,7 +12,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-import {DummyCanteen, DummyFood1, DummyFood2} from '../../assets';
+import {DummyCanteen, DummyFood1, DummyFood2, DummyFoodCourt} from '../../assets';
 import {getUser} from '../../utils/AsyncStoreServices';
 import {useDispatch} from 'react-redux';
 import {
@@ -48,6 +48,7 @@ const Home = ({navigation}) => {
   const dispatch = useDispatch()
   const{severalRecommended, severalNewTaste, severalPopular} = useSelector(state => state.menuReducer)
   var titleMenu = '';
+  var paramsQuery = '';
 
   const [profile, setProfile] = useState({
     fullName: '',
@@ -82,7 +83,7 @@ const Home = ({navigation}) => {
   useEffect(() => {
     user();
     dispatch(getDataMenuSeveralByTypes('Recommended'))
-    dispatch(getDataMenuSeveralByTypes('New Taste'))
+    dispatch(getDataMenuSeveralByTypes('New Menu'))
     dispatch(getDataMenuSeveralByTypes('Popular'))
   }, []);
 
@@ -152,12 +153,12 @@ const Home = ({navigation}) => {
                 <Gap />
               </View>
             </ScrollView>
-            <Text style={styles.textCanteen}>Choose Canteen By Faculty</Text>
+            <Text style={styles.textCanteen}>Choose Food By Canteen</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.foodCardContainer}>
                 <Gap width={18} />
                     <CardCanteen avatar={DummyCanteen} name="Kantin Fakultas Teknik"/>
-                    <CardCanteen avatar={DummyCanteen} name="Kantin Fakultas Ilmu Terapan"/>
+                    <CardCanteen avatar={DummyFoodCourt} name="Kantin Fakultas Ilmu Terapan"/>
                     <CardCanteen avatar={DummyCanteen} name="Kantin Fakultas Ekonomi Bisnis"/>
                 <Gap />
               </View>
@@ -170,7 +171,7 @@ const Home = ({navigation}) => {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.title}>Recommended Menu</Text>
                     </View>
-                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', titleMenu="Recommended Menu")}>
+                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', [titleMenu="Recommended Menu", paramsQuery="Recommended"])}>
                         <Text style={styles.desc}>Lihat Semua</Text>
                     </TouchableOpacity>
                 </View>
@@ -189,7 +190,7 @@ const Home = ({navigation}) => {
 
                         const idKey = `${data.id}001`
                         return(
-                            <CategoryMenu key={idKey} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath}  />
+                            <CategoryMenu key={result} rating={data.ratingMenu} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath} onPress={() => navigation.navigate('DetailFoodItem', data)}  />
                         )
                       })}
                     </ScrollView>
@@ -203,7 +204,7 @@ const Home = ({navigation}) => {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.title}>New Taste Menu</Text>
                     </View>
-                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', titleMenu="New Taste Menu")}>
+                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', [titleMenu="New Menu", paramsQuery="New Menu"])}>
                         <Text style={styles.desc}>Lihat Semua</Text>
                     </TouchableOpacity>
                 </View>
@@ -211,9 +212,9 @@ const Home = ({navigation}) => {
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                       {severalNewTaste.map(data => {
                         const nameCanteen = `${data.name} - ${data.nama_tenant}`
-                        const idKey = `${data.id}001`
+                        
                         return(
-                             <CategoryMenu key={idKey} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath}  />
+                             <CategoryMenu key={data.kode_menu} rating={data.rating} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath}  />
                         )
                       })}
                     </ScrollView>
@@ -227,7 +228,7 @@ const Home = ({navigation}) => {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.title}>Popular Menu</Text>
                     </View>
-                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', titleMenu="Popular Menu")}>
+                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', [titleMenu="Popular Menu", paramsQuery="Popular"])}>
                         <Text style={styles.desc}>Lihat Semua</Text>
                     </TouchableOpacity>
                 </View>
@@ -237,13 +238,13 @@ const Home = ({navigation}) => {
                         const nameCanteen = `${data.name} - ${data.nama_tenant}`
                         const idKey = `${data.id}`
                         return(
-                             <CategoryMenu key={idKey} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath}  />
+                             <CategoryMenu key={idKey} rating={data.rating} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath} onPress={() => navigation.navigate('DetailFoodItem', data)}  />
                         )
                       })}
                     </ScrollView>
                 </View>
               </View>
-            </View>  
+            </View>   
             {/* <TabViewHome /> */}
           </View>
         </View>

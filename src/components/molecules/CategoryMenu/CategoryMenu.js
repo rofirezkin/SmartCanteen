@@ -5,7 +5,7 @@ import { ENDPOINT_SMART_CANTEEN } from '../../../utils/API/httpClient'
 import { normalizeFont } from '../../../utils/normalizeFont'
 import CardCategoryMenu from '../CardCategoryMenu/CardCategoryMenu'
 
-const CategoryMenu = ({categoryName, avatar, onPress, name, canteen, images }) => {
+const CategoryMenu = ({categoryName, avatar, onPress, name, canteen, images, rating }) => {
     var string = `${name}`;
     var length = 25;
     if(string.length > 25)
@@ -24,7 +24,7 @@ const CategoryMenu = ({categoryName, avatar, onPress, name, canteen, images }) =
                         <View style={styles.content}>
                         <Text style={styles.text}>{result} </Text>
                         <Text style={styles.subTitle}>{canteen}</Text>
-                        <Rating />
+                        <Rating number={rating} />
                     </View>
                 </TouchableOpacity>
                 </ScrollView>

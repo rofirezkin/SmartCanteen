@@ -24,6 +24,7 @@ import DetailFoodItem from './DetailFoodItem';
 import MyCart from './MyCart';
 import Notification from './Notification';
 import AllMenuByCategory from './AllMenuByCategory/AllMenuByCategory';
+import OrderSummary from './OrderSummary/OrderSummary';
 
 export {
   MyCart,
@@ -51,5 +52,6 @@ export {
   SuccessSignUp,
   SignUpAddress,
   SplashScreen,
-  AllMenuByCategory
+  AllMenuByCategory,
+  OrderSummary
 };

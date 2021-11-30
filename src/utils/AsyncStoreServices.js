@@ -11,6 +11,7 @@ const DEFAULT_USER = {
   studentClass: '',
   role: '',
   photo: '',
+  phone: '',
   authenticated: false,
 };
 

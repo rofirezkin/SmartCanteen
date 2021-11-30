@@ -1,7 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Image, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import {deleteUser} from '../../../utils/AsyncStoreServices'
 
 import {ItemListMenu} from '..';
 
@@ -19,6 +21,12 @@ const renderTabBar = props => (
 
 const Account = () => {
   const navigation = useNavigation();
+
+   const signOut = async () => {
+    await deleteUser()
+
+    navigation.replace('SignIn')
+  }
   return (
     <View>
       <ItemListMenu
@@ -38,6 +46,7 @@ const Account = () => {
         name="Log Out"
         desc="Keluar dari akun anda"
         icon="logout"
+        onPress={signOut}
       />
     </View>
   );

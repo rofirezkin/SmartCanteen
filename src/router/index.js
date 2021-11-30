@@ -32,6 +32,7 @@ import {
   MyCart,
   Notification,
   AllMenuByCategory,
+  OrderSummary,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -177,6 +178,11 @@ const Router = () => {
       <Stack.Screen
         name="AllMenuByCategory"
         component={AllMenuByCategory}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="OrderSummary"
+        component={OrderSummary}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

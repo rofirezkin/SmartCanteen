@@ -19,6 +19,13 @@ const DetailFoodItem = ({navigation, route}) => {
     setTotalItem(value);
 
   };
+  const totalOrder = params.price * totalItem
+
+  const dataOrder = {
+    ...params,
+    totalItem,
+    totalOrder
+  }
   
 
   return (
@@ -53,7 +60,7 @@ const DetailFoodItem = ({navigation, route}) => {
 
             <View>
             <Text style={styles.label}>Total Harga</Text>
-            <Text style={styles.descriptionTotal}><Number number={params.price * totalItem}  /> </Text>
+            <Text style={styles.descriptionTotal}><Number number={totalOrder}  /> </Text>
           </View>
         </View>
 
@@ -65,7 +72,7 @@ const DetailFoodItem = ({navigation, route}) => {
             <Button
               double
               label="Order Now"
-              onPress={() => navigation.navigate('SuccessOrder')}
+              onPress={() => navigation.navigate('OrderSummary', dataOrder)}
             />
           </View>
         </View>

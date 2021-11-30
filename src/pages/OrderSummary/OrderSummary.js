@@ -1,4 +1,3 @@
-import { privateName } from '@babel/types';
 import React, { useEffect, useState } from 'react';
 import {ScrollView, StyleSheet, Text, View, Image, TextInput} from 'react-native';
 import { IcStore } from '../../assets';
@@ -10,6 +9,7 @@ import Number from '../../utils/Number/Number';
 const OrderSummary = ({navigation, route}) => {
 
   const params = route.params;
+  const [text, onChangeText] = React.useState('');
   const [profile, setProfile] = useState({
     fullName: '',
     numberId: '',
@@ -19,6 +19,8 @@ const OrderSummary = ({navigation, route}) => {
     role: '',
     phone: ''
   });
+
+
 
   const totalPrice = params.totalOrder + 1000 + 2000
 
@@ -32,6 +34,14 @@ const OrderSummary = ({navigation, route}) => {
       phone: dataUser.phone
     });
   };
+
+  const dataSubmitOrder = {
+      id_menu
+  }
+
+  const onSubmit =  () => {
+      
+  }
 
   useEffect(() => {
     user()
@@ -63,7 +73,12 @@ const OrderSummary = ({navigation, route}) => {
           </View>
           <View style={styles.detailCardCatatan}>
             <Text style={{ fontFamily: 'Poppins-Regular'}}>Catatan: </Text>
-            <TextInput style={{ fontSize: 12 }} placeholder="Mohon meninggalkan catatan..." />
+            <TextInput 
+                style={{ fontSize: 12, textAlign: 'right' }}  
+                placeholder="Mohon meninggalkan catatan..." 
+                onChangeText={onChangeText}
+                value={text}
+                />
           </View>
 
          <View style={styles.detailCard}>
@@ -90,7 +105,8 @@ const OrderSummary = ({navigation, route}) => {
         <View style={styles.detailCard}>
           <Button
             label="Order Now"
-            onPress={() => navigation.navigate('SecureCheckout')}
+            // onPress={() => navigation.navigate('SecureCheckout')}
+            onPress={onSubmit}
           />
         </View>
         <Gap height={18} />

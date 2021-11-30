@@ -29,15 +29,14 @@ const ItemListFood = ({
               <Text style={styles.subTitle}>
                 {canteen}
               </Text>
+              <Rating ratingCard number={rating} />
               <Text style={styles.subTitle}>
-                {items} Item . Rp{totalOrder}
+                {items} Item . <Number style={styles.subTitle} number={totalOrder} />
               </Text>
-            </View>
-            <View>
-              <Rating ratingCard />
             </View>
           </View>
         );
+
 
       case 'in-progress':
         return (
@@ -97,7 +96,7 @@ const ItemListFood = ({
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <View style={styles.tabview}>
-        <Image source={urlPhoto} style={styles.avatar} />
+        <Image source={{ uri: urlPhoto }} style={styles.avatar} />
         {renderContent()}
       </View>
     </TouchableOpacity>
@@ -134,6 +133,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontSize: 13,
     color: '#8D92A3',
+    width: 300
   },
   container: {
     marginLeft: 10,

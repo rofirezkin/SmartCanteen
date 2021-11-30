@@ -60,6 +60,7 @@ const SignIn = ({navigation}) => {
         faculty: issueProfile.faculty,
         studentClass: issueProfile.studentclass,
         photo: issueProfile.photo,
+        phone: issueProfile.phone,
         authenticated: true,
       });
 

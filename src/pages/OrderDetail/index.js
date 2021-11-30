@@ -1,8 +1,13 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, Gap, Header, ItemListFood, ItemValue} from '../../components';
+import { ENDPOINT_SMART_CANTEEN } from '../../utils/API/httpClient';
 
-const OrderDetail = ({navigation}) => {
+const OrderDetail = ({navigation, route}) => {
+
+  const params = route.params;
+
+  console.log(params)
   return (
     <ScrollView>
       <View style={styles.page}>
@@ -14,7 +19,15 @@ const OrderDetail = ({navigation}) => {
         />
         <View style={styles.container}>
           <View>
-            <ItemListFood type="product" items={3} totalOrder="20.000" />
+            <ItemListFood 
+              type="product" 
+              items={params.totalItem} 
+              totalOrder={params.totalOrder}
+              name={params.name}
+              ingredients={params.ingredients}
+              rating={params.ratingMenu}
+              urlPhoto={`${ENDPOINT_SMART_CANTEEN}/storage/${params.picturePath}`}
+              />
           </View>
           <View style={styles.detailCard}>
             <Text style={styles.text}>Detail Transaction</Text>

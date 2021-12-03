@@ -14,6 +14,11 @@ import Number from '../../utils/Number/Number';
 const DetailFoodItem = ({navigation, route}) => {
 
   const params = route.params;
+  var titleMenu = ''
+  var paramsQuery = ''
+
+
+
   const [totalItem, setTotalItem] = useState(1);
   const onCounterChange = value => {
     setTotalItem(value);
@@ -33,7 +38,7 @@ const DetailFoodItem = ({navigation, route}) => {
       <ImageBackground source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${params.picturePath}` }} style={styles.cover}>
         <View style={styles.back}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('AllMenuByCategory', params)}
+            onPress={() => navigation.navigate('AllMenuByCategory', [titleMenu=params.category_menu, paramsQuery=params.category_menu])}
             activeOpacity={0.5}>
             <IcBackFoodCourt />
           </TouchableOpacity>

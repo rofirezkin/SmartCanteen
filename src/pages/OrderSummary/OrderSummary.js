@@ -35,9 +35,6 @@ const OrderSummary = ({navigation, route}) => {
     });
   };
 
-  const dataSubmitOrder = {
-      id_menu
-  }
 
   const onSubmit =  () => {
       

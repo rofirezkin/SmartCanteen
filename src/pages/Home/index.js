@@ -153,7 +153,11 @@ const Home = ({navigation}) => {
                 <Gap />
               </View>
             </ScrollView>
-            <Text style={styles.textCanteen}>Choose Food By Canteen</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Text style={styles.textCanteen}>Choose Food By Canteen</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Canteen')} style={{ marginRight: 20, fontFamily: 'Poppins-Regular', fontSize: 13, }}><Text>Lihat Semua</Text></TouchableOpacity>
+            </View>
+            
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.foodCardContainer}>
                 <Gap width={18} />
@@ -212,9 +216,18 @@ const Home = ({navigation}) => {
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                       {severalNewTaste.map(data => {
                         const nameCanteen = `${data.name} - ${data.nama_tenant}`
+                        var result = `${data.id}`;
+                        var characters = '012345';
+                        var charactersLength = characters.length;
                         
+                         for ( var i = 0; i < charactersLength; i++ ) {
+                            result += characters.charAt(Math.floor(Math.random() * 
+                            charactersLength));
+                          }
+
+                        const idKey = `${data.id}001`
                         return(
-                             <CategoryMenu key={data.kode_menu} rating={data.rating} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath}  />
+                            <CategoryMenu key={result} rating={data.ratingMenu} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath} onPress={() => navigation.navigate('DetailFoodItem', data)}  />
                         )
                       })}
                     </ScrollView>
@@ -228,7 +241,7 @@ const Home = ({navigation}) => {
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.title}>Popular Menu</Text>
                     </View>
-                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', [titleMenu="Popular Menu", paramsQuery="Popular"])}>
+                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate('AllMenuByCategory', [titleMenu="Popular", paramsQuery="Popular"])}>
                         <Text style={styles.desc}>Lihat Semua</Text>
                     </TouchableOpacity>
                 </View>
@@ -236,15 +249,24 @@ const Home = ({navigation}) => {
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                       {severalPopular.map(data => {
                         const nameCanteen = `${data.name} - ${data.nama_tenant}`
-                        const idKey = `${data.id}`
+                        var result = `${data.id}`;
+                        var characters = '012345';
+                        var charactersLength = characters.length;
+                        
+                         for ( var i = 0; i < charactersLength; i++ ) {
+                            result += characters.charAt(Math.floor(Math.random() * 
+                            charactersLength));
+                          }
+
+                        const idKey = `${data.id}001`
                         return(
-                             <CategoryMenu key={idKey} rating={data.rating} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath} onPress={() => navigation.navigate('DetailFoodItem', data)}  />
+                            <CategoryMenu key={result} rating={data.ratingMenu} avatar={DummyFood1} name={nameCanteen} canteen={data.lokasi_kantin} images={data.picturePath} onPress={() => navigation.navigate('DetailFoodItem', data)}  />
                         )
                       })}
                     </ScrollView>
                 </View>
               </View>
-            </View>   
+            </View>  
             {/* <TabViewHome /> */}
           </View>
         </View>

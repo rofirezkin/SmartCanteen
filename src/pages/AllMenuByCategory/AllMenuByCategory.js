@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { FlatList, StyleSheet, Text, View, Image , ScrollView, ActivityIndicator, TouchableOpacity} from 'react-native'
-import { IcLocation, ILBannerRec } from '../../assets';
+import { FlatList, StyleSheet, Text, View, Image , ScrollView, ActivityIndicator, TouchableOpacity, ImageBackground} from 'react-native'
+import { useDispatch } from 'react-redux';
+import { IcBackFoodCourt, IcLocation, ILBannerRec } from '../../assets';
 import { Gap, Rating } from '../../components';
 import { ENDPOINT_API_SMART_CANTEEN, ENDPOINT_SMART_CANTEEN } from '../../utils/API/httpClient';
 import { normalizeFont } from '../../utils/normalizeFont';
@@ -12,10 +13,11 @@ const AllMenuByCategory = ({route, navigation}) => {
     const [items,setItems] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
+    const dispatch = useDispatch();
 
-    const getItems = () => {
+    const getItems = async () => {
         setIsLoading(true)
-        axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch?page=${currentPage}&category_menu=${title[1]}`)
+        await axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch?page=${currentPage}&category_menu=${title[1]}`)
               .then(res => {
                 setItems([...items, ...res.data.data.data])
                 setIsLoading(false)
@@ -73,7 +75,15 @@ const AllMenuByCategory = ({route, navigation}) => {
     },[currentPage])
     return (
         <View style={styles.container}>
-            <Image source={ILBannerRec} style={{ width: "100%", resizeMode: 'cover', backgroundColor: '#ED212B' }}/>
+            <ImageBackground source={ILBannerRec} style={{ width: "100%", height: 120, resizeMode: 'cover', backgroundColor: '#ED212B' }} >
+                        <View style={styles.back}>
+                            <TouchableOpacity
+                                onPress={() => navigation.reset({index: 0, routes:[{name: 'MainApp'}]})}
+                                activeOpacity={0.5}>
+                                <IcBackFoodCourt />
+                            </TouchableOpacity>
+                            </View>
+            </ImageBackground>
             <Gap height={10} />
             <View style={styles.title}>
                 <Text style={styles.textTitle}>{title[0]}</Text>
@@ -106,6 +116,10 @@ const styles = StyleSheet.create({
     },
     content:{
         flex: 1
+    },
+    back: {
+        position: 'absolute',
+        padding: 18,
     },
     desc:{
         fontSize: normalizeFont(12),

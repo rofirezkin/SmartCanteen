@@ -34,6 +34,9 @@ import {skeletonHome} from '../../components/skeleton/skeletonHome';
 import { useSelector } from 'react-redux';
 import { getDataMenuByTypes, getDataMenuSeveralByTypes } from '../../redux/action/menuAction';
 import CardCanteen from '../../components/molecules/CardCanteen/CardCanteen';
+import useForm from '../../utils/useForm';
+import { ENDPOINT_API_SMART_CANTEEN } from '../../utils/API/httpClient';
+import axios from 'axios';
 
 
 const wait = timeout => {
@@ -78,7 +81,49 @@ const Home = ({navigation}) => {
     });
   };
 
- 
+
+  const submitOrder = async () => {
+      const dataSubmit = await axios({
+        method: 'POST',
+        url : `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: [
+          {
+                  kode_transaksi : "AD12a3asdasds",
+                id_user : 32,
+                nama_pelanggan : "Muhamamd Fajar Mobileasd",
+                nim : 6712,
+                id_menu : 1,
+                id_tenant : 3,
+                status : "ENDING",
+                method : "delivery",
+                quantity : 3,
+                total : 42000
+          },{
+                  kode_transaksi : "AD12a3asdsds",
+                id_user : 32,
+                nama_pelanggan : "Muhamamd Fajar Mobilezzz",
+                nim : 6712,
+                id_menu : 1,
+                id_tenant : 3,
+                status : "ENDING",
+                method : "delivery",
+                quantity : 3,
+                total : 42000
+          }
+
+      ]
+      }).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err.response)
+      })
+
+      return Promise.resolve(dataSubmit)
+      // console.log(form)
+  }
 
   useEffect(() => {
     user();
@@ -106,7 +151,7 @@ const Home = ({navigation}) => {
                 url={profile.photo}
               />
               <Gap height={15} />
-
+              <Button label="Add" onPress={submitOrder} />
               <PosterHome />
               <View>
                 <Gap height={20} />

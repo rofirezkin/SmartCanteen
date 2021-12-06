@@ -37,7 +37,7 @@ const OrderSummary = ({navigation, route}) => {
 
 
   const onSubmit =  () => {
-      
+      navigation.navigate('SecureCheckout')
   }
 
   useEffect(() => {
@@ -102,7 +102,6 @@ const OrderSummary = ({navigation, route}) => {
         <View style={styles.detailCard}>
           <Button
             label="Order Now"
-            // onPress={() => navigation.navigate('SecureCheckout')}
             onPress={onSubmit}
           />
         </View>

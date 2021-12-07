@@ -3,17 +3,17 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import {DummyFoodCourt} from '../../../assets';
 import Rating from '../Rating';
 
-const ProfileFoodCourt = () => {
+const ProfileFoodCourt = ({nameCanteen, ingredients, number}) => {
   return (
     <View style={styles.container}>
       <Image source={DummyFoodCourt} style={styles.image} />
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Food Court-A</Text>
+        <Text style={styles.title}>{nameCanteen}</Text>
         <Text style={styles.description}>
-          Pecel Ayam, ikan Bakar, Mie Ayam , ikan bakar
+          {ingredients}
         </Text>
 
-        <Rating />
+        <Rating number={number} />
       </View>
     </View>
   );

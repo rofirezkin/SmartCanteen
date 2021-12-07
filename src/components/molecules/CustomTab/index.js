@@ -1,19 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {ListFoodCourt} from '..';
 import {Button} from '../..';
+import { getAllMenuUsers } from '../../../redux/action/menuAction';
 
-const CustomTab = () => {
+const CustomTab = ({id_tenant}) => {
   const [foodMenu, setFoodMenu] = useState('all');
   const [all, setAll] = useState('red');
   const [food, setFood] = useState('#909090');
   const [baverages, setBaverages] = useState('#909090');
+  const dispatch = useDispatch();
+
+  const {allMenu, foodMenuUsers, beveragesMenu} = useSelector(state => state.menuReducer)
 
   useEffect(() => {
     if (foodMenu === 'all') {
       setAll('red');
       setFood('#909090');
       setBaverages('#909090');
+      dispatch(getAllMenuUsers(id_tenant))
     } else if (foodMenu === 'food') {
       setAll('#909090');
       setFood('red');
@@ -25,6 +32,8 @@ const CustomTab = () => {
     }
   }, [foodMenu]);
 
+  console.log('reducer',allMenu)
+
   const getFoodData = value => {
     setFoodMenu(value);
   };
@@ -33,11 +42,16 @@ const CustomTab = () => {
     if (foodMenu === 'all') {
       return (
         <View>
-          <ListFoodCourt />
-          <ListFoodCourt />
-          <ListFoodCourt />
-          <ListFoodCourt />
-          <ListFoodCourt />
+            {allMenu.map(res => {
+              return(
+                <ListFoodCourt 
+                  name={res.name}
+                  ingredients={res.ingredients}
+                  price={res.price}
+                />
+                )
+                
+            })}
         </View>
       );
     } else if (foodMenu === 'food') {

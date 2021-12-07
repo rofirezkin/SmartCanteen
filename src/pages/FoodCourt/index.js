@@ -1,18 +1,78 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import {
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 import {IcBackFoodCourt, ILFoodCourt} from '../../assets';
 import {DetailFoodCourt, Gap, Header, SearchInput} from '../../components';
+import { ENDPOINT_API_SMART_CANTEEN } from '../../utils/API/httpClient';
 
-const FoodCourt = ({navigation}) => {
+const FoodCourt = ({navigation, route}) => {
+
+
+  const params = route.params;
+  const [items,setItems] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+    
+  const getItems = async () => {
+
+    setIsLoading(true)
+     await axios.get(`${ENDPOINT_API_SMART_CANTEEN}tenant/fetch/several?page=${currentPage}&lokasi_kantin=${params}`)
+              .then(res => {
+                setItems([...items, ...res.data.data.data])  
+                setIsLoading(false)
+              }).catch(err => {
+                  console.log(err.message)
+        })
+  }
+
+  const renderItem = ({item}) => {
+        const nameCanteen = `${item.nama_tenant}`
+        var length = 60;
+        if(nameCanteen.length > 60)
+        {
+            var trimmedString = nameCanteen.substring(0, length);
+            var result = `${trimmedString}...`
+        }else{
+            var result = `${item.nama_tenant}`
+        }
+        return (
+        <DetailFoodCourt 
+            nameCanteen={result}
+            desc={item.desc_kantin}
+            rating={item.rating}
+            onPress={() => navigation.navigate('ChooseFood', item)} />       
+        )
+    }
+
+      const loadMoreItem = () => {
+        setCurrentPage(currentPage + 1)
+    }
+
+    const renderLoader = () => {
+        return (
+            isLoading ? 
+            <View style={{ marginVertical: 16, alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#aaa" />
+            </View> : null
+            )
+    }
+
+  useEffect(() => {
+    getItems()
+  },[currentPage])
+
   return (
-    <ScrollView style={{backgroundColor: 'white'}}>
+    <View style={{backgroundColor: 'white', flex: 1,}}>
       <View style={styles.page}>
         <Image source={ILFoodCourt} style={styles.illustration} />
         <View style={styles.back}>
@@ -26,16 +86,20 @@ const FoodCourt = ({navigation}) => {
         <View style={styles.container}>
           <SearchInput onPress={() => navigation.navigate('SearchSection')} />
           <Gap height={10} />
-          <Text style={styles.title}>Welcome to A-Canteen Food Court!</Text>
+          <Text style={styles.title}>Welcome to Canteen {params}!</Text>
         </View>
         <View style={styles.listFoodcourt}>
-          <DetailFoodCourt onPress={() => navigation.navigate('ChooseFood')} />
-          <DetailFoodCourt />
-          <DetailFoodCourt />
-          <DetailFoodCourt />
+              <FlatList 
+                  data={items} 
+                  renderItem={renderItem}
+                  keyExtractor={items => items.id}
+                  ListFooterComponent={renderLoader}
+                  onEndReached={loadMoreItem}
+                  onEndReachedThreshold={0}
+              />
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -62,4 +126,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     padding: 18,
   },
+  listFoodcourt:{
+      paddingHorizontal: 10
+  }
 });

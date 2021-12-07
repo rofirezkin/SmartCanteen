@@ -3,27 +3,27 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {DummyFoodCourt} from '../../../assets';
 import Rating from '../Rating';
 
-const DetailFoodCourt = ({onPress, type}) => {
+const DetailFoodCourt = ({onPress, type, nameCanteen, desc, locKantin, rating}) => {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <View style={styles.container}>
         <View style={styles.boxFoodCourt}>
           <Image source={DummyFoodCourt} style={styles.image} />
           <View style={styles.textContainer}>
-            <Text style={styles.title}>Food Court-A</Text>
+            <Text style={styles.title}>{nameCanteen}</Text>
             <Text style={styles.description}>
-              Pecel Ayam, ikan Bakar, Mie Ayam...
+             {desc}
             </Text>
             {type ? (
               <View>
-                <Text style={styles.description}>Kantin Fakultas Teknik</Text>
+                <Text style={styles.description}>{locKantin}</Text>
               </View>
             ) : (
               <View>
                 <Text style={styles.statusText}>Open</Text>
               </View>
             )}
-            <Rating />
+            <Rating number={rating} />
           </View>
         </View>
       </View>

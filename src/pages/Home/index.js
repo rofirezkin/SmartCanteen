@@ -100,6 +100,8 @@ const Home = ({navigation}) => {
                 status : "ENDING",
                 method : "delivery",
                 quantity : 3,
+                catatan: 'tidak ada',
+                phoneNumber: '0123213213',
                 total : 42000
           },{
                   kode_transaksi : "AD12a3asdsds",
@@ -111,6 +113,8 @@ const Home = ({navigation}) => {
                 status : "ENDING",
                 method : "delivery",
                 quantity : 3,
+                catatan: 'tidak ada',
+                phoneNumber: '0123213213',
                 total : 42000
           }
 

@@ -44,10 +44,13 @@ const CustomTab = ({id_tenant}) => {
         <View>
             {allMenu.map(res => {
               return(
-                <ListFoodCourt 
+                <ListFoodCourt
+                  key={res.id}
                   name={res.name}
                   ingredients={res.ingredients}
                   price={res.price}
+                  status={res.is_active}
+                  imagePath={res.picturePath}
                 />
                 )
                 

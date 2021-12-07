@@ -3,41 +3,104 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter, Gap, Like, Price} from '../..';
 import {DummyFoodCourt2} from '../../../assets';
+import { ENDPOINT_SMART_CANTEEN } from '../../../utils/API/httpClient';
 
-const ListFoodCourt = ({type, name, ingredients, price}) => {
+const ListFoodCourt = ({type, name, ingredients, price, status, textColor="#2B9F61", imagePath}) => {
   const navigation = useNavigation();
+
+  const onValueChange = () => {
+
+  }
+
+  const renderMenu = () => {
+    if(status === 'Tersedia')
+    {
+      return(
+          <TouchableOpacity
+                activeOpacity={0.6}
+                style={styles.container}
+              >
+                <View>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{name}</Text>
+                    <Text style={styles.statusFood(textColor)}>Available</Text> 
+                  </View>
+                  <Text style={styles.description}>
+                    {ingredients}
+                  </Text>
+                  <Price price={price} />
+                  <View style={{ flexDirection: 'row' }}>
+                      <View>
+                      {type ? (
+                        <View style={styles.subBox}>
+                          <Text style={styles.description}>FoodCourt A</Text>
+                          <Gap width={10} />
+                          <Like />
+                        </View>
+                      ) : (
+                        <>
+                          <Like />
+                        </>
+                        
+                      )}
+                    </View>
+                    <View>
+                      <Counter addItem onValueChange={onValueChange} />
+                    </View>
+                  </View>
+
+                </View>
+                <View style={{ marginLeft: 15 }}>
+                  <Image source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${imagePath}` }} style={styles.image} />
+                     
+                </View>
+                
+              </TouchableOpacity>
+      )
+    }else{
+      return(
+          <TouchableOpacity
+                activeOpacity={0.6}
+                style={styles.container}
+                disabled={true}
+              >
+                <View>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{name}</Text>
+                    <Text style={styles.statusFood(textColor = 'red')}>Not-Available</Text>
+                    
+                  </View>
+                  <Text style={styles.description}>
+                    {ingredients}
+                  </Text>
+                  <Price price={price} />
+                  <View>
+                    {type ? (
+                      <View style={styles.subBox}>
+                        <Text style={styles.description}>FoodCourt A</Text>
+                        <Gap width={10} />
+                        <Like />
+                      </View>
+                    ) : (
+                      <>
+                        <Like />
+                      </>
+                    )}
+                  </View>
+                </View>
+                <View style={{ marginLeft: 15 }}>
+                  <Image source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${imagePath}` }} style={styles.image} />
+                </View>
+          </TouchableOpacity>
+      )
+    
+    }
+  }
+
   return (
-    <TouchableOpacity
-      activeOpacity={0.6}
-      style={styles.container}
-     >
-      <View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>{name}</Text>
-          <Text style={styles.statusFood}>Available</Text>
-        </View>
-        <Text style={styles.description}>
-          {ingredients}
-        </Text>
-        <Price price={price} />
-        <View>
-          {type ? (
-            <View style={styles.subBox}>
-              <Text style={styles.description}>FoodCourt A</Text>
-              <Gap width={10} />
-              <Like />
-            </View>
-          ) : (
-            <>
-              <Like />
-            </>
-          )}
-        </View>
-      </View>
-      <View>
-        <Image source={DummyFoodCourt2} style={styles.image} />
-      </View>
-    </TouchableOpacity>
+    <>
+    {renderMenu()}
+    </>
   );
 };
 
@@ -58,13 +121,14 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     marginRight: 10,
+    width: 170
   },
-  statusFood: {
+  statusFood: textColor => ({
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
-    color: '#2B9F61',
+    color: textColor,
     textAlignVertical: 'center',
-  },
+  }),
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -77,6 +141,7 @@ const styles = StyleSheet.create({
     color: '#8D92A3',
     fontSize: 13,
     fontFamily: 'Poppins-Regular',
+    width: 250
   },
   subBox: {
     flexDirection: 'row',

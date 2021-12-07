@@ -12,7 +12,6 @@ const ProfileFoodCourt = ({nameCanteen, ingredients, number}) => {
         <Text style={styles.description}>
           {ingredients}
         </Text>
-
         <Rating number={number} />
       </View>
     </View>

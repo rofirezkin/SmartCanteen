@@ -49,7 +49,7 @@ const ChooseFood = ({navigation, route}) => {
           </View>
         </View>
       </ScrollView>
-      {/* <View style={styles.button}>
+      <View style={styles.button}>
         <TouchableOpacity
           style={styles.buttonTab}
           activeOpacity={0.8}
@@ -60,7 +60,7 @@ const ChooseFood = ({navigation, route}) => {
           </View>
           <Text style={styles.textButton}>Order Now</Text>
         </TouchableOpacity>
-      </View> */}
+      </View>
     </View>
   );
 };
@@ -84,8 +84,6 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   button: {
-    position: 'absolute',
-    width: '100%',
     bottom: 20,
     paddingHorizontal: 19,
   },

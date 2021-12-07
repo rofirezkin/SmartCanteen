@@ -18,7 +18,12 @@ import {
   ProfileFoodCourt,
 } from '../../components';
 
-const ChooseFood = ({navigation}) => {
+const ChooseFood = ({navigation, route}) => {
+
+  const params = route.params;
+  const idTenant = params.id
+  console.log(params)
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -26,21 +31,25 @@ const ChooseFood = ({navigation}) => {
           <Header
             onPress={() => navigation.goBack()}
             title="Choose Food"
-            subtTitle="Food Court-A - Kantin Fak. Teknik"
+            subtTitle={`Canteen ${params.lokasi_kantin}`}
             onBack
           />
           <View style={styles.container}>
-            <ProfileFoodCourt />
+            <ProfileFoodCourt
+                nameCanteen={params.nama_tenant}
+                ingredients={params.desc_kantin}
+                number={params.rating}
+            />
             <Gap height={16} />
-            <DecisionUser />
+            {/* <DecisionUser /> */}
           </View>
           <View style={styles.tabContainer}>
             {/* <TabViewFoodCourt /> */}
-            <CustomTab />
+            <CustomTab id_tenant={idTenant} />
           </View>
         </View>
       </ScrollView>
-      <View style={styles.button}>
+      {/* <View style={styles.button}>
         <TouchableOpacity
           style={styles.buttonTab}
           activeOpacity={0.8}
@@ -51,7 +60,7 @@ const ChooseFood = ({navigation}) => {
           </View>
           <Text style={styles.textButton}>Order Now</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

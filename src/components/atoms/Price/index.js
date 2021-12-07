@@ -1,10 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import Number from '../../../utils/Number/Number';
 
-const Price = () => {
+const Price = ({price}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.priceDefault}>Rp15.000</Text>
+      <Number style={styles.priceDefault} number={price}/>
       <Text style={styles.discountFee}>Rp15.000</Text>
       <View style={styles.statusPromo}>
         <Text style={styles.textPromo}>Promo</Text>

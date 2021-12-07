@@ -41,18 +41,15 @@ const AllMenuByCategory = ({route, navigation}) => {
                 <Image style={styles.imageItems} source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${item.picturePath}` }} />
                  
                 <View style={styles.itemContent}>
-                  
                     <Text style={styles.titleConten}>{result}</Text>
                     <Text style={styles.descConten}>{item.category}</Text>
                     <View style={{ flexDirection: 'row', flex: 1 }}>
-                        <IcLocation style={{ marginRight: 5, marginTop: 2}}/>
+                        <IcLocation style={{ marginRight: 5, marginTop: 2}} />
                         <Text style={styles.descContenlokasi}>{item.lokasi_kantin}</Text>
                     </View>
                     <Rating number={item.ratingMenu} />
-                    
                 </View>
             </TouchableOpacity>
-            
         )
     }
 

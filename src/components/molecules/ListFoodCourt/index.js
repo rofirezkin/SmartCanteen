@@ -4,22 +4,22 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter, Gap, Like, Price} from '../..';
 import {DummyFoodCourt2} from '../../../assets';
 
-const ListFoodCourt = ({type}) => {
+const ListFoodCourt = ({type, name, ingredients, price}) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       activeOpacity={0.6}
       style={styles.container}
-      onPress={() => navigation.navigate('DetailFoodItem')}>
+     >
       <View>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Chicken Katsu</Text>
+          <Text style={styles.title}>{name}</Text>
           <Text style={styles.statusFood}>Available</Text>
         </View>
         <Text style={styles.description}>
-          Nasi, Telur, Ayam, sambal dan jeruk
+          {ingredients}
         </Text>
-        <Price />
+        <Price price={price} />
         <View>
           {type ? (
             <View style={styles.subBox}>

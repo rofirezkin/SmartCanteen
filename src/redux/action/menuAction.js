@@ -58,3 +58,45 @@ export const getDataFetchMenu = () => async (dispatch) => {
         
         return Promise.resolve(result)
 }
+
+
+export const getAllMenuUsers = (id_tenant) => async (dispatch) => {
+    const result = await axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/byTenant?id_tenant=${id_tenant}`)
+                    .then(res => {
+                        console.log('res all menu', res.data.data)
+                        dispatch({
+                            type: 'SET_USERS_MENU', 
+                            value: res.data.data.data
+                        })
+                    }).catch(err =>{
+                         console.log(err.response)
+                    })
+
+    return Promise.resolve(result)
+}
+
+export const getAllMenuByCategory = (id_tenant, category) => async (dispatch) => {
+    const result = await axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/byTenant?id_tenant=${id_tenant}&category=${category}`)
+                    .then(res => {
+                        if(category === "Makanan")
+                        {   
+                            console.log('res makanan', res.data.data)
+                            dispatch({
+                                type: 'SET_FOOD_MENU',
+                                value: res.data.data.data
+                            })
+                        }
+                        if(category === "Minuman")
+                        {
+                            console.log('res minuman', res.data.data)
+                            dispatch({
+                                type: 'SET_BEVERAGES_MENU',
+                                value: res.data.data.data
+                            })
+                        }
+                    }).catch(err =>{
+                        console.log(err.response)
+                    })
+
+    return Promise.resolve(result)
+}

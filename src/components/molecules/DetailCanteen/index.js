@@ -1,13 +1,13 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-const DetailCanteen = ({onPress, avatar}) => {
+const DetailCanteen = ({onPress, name, avatar}) => {
   return (
     <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
       <View style={styles.container}>
         <Image source={avatar} style={styles.image} />
         <View style={styles.textContainer}>
-          <Text style={styles.title}>Kantin Fakultas Teknik</Text>
+          <Text style={styles.title}>{name}</Text>
           <Text style={styles.subTitle}>
             Menyediakan Makanan yang higenis dekat dengan fakultas teknik
           </Text>

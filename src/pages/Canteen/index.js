@@ -3,8 +3,9 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {DummyCanteen, DummyFood2} from '../../assets';
 import {DetailCanteen, Gap, Header} from '../../components';
 
-const Canteen = ({navigation, route}) => {
-  const type = route.params;
+const Canteen = ({navigation}) => {
+
+  var nameCanteen = ''
   return (
     <ScrollView>
       <View style={styles.page}>
@@ -20,16 +21,23 @@ const Canteen = ({navigation, route}) => {
             Welcome to Tel-U Canteen, pick your location
           </Text>
           <DetailCanteen
+            name="Kantin Fakultas Ilmu Terapan"
             avatar={DummyFood2}
             onPress={
-              type === 'dine-in'
-                ? () => navigation.navigate('Reservation')
-                : type === 'take-away'
-                ? () => navigation.navigate('FoodCourt')
-                : () => navigation.navigate('Reservation')
+              // type === 'dine-in'
+              //   ? () => navigation.navigate('Reservation')
+              //   : type === 'take-away'
+              //   ? () => navigation.navigate('FoodCourt')
+              //   : () => navigation.navigate('Reservation')
+              () => navigation.navigate('FoodCourt', nameCanteen="Fakultas Ilmu Terapan")
             }
           />
-          <DetailCanteen avatar={DummyCanteen} />
+          <DetailCanteen 
+              avatar={DummyCanteen}
+              onPress={
+                 () => navigation.navigate('FoodCourt', nameCanteen="Fakultas Ilmu Terapanzzz")
+              }
+               />
           <DetailCanteen avatar={DummyFood2} />
         </View>
         <Gap height={20} />

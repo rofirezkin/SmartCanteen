@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter1, Counter2} from '../../../assets';
 
-const Counter = ({payment,onValueChange, onPress}) => {
+const Counter = ({payment,onValueChange,  addItem, onPress}) => {
   const [value,setValue] = useState(1);
   
   useEffect(() => {
@@ -26,6 +26,28 @@ const Counter = ({payment,onValueChange, onPress}) => {
     onValueChange(result)
   }
 
+  const renderAddItem = () => {
+
+    if(value > 0)
+    {
+      return(
+        <TouchableOpacity onPress={() => onCount('minus')} style={{ flexDirection: 'row' }} >
+          <Text style={{ paddingHorizontal: 5 }}>{`${value} Items`}</Text>
+          <Counter2 />
+          
+        </TouchableOpacity>
+        )
+    }
+    
+    return(
+      
+      <View style={{ marginLeft: 5 }}>
+         
+      </View>
+      
+      )
+  }
+
   if (payment) {
     return (
       <View style={styles.counter}>
@@ -40,6 +62,19 @@ const Counter = ({payment,onValueChange, onPress}) => {
         </TouchableOpacity>
       </View>
     );
+  }
+
+  if(addItem)
+  {
+    return(
+      <View style={styles.counter}>
+          <TouchableOpacity onPress={() => onCount('plus')} style={styles.containerCounter}>
+            <Counter1 />
+            {renderAddItem()}
+          </TouchableOpacity>
+      </View>    
+      )
+
   }
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -67,5 +102,6 @@ const styles = StyleSheet.create({
   },
   containerCounter: {
     padding: 5,
+    flexDirection: 'row'
   },
 });

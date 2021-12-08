@@ -45,12 +45,12 @@ const ListFoodCourt = ({type, name, ingredients, price, status, textColor="#2B9F
                       )}
                     </View>
                     <View>
-                      <Counter addItem onValueChange={onValueChange} />
+                      <Counter addItem order onValueChange={onValueChange} />
                     </View>
                   </View>
 
                 </View>
-                <View style={{ marginLeft: 15 }}>
+                <View>
                   <Image source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${imagePath}` }} style={styles.image} />
                      
                 </View>
@@ -88,7 +88,7 @@ const ListFoodCourt = ({type, name, ingredients, price, status, textColor="#2B9F
                     )}
                   </View>
                 </View>
-                <View style={{ marginLeft: 15 }}>
+                <View>
                   <Image source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${imagePath}` }} style={styles.image} />
                 </View>
           </TouchableOpacity>
@@ -120,19 +120,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     color: 'black',
     fontSize: 16,
-    marginRight: 10,
     width: 170
   },
   statusFood: textColor => ({
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
     color: textColor,
+    marginRight: 5,
     textAlignVertical: 'center',
   }),
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 21,
+    paddingHorizontal: 10,
     paddingVertical: 12,
     borderBottomColor: '#EEEEEE',
     borderBottomWidth: 1,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     color: '#8D92A3',
     fontSize: 13,
     fontFamily: 'Poppins-Regular',
-    width: 250
+    width: 200
   },
   subBox: {
     flexDirection: 'row',

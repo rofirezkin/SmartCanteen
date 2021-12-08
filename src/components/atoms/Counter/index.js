@@ -2,37 +2,66 @@ import React, { useEffect, useState } from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter1, Counter2} from '../../../assets';
 
-const Counter = ({payment,onValueChange,  addItem, onPress}) => {
+const Counter = ({payment,onValueChange, order,  addItem, onPress}) => {
   const [value,setValue] = useState(1);
+  const [itemValue, setItemValue] = useState(0);
   
   useEffect(() => {
-    onValueChange(value);
+    if(order)
+    {
+      onValueChange(itemValue); 
+    }else{
+      onValueChange(value);
+    }
+
   }, [])
 
-  const onCount =(type) => {
-    let result = value;
-    if(type === 'plus')
+  const onCount = (type,item) => {
+  
+    if(item === 'payment')
     {
-      result = value+1;
+      let result = itemValue;
+
+      if(type === 'plus')
+    {
+      result = itemValue+1;
 
     }if(type === 'minus')
     {
-      if(value > 1){
-       result = value-1;
+      if(itemValue > 0){
+       result = itemValue-1;
       }
     }
 
-    setValue(result)
+    setItemValue(result)
     onValueChange(result)
+
+    }
+  else{
+      let result = value;
+      if(type === 'plus')
+      {
+        result = value+1;
+  
+      }if(type === 'minus')
+      {
+        if(value > 1){
+         result = value-1;
+        }
+      }
+  
+      setValue(result)
+      onValueChange(result)
+    }
   }
 
   const renderAddItem = () => {
 
-    if(value > 0)
+    if(itemValue > 0)
     {
       return(
-        <TouchableOpacity onPress={() => onCount('minus')} style={{ flexDirection: 'row' }} >
-          <Text style={{ paddingHorizontal: 5 }}>{`${value} Items`}</Text>
+        <TouchableOpacity onPress={() => onCount('minus', 'payment')} style={{ flexDirection: 'row' }} >
+          <Text style={{ paddingHorizontal: 5 }}>{`${itemValue} Items`}</Text>
           <Counter2 />
           
         </TouchableOpacity>
@@ -68,7 +97,7 @@ const Counter = ({payment,onValueChange,  addItem, onPress}) => {
   {
     return(
       <View style={styles.counter}>
-          <TouchableOpacity onPress={() => onCount('plus')} style={styles.containerCounter}>
+          <TouchableOpacity onPress={() => onCount('plus', 'payment')} style={styles.containerCounter}>
             <Counter1 />
             {renderAddItem()}
           </TouchableOpacity>

@@ -25,8 +25,8 @@ const ChooseFood = ({navigation, route}) => {
   console.log(params)
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <View style={{flex: 1}}>
+      
         <View style={styles.page}>
           <Header
             onPress={() => navigation.goBack()}
@@ -40,17 +40,23 @@ const ChooseFood = ({navigation, route}) => {
                 ingredients={params.desc_kantin}
                 number={params.rating}
             />
-            <Gap height={16} />
+
             {/* <DecisionUser /> */}
           </View>
+          <View style={styles.tabContainer}>
+            {/* <TabViewFoodCourt /> */}
+            {/* <CustomTab id_tenant={idTenant} /> */}
+          </View>
+        </View>
+        <View style={{ flex: 1 }}>
           <View style={styles.tabContainer}>
             {/* <TabViewFoodCourt /> */}
             <CustomTab id_tenant={idTenant} />
           </View>
         </View>
-      </ScrollView>
+     
       <View style={styles.button}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.buttonTab}
           activeOpacity={0.8}
           onPress={() => navigation.navigate('Payment')}>
@@ -59,7 +65,7 @@ const ChooseFood = ({navigation, route}) => {
             <Text style={styles.textButton}>3 Items Rp20.000</Text>
           </View>
           <Text style={styles.textButton}>Order Now</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
@@ -68,14 +74,12 @@ const ChooseFood = ({navigation, route}) => {
 export default ChooseFood;
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
+
   container: {
     backgroundColor: 'white',
     paddingHorizontal: 18,
     paddingTop: 20,
-    flex: 1,
+    
   },
   tabContainer: {
     flex: 1,

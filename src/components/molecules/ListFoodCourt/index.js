@@ -1,16 +1,28 @@
 import {useNavigation} from '@react-navigation/core';
-import React from 'react';
+import React, { useState } from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter, Gap, Like, Price} from '../..';
 import {DummyFoodCourt2} from '../../../assets';
 import { ENDPOINT_SMART_CANTEEN } from '../../../utils/API/httpClient';
+import useForm from '../../../utils/useForm';
 
-const ListFoodCourt = ({type, name, ingredients, price, status, textColor="#2B9F61", imagePath}) => {
+const ListFoodCourt = ({id, idTenant, type, name, ingredients, price, status, textColor="#2B9F61", imagePath}) => {
   const navigation = useNavigation();
+  const[item,setItem] = useState();
 
-  const onValueChange = () => {
 
+  const onValueChange = (value) => {
+
+      const formData = {
+        id_menu: id,
+        id_tenant: idTenant,
+        quantity: value,
+
+      }
+      
+      console.log(formData)
   }
+
 
   const renderMenu = () => {
     if(status === 'Tersedia')

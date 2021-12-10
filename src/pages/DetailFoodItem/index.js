@@ -53,7 +53,7 @@ const DetailFoodItem = ({navigation, route}) => {
             </View>
             <Counter payment onValueChange={onCounterChange} />
           </View>
-          <Text style={styles.label}>Deskripsi Makanan </Text>
+          <Text style={styles.label}>Deskripsi Makanan</Text>
           <Text style={styles.description}>
             {params.ingredients}
           </Text>

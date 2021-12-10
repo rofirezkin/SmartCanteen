@@ -63,7 +63,6 @@ const Counter = ({payment,onValueChange, order,  addItem, onPress}) => {
         <TouchableOpacity onPress={() => onCount('minus', 'payment')} style={{ flexDirection: 'row' }} >
           <Text style={{ paddingHorizontal: 5 }}>{`${itemValue} Items`}</Text>
           <Counter2 />
-          
         </TouchableOpacity>
         )
     }

@@ -21,24 +21,27 @@ const CustomTab = ({id_tenant}) => {
   const dispatch = useDispatch();
 
   const getItems = async () => {
-      setIsLoading(true)
+        setIsLoading(true)
         await axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/byTenant?id_tenant=${id_tenant}`)
-            .then(res => {
-              setItems([...items, ...res.data.data.data])
-              setIsLoading(false)
-            }).catch(err => {
-                console.log(err.message)
-            })
-  }
+              .then(res => {
+                setItems([...items, ...res.data.data])
+                
+                setIsLoading(false)
+              }).catch(err => {
+                  console.log(err.message)
+              })
+    }
 
   const renderItem = ({item}) => {
     return(
           <ListFoodCourt
+                id={item.id}
                 name={item.name}
                 ingredients={item.ingredients}
                 price={item.price}
                 status={item.is_active}
                 imagePath={item.picturePath}
+                
           />
     )
 
@@ -53,9 +56,6 @@ const CustomTab = ({id_tenant}) => {
           )
   }
 
-  const loadMoreItem = () => {
-      
-  }
 
   const {allMenu, foodMenuUsers, beveragesMenu} = useSelector(state => state.menuReducer)
 
@@ -74,7 +74,7 @@ const CustomTab = ({id_tenant}) => {
       setFood('#909090');
       setBaverages('red');
     }
-  }, [foodMenu]);
+  }, [foodMenu,currentPage]);
 
   const getFoodData = value => {
     setFoodMenu(value);
@@ -83,6 +83,7 @@ const CustomTab = ({id_tenant}) => {
   const AllFood = () => {
     if (foodMenu === 'all') {
       return (
+        <View style={{ marginBottom: 70 }}>
           <FlatList 
               data={items} 
               renderItem={renderItem}
@@ -90,6 +91,8 @@ const CustomTab = ({id_tenant}) => {
               ListFooterComponent={renderLoader}
               onEndReachedThreshold={0}
           />
+        </View>
+
       );
     } else if (foodMenu === 'food') {
       return (

@@ -63,10 +63,9 @@ export const getDataFetchMenu = () => async (dispatch) => {
 export const getAllMenuUsers = (id_tenant) => async (dispatch) => {
     const result = await axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/byTenant?id_tenant=${id_tenant}`)
                     .then(res => {
-                        console.log('res all menu', res.data.data)
                         dispatch({
                             type: 'SET_USERS_MENU', 
-                            value: res.data.data.data
+                            value: res.data.data
                         })
                     }).catch(err =>{
                          console.log(err.response)

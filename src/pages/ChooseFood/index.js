@@ -17,6 +17,7 @@ import {
   ListFoodCourt,
   ProfileFoodCourt,
 } from '../../components';
+import ShoppingCart from '../../components/molecules/ShoppingCart/ShoppingCart';
 
 const ChooseFood = ({navigation, route}) => {
 
@@ -56,16 +57,7 @@ const ChooseFood = ({navigation, route}) => {
         </View>
      
       <View style={styles.button}>
-        {/* <TouchableOpacity
-          style={styles.buttonTab}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate('Payment')}>
-          <View style={{flexDirection: 'row'}}>
-            <ICCart />
-            <Text style={styles.textButton}>3 Items Rp20.000</Text>
-          </View>
-          <Text style={styles.textButton}>Order Now</Text>
-        </TouchableOpacity> */}
+          <ShoppingCart />
       </View>
     </View>
   );
@@ -84,12 +76,11 @@ const styles = StyleSheet.create({
   tabContainer: {
     flex: 1,
     backgroundColor: 'white',
-    paddingBottom: 20,
+    paddingBottom: 45,
     height: '100%',
   },
   button: {
-    bottom: 20,
-    paddingHorizontal: 19,
+
   },
   buttonTab: {
     backgroundColor: '#2FAD24',

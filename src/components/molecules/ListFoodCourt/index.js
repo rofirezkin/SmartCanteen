@@ -1,17 +1,18 @@
 import {useNavigation} from '@react-navigation/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter, Gap, Like, Price} from '../..';
 import {DummyFoodCourt2} from '../../../assets';
 import { ENDPOINT_SMART_CANTEEN } from '../../../utils/API/httpClient';
 import useForm from '../../../utils/useForm';
 
-const ListFoodCourt = ({id, idTenant, type, name, ingredients, price, status, textColor="#2B9F61", imagePath}) => {
+const ListFoodCourt = ({id, onValue, idTenant, type, name, ingredients, price, status, textColor="#2B9F61", imagePath}) => {
   const navigation = useNavigation();
   const[item,setItem] = useState();
+  const[value,setValue] = useState()
 
 
-  const onValueChange = (value) => {
+  const onValueParsing = (value) => {
 
       const formData = {
         id_menu: id,
@@ -19,9 +20,13 @@ const ListFoodCourt = ({id, idTenant, type, name, ingredients, price, status, te
         quantity: value,
 
       }
-      
-      console.log(formData)
+
+      value != 0 ? console.log(formData) : null
   }
+
+  useEffect(() => {
+      
+  },[])
 
 
   const renderMenu = () => {
@@ -57,7 +62,7 @@ const ListFoodCourt = ({id, idTenant, type, name, ingredients, price, status, te
                       )}
                     </View>
                     <View>
-                      <Counter addItem order onValueChange={onValueChange} />
+                      <Counter addItem order onValueChange={onValueParsing} />
                     </View>
                   </View>
 

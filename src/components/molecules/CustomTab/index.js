@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import {ListFoodCourt} from '..';
 import {Button} from '../..';
 import { getAllMenuUsers } from '../../../redux/action/menuAction';
 import { ENDPOINT_API_SMART_CANTEEN } from '../../../utils/API/httpClient';
+import ShoppingCart from '../ShoppingCart/ShoppingCart';
 
 const CustomTab = ({id_tenant}) => {
   const [foodMenu, setFoodMenu] = useState('all');
@@ -20,43 +21,6 @@ const CustomTab = ({id_tenant}) => {
 
   const dispatch = useDispatch();
 
-  const getItems = async () => {
-        setIsLoading(true)
-        await axios.get(`${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/byTenant?id_tenant=${id_tenant}`)
-              .then(res => {
-                setItems([...items, ...res.data.data])
-                
-                setIsLoading(false)
-              }).catch(err => {
-                  console.log(err.message)
-              })
-    }
-
-  const renderItem = ({item}) => {
-    return(
-          <ListFoodCourt
-                id={item.id}
-                name={item.name}
-                ingredients={item.ingredients}
-                price={item.price}
-                status={item.is_active}
-                imagePath={item.picturePath}
-                
-          />
-    )
-
-  }
-
-  const renderLoader = () => {
-      return (
-          isLoading ? 
-          <View style={{ marginVertical: 16, alignItems: 'center' }}>
-              <ActivityIndicator size="large" color="#aaa" />
-          </View> : null
-          )
-  }
-
-
   const {allMenu, foodMenuUsers, beveragesMenu} = useSelector(state => state.menuReducer)
 
   useEffect(() => {
@@ -64,7 +28,7 @@ const CustomTab = ({id_tenant}) => {
       setAll('red');
       setFood('#909090');
       setBaverages('#909090');
-      getItems()
+      dispatch(getAllMenuUsers(id_tenant))
     } else if (foodMenu === 'food') {
       setAll('#909090');
       setFood('red');
@@ -82,18 +46,29 @@ const CustomTab = ({id_tenant}) => {
 
   const AllFood = () => {
     if (foodMenu === 'all') {
-      return (
-        <View style={{ marginBottom: 70 }}>
-          <FlatList 
-              data={items} 
-              renderItem={renderItem}
-              keyExtractor={items => items.id}
-              ListFooterComponent={renderLoader}
-              onEndReachedThreshold={0}
+      return(
+   
+      <ScrollView>
+        {allMenu.map(item => {
+          return(
+            <ListFoodCourt
+                key={item.id}
+                id={item.id}
+                idTenant={item.id_tenant}
+                name={item.name}
+                ingredients={item.ingredients}
+                price={item.price}
+                status={item.is_active}
+                imagePath={item.picturePath}
+                onValue={1}  
           />
-        </View>
+          )
+        })}
+      </ScrollView>
+     
+      )
+      
 
-      );
     } else if (foodMenu === 'food') {
       return (
         <View>
@@ -108,6 +83,7 @@ const CustomTab = ({id_tenant}) => {
         </View>
       );
     }
+    
   };
 
   return (
@@ -141,7 +117,7 @@ export default CustomTab;
 
 const styles = StyleSheet.create({
   buttonSection: {
-    marginTop: 10,
+    marginTop: 15,
     paddingHorizontal: 19,
     flexDirection: 'row',
   },

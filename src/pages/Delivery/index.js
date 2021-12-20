@@ -1,26 +1,36 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View, Alert} from 'react-native';
-import {Button, DropOffLocation, Gap, Header, Select, TextInput} from '../../components';
+import {
+  Button,
+  DropOffLocation,
+  Gap,
+  Header,
+  Select,
+  TextInput,
+} from '../../components';
 import {RadioButton} from 'react-native-paper';
-import { ICLocation } from '../../assets';
+import {ICLocation} from '../../assets';
 import useForm from '../../utils/useForm';
-import { listData } from '../../utils/ListData';
-
+import {listData} from '../../utils/ListData';
+import {showMessage} from '../../utils';
+import {useDispatch} from 'react-redux';
 
 const Delivery = ({navigation}) => {
   const [value, setValue] = React.useState('');
+  const dispatch = useDispatch();
+  const [form, setForm] = useForm({
+    speclocation: '',
+    location: 'Fakultas Ilmu Terapan',
+  });
 
-  const[form,setForm] = useForm({
-    speclocation : '',
-    location: ''
-  })
-
-  const locationDrop = `${form.location} - ${form.speclocation}`
-
-  const dropValue = () => {
-    console.log(locationDrop)
-  }
-
+  const onDropValue = () => {
+    if (form.speclocation !== '') {
+      dispatch({type: 'SET_LOCATION_USER', value: form});
+      navigation.navigate('Canteen', 'Delivery');
+    } else {
+      showMessage('Anda belum mengisi spesifik lokasi');
+    }
+  };
 
   return (
     <ScrollView>
@@ -33,37 +43,37 @@ const Delivery = ({navigation}) => {
         />
 
         <View style={styles.container}>
-              <View style={styles.containerRadioTitle}>
-                    <ICLocation />
-                    <Text style={{     
-                      fontSize: 16,
-                      fontFamily: 'Poppins-Regular',
-                      color: '#020202'}}>Pilih Lokasi Antar: </Text>
-              </View>
-              <Gap height={9} />
-              <Select
-                label="Pilih lokasi"
-                value={form.location}
-                onValueChange={value => setForm('location', value)}
-                selectItem={listData}
-              />
-              <Gap height={12} />
-                <TextInput
-                  longInput
-                  label="Spesifikasi Lokasi"
-                  underlineColorAndroid="transparent"
-                  placeholder="Isi lokasi lengkap"
-                  placeholderTextColor="grey"
-                  numberOfLines={2}
-                  multiline={true}
-                  onChangeText={value => setForm('speclocation', value)}
-                  value={form.speclocation}
-                />
-          <Gap height={15} />
-          <Button
-            label="Confirm Your Location"
-            onPress={dropValue}
+          <View style={styles.containerRadioTitle}>
+            <ICLocation />
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: 'Poppins-Regular',
+                color: '#020202',
+              }}>
+              Pilih Lokasi Antar:{' '}
+            </Text>
+          </View>
+          <Gap height={9} />
+          <Select
+            label="Pilih lokasi"
+            value={form.location}
+            onValueChange={value => setForm('location', value)}
+            selectItem={listData}
           />
+          <Gap height={12} />
+          <TextInput
+            longInput
+            label="Spesifikasi Lokasi"
+            underlineColorAndroid="transparent"
+            placeholder="Isi lokasi lengkap"
+            placeholderTextColor="grey"
+            numberOfLines={2}
+            onChangeText={value => setForm('speclocation', value)}
+            value={form.speclocation}
+          />
+          <Gap height={15} />
+          <Button label="Confirm Your Location" onPress={onDropValue} />
           <Gap height={15} />
         </View>
       </View>
@@ -93,9 +103,9 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 19,
   },
-  containerRadioTitle:{
+  containerRadioTitle: {
     flexDirection: 'row',
-    marginRight: 5
+    marginRight: 5,
   },
   containerRadio: {
     flexDirection: 'row',

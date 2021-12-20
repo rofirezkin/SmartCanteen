@@ -16,7 +16,7 @@ const SignUpAddress = ({navigation}) => {
         <Gap height={16} />
         <TextInput label="NIM/NIP" placeholder="Type your NIM" />
         <Gap height={16} />
-        <Select label="Status" />
+        <Select label="Status" value={'hali'} onValueChange={'dff'}  />
         <Gap height={24} />
         <Button
           label="Sign Up Now"

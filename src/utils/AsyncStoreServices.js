@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {showMessage} from './showMessage';
 
 const STORAGE_KEY = '@user_information';
 const DEFAULT_USER = {
@@ -29,7 +30,7 @@ const getUser = async () => {
  * @param {object} user
  * @returns object
  */
-const setUser = async (user) => {
+const setUser = async user => {
   const oldUser = await getUser();
   const newUser = {
     ...oldUser,
@@ -50,4 +51,31 @@ const deleteUser = async () => {
   return resetUser;
 };
 
-export {getUser, setUser, deleteUser};
+const storeData = async (storageKey, value) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem(storageKey, jsonValue);
+  } catch (e) {
+    showMessage('Gagal menyimpan di localstorage');
+  }
+};
+
+const getData = async storageKey => {
+  try {
+    const jsonValue = await AsyncStorage.getItem(storageKey);
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    showMessage('Gagal mengambil data dari localstorage');
+  }
+};
+
+const removeItem = async storageKey => {
+  try {
+    await AsyncStorage.removeItem(storageKey);
+    return true;
+  } catch (exception) {
+    showMessage('Gagal remove data');
+  }
+};
+
+export {getUser, removeItem, setUser, deleteUser, storeData, getData};

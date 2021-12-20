@@ -23,11 +23,13 @@ const NewTaste = () => {
   const navigation = useNavigation();
   return (
     <View>
-      <ListFoodCourt />
-      <ListFoodCourt />
-      <ListFoodCourt />
-      <ListFoodCourt />
-      <ListFoodCourt />
+      <ItemListFood
+        type="in-progress"
+        date="Jun 12, 14:00"
+        items={3}
+        totalOrder="3.000.000"
+        onPress={() => navigation.navigate('OrderDetail')}
+      />
     </View>
   );
 };
@@ -36,10 +38,13 @@ const Popular = () => {
   const navigation = useNavigation();
   return (
     <View>
-      <ListFoodCourt />
-      <ListFoodCourt />
-      <ListFoodCourt />
-      <ListFoodCourt />
+      <ItemListFood
+        type="in-progress"
+        date="Jun 12, 14:00"
+        items={3}
+        totalOrder="3.000.000"
+        onPress={() => navigation.navigate('OrderDetail')}
+      />
     </View>
   );
 };
@@ -47,10 +52,13 @@ const Recommended = () => {
   const navigation = useNavigation();
   return (
     <View>
-      <ListFoodCourt />
-      <ListFoodCourt />
-      <ListFoodCourt />
-      <ListFoodCourt />
+      <ItemListFood
+        type="in-progress"
+        date="Jun 12, 14:00"
+        items={3}
+        totalOrder="3.000.000"
+        onPress={() => navigation.navigate('OrderDetail')}
+      />
     </View>
   );
 };

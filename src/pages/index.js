@@ -25,8 +25,14 @@ import MyCart from './MyCart';
 import Notification from './Notification';
 import AllMenuByCategory from './AllMenuByCategory/AllMenuByCategory';
 import OrderSummary from './OrderSummary/OrderSummary';
+import UserProfile from './UserProfile';
+import HelpCenter from './HelpCenter';
+import Maintenance from './Maintenance';
 
 export {
+  Maintenance,
+  HelpCenter,
+  UserProfile,
   MyCart,
   Notification,
   DetailFoodItem,
@@ -53,5 +59,5 @@ export {
   SignUpAddress,
   SplashScreen,
   AllMenuByCategory,
-  OrderSummary
+  OrderSummary,
 };

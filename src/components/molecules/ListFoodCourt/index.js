@@ -1,124 +1,124 @@
 import {useNavigation} from '@react-navigation/core';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Counter, Gap, Like, Price} from '../..';
 import {DummyFoodCourt2} from '../../../assets';
-import { ENDPOINT_SMART_CANTEEN } from '../../../utils/API/httpClient';
+import {ENDPOINT_SMART_CANTEEN} from '../../../utils/API/httpClient';
 import useForm from '../../../utils/useForm';
 
-const ListFoodCourt = ({id, onValue, idTenant, type, name, ingredients, price, status, textColor="#2B9F61", imagePath}) => {
-  const navigation = useNavigation();
-  const[item,setItem] = useState();
-  const[value,setValue] = useState()
+const ListFoodCourt = ({
+  id,
+  onPress,
+  idTenant,
+  type,
+  name,
+  ingredients,
+  price,
+  status,
+  textColor = '#2B9F61',
+  imagePath,
+}) => {
+  const [item, setItem] = useState();
+  const [value, setValue] = useState();
 
+  const onValueParsing = value => {
+    const formData = {
+      id_menu: id,
+      id_tenant: idTenant,
+      quantity: value,
+    };
 
-  const onValueParsing = (value) => {
+    value != 0 ? console.log(formData) : null;
+  };
 
-      const formData = {
-        id_menu: id,
-        id_tenant: idTenant,
-        quantity: value,
-
-      }
-
-      value != 0 ? console.log(formData) : null
-  }
-
-  useEffect(() => {
-      
-  },[])
-
+  useEffect(() => {}, []);
 
   const renderMenu = () => {
-    if(status === 'Tersedia')
-    {
-      return(
-          <TouchableOpacity
-                activeOpacity={0.6}
-                style={styles.container}
-              >
-                <View>
-                  <View style={styles.titleContainer}>
-                    <Text style={styles.title}>{name}</Text>
-                    <Text style={styles.statusFood(textColor)}>Available</Text> 
+    if (status === 'Tersedia') {
+      return (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.6}
+          style={styles.container}>
+          <View>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{name}</Text>
+              <Text style={styles.statusFood(textColor)}>Available</Text>
+            </View>
+            <Text style={styles.description}>{ingredients}</Text>
+            <Price price={price} />
+            <View style={{flexDirection: 'row'}}>
+              <View>
+                {type ? (
+                  <View style={styles.subBox}>
+                    <Text style={styles.description}>FoodCourt A</Text>
+                    <Gap width={10} />
+                    <Like />
                   </View>
-                  <Text style={styles.description}>
-                    {ingredients}
-                  </Text>
-                  <Price price={price} />
-                  <View style={{ flexDirection: 'row' }}>
-                      <View>
-                      {type ? (
-                        <View style={styles.subBox}>
-                          <Text style={styles.description}>FoodCourt A</Text>
-                          <Gap width={10} />
-                          <Like />
-                        </View>
-                      ) : (
-                        <>
-                          <Like />
-                        </>
-                        
-                      )}
-                    </View>
-                    <View>
+                ) : (
+                  <>{/* <Like /> */}</>
+                )}
+              </View>
+              {/* <View>
                       <Counter addItem order onValueChange={onValueParsing} />
-                    </View>
-                  </View>
-
+                    </View> */}
+            </View>
+          </View>
+          <View>
+            <Image
+              source={{uri: `${ENDPOINT_SMART_CANTEEN}/storage/${imagePath}`}}
+              style={styles.image}
+            />
+            <View style={{alignSelf: 'center'}}>
+              <Like />
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={styles.container}
+          disabled={true}>
+          <View>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{name}</Text>
+              <Text style={styles.statusFood((textColor = 'red'))}>
+                Not-Available
+              </Text>
+            </View>
+            <Text style={styles.description}>{ingredients}</Text>
+            <Price price={price} />
+            <View>
+              {/* {type ? (
+                <View style={styles.subBox}>
+                  <Text style={styles.description}>FoodCourt A</Text>
+                  <Gap width={10} />
+                  <Like />
                 </View>
-                <View>
-                  <Image source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${imagePath}` }} style={styles.image} />
-                     
-                </View>
-                
-              </TouchableOpacity>
-      )
-    }else{
-      return(
-          <TouchableOpacity
-                activeOpacity={0.6}
-                style={styles.container}
-                disabled={true}
-              >
-                <View>
-                  <View style={styles.titleContainer}>
-                    <Text style={styles.title}>{name}</Text>
-                    <Text style={styles.statusFood(textColor = 'red')}>Not-Available</Text>
-                    
-                  </View>
-                  <Text style={styles.description}>
-                    {ingredients}
-                  </Text>
-                  <Price price={price} />
-                  <View>
-                    {type ? (
-                      <View style={styles.subBox}>
-                        <Text style={styles.description}>FoodCourt A</Text>
-                        <Gap width={10} />
-                        <Like />
-                      </View>
-                    ) : (
-                      <>
-                        <Like />
-                      </>
-                    )}
-                  </View>
-                </View>
-                <View>
-                  <Image source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${imagePath}` }} style={styles.image} />
-                </View>
-          </TouchableOpacity>
-      )
-    
+              ) : (
+                <>
+                  <Like />
+                </>
+              )} */}
+            </View>
+          </View>
+          <View>
+            <Image
+              source={{uri: `${ENDPOINT_SMART_CANTEEN}/storage/${imagePath}`}}
+              style={styles.image}
+            />
+            <View style={{alignSelf: 'center'}}>
+              <Like />
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
     }
-  }
+  };
 
-  return (
-    <>
-    {renderMenu()}
-    </>
-  );
+  return <>{renderMenu()}</>;
 };
 
 export default ListFoodCourt;
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     color: 'black',
     fontSize: 16,
-    width: 170
+    width: 170,
   },
   statusFood: textColor => ({
     fontSize: 12,
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     color: '#8D92A3',
     fontSize: 13,
     fontFamily: 'Poppins-Regular',
-    width: 200
+    width: 200,
   },
   subBox: {
     flexDirection: 'row',

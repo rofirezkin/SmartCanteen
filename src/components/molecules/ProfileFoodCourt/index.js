@@ -1,17 +1,19 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {DummyFoodCourt} from '../../../assets';
+import {ENDPOINT_SMART_CANTEEN} from '../../../utils/API/httpClient';
 import Rating from '../Rating';
 
-const ProfileFoodCourt = ({nameCanteen, ingredients, number}) => {
+const ProfileFoodCourt = ({nameCanteen, ingredients, number, image}) => {
   return (
     <View style={styles.container}>
-      <Image source={DummyFoodCourt} style={styles.image} />
+      <Image
+        source={{uri: `${ENDPOINT_SMART_CANTEEN}/storage/${image}`}}
+        style={styles.image}
+      />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{nameCanteen}</Text>
-        <Text style={styles.description}>
-          {ingredients}
-        </Text>
+        <Text style={styles.description}>{ingredients}</Text>
         <Rating number={number} />
       </View>
     </View>

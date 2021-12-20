@@ -33,6 +33,9 @@ import {
   Notification,
   AllMenuByCategory,
   OrderSummary,
+  UserProfile,
+  HelpCenter,
+  Maintenance,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -116,6 +119,11 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="Maintenance"
+        component={Maintenance}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="SuccessOrder"
         component={SuccessOrder}
         options={{headerShown: false}}
@@ -163,6 +171,16 @@ const Router = () => {
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="HelpCenter"
+        component={HelpCenter}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="UserProfile"
+        component={UserProfile}
         options={{headerShown: false}}
       />
       <Stack.Screen

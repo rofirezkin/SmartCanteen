@@ -1,0 +1,69 @@
+[
+	idtenant :	{
+
+        lokasi_kantin : params.
+        nama_tenant : params.nama_tenant
+         data : [
+             {
+                 ..params,
+                 totalItem,
+                 totalOrder,
+                 kode_transaksi,
+             },
+                {
+                 ..params,
+                 totalItem,
+                 totalOrder,
+                 kode_transaksi,
+             },
+          
+  }
+
+
+      idtenant : [
+               lokasi_kantin : params.
+        nama_tenant : params.nama_tenant
+         data : [
+             {
+                 ..params,
+                 totalItem,
+                 totalOrder,
+                 kode_transaksi,
+             },
+                {
+                 ..params,
+                 totalItem,
+                 totalOrder,
+                 kode_transaksi,
+             },
+          
+
+         ]
+         ]
+
+
+	]
+
+
+
+]
+
+ const dataOrder = {
+    lokasi_kantin: params.lokasi_kantin,
+    nama_tenant: params.nama_tenant,
+
+    data: [
+      {
+        ...params,
+        totalItem,
+        totalOrder,
+        kode_transaksi: 'AD12a3asdasds',
+      },
+      {
+        ...params,
+        totalItem,
+        totalOrder,
+        kode_transaksi: 'AD12a3asdasds',
+      },
+    ],
+  };

@@ -2,7 +2,29 @@ import React, {useState} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import {StyleSheet, Text, View} from 'react-native';
 
-const Select = ({label, onValueChange, value, selectItem}) => {
+const Select = ({label, onValueChange, value, selectItem, order}) => {
+  if (order) {
+    <View>
+      {selectItem && (
+        <View>
+          <Text style={styles.label}>{label}</Text>
+          <View style={styles.inputOrder}>
+            <Picker selectedValue={value} onValueChange={onValueChange}>
+              {selectItem.map(item => {
+                return (
+                  <Picker.Item
+                    key={item.id}
+                    label={item.label}
+                    value={item.value}
+                  />
+                );
+              })}
+            </Picker>
+          </View>
+        </View>
+      )}
+    </View>;
+  }
   return (
     <View>
       {selectItem && (
@@ -36,5 +58,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins-Regular',
     color: '#020202',
+  },
+  input: {
+    borderRadius: 3,
+    backgroundColor: 'white',
+    borderColor: 'black',
+    borderWidth: 1,
   },
 });

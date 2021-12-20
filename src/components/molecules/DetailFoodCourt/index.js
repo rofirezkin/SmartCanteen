@@ -1,26 +1,37 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {DummyFoodCourt} from '../../../assets';
+import {ENDPOINT_SMART_CANTEEN} from '../../../utils/API/httpClient';
 import Rating from '../Rating';
 
-const DetailFoodCourt = ({onPress, type, nameCanteen, desc, locKantin, rating}) => {
+const DetailFoodCourt = ({
+  onPress,
+  type,
+  nameCanteen,
+  desc,
+  locKantin,
+  image,
+  rating,
+  status,
+}) => {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <View style={styles.container}>
         <View style={styles.boxFoodCourt}>
-          <Image source={DummyFoodCourt} style={styles.image} />
+          <Image
+            source={{uri: `${ENDPOINT_SMART_CANTEEN}/storage/${image}`}}
+            style={styles.image}
+          />
           <View style={styles.textContainer}>
             <Text style={styles.title}>{nameCanteen}</Text>
-            <Text style={styles.description}>
-             {desc}
-            </Text>
+            <Text style={styles.description}>{desc}</Text>
             {type ? (
               <View>
                 <Text style={styles.description}>{locKantin}</Text>
               </View>
             ) : (
               <View>
-                <Text style={styles.statusText}>Open</Text>
+                <Text style={styles.statusText(status)}>{status}</Text>
               </View>
             )}
             <Rating number={rating} />
@@ -63,10 +74,11 @@ const styles = StyleSheet.create({
     color: '#8D92A3',
   },
   textContainer: {
+    flex: 1,
     marginLeft: 14,
   },
-  statusText: {
-    color: '#1CBD49',
+  statusText: status => ({
+    color: status == 'active' ? '#1CBD49' : 'red',
     fontSize: 14,
-  },
+  }),
 });

@@ -1,34 +1,43 @@
+import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import {
+  ActivityIndicator,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {ListFoodCourt} from '..';
 import {Button} from '../..';
-import { getAllMenuUsers } from '../../../redux/action/menuAction';
-import { ENDPOINT_API_SMART_CANTEEN } from '../../../utils/API/httpClient';
-import ShoppingCart from '../ShoppingCart/ShoppingCart';
+import {getAllMenuUsers} from '../../../redux/action/menuAction';
 
-const CustomTab = ({id_tenant}) => {
+const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
+  const navigation = useNavigation();
   const [foodMenu, setFoodMenu] = useState('all');
   const [all, setAll] = useState('red');
   const [food, setFood] = useState('#909090');
   const [baverages, setBaverages] = useState('#909090');
 
-  const [items,setItems] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [isLoading, setIsLoading] = useState(false)
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
-  const {allMenu, foodMenuUsers, beveragesMenu} = useSelector(state => state.menuReducer)
+  const {allMenu, foodMenuUsers, beveragesMenu} = useSelector(
+    state => state.menuReducer,
+  );
 
   useEffect(() => {
+    dispatch(getAllMenuUsers(id_tenant));
     if (foodMenu === 'all') {
       setAll('red');
       setFood('#909090');
       setBaverages('#909090');
-      dispatch(getAllMenuUsers(id_tenant))
     } else if (foodMenu === 'food') {
       setAll('#909090');
       setFood('red');
@@ -38,7 +47,7 @@ const CustomTab = ({id_tenant}) => {
       setFood('#909090');
       setBaverages('red');
     }
-  }, [foodMenu,currentPage]);
+  }, [foodMenu, currentPage]);
 
   const getFoodData = value => {
     setFoodMenu(value);
@@ -46,44 +55,142 @@ const CustomTab = ({id_tenant}) => {
 
   const AllFood = () => {
     if (foodMenu === 'all') {
-      return(
-   
-      <ScrollView>
-        {allMenu.map(item => {
-          return(
-            <ListFoodCourt
+      return (
+        <View>
+          {allMenu.map(item => {
+            const dataParam = {
+              ...item,
+              nama_tenant,
+              lokasi_kantin,
+            };
+
+            const dataSubstring = [
+              {desc: item.ingredients, value: 40},
+              {desc: item.name, value: 25},
+            ];
+            var fixedDesc;
+            var data = [];
+            for (var i = 0; i < dataSubstring.length; i++) {
+              if (dataSubstring[i].desc.length > dataSubstring[i].value) {
+                fixedDesc =
+                  dataSubstring[i].desc.substring(0, dataSubstring[i].value) +
+                  '...';
+              } else {
+                fixedDesc = dataSubstring[i].desc;
+              }
+              data.push({
+                key: i,
+                desc: fixedDesc,
+              });
+            }
+            return (
+              <ListFoodCourt
+                onPress={() => navigation.navigate('DetailFoodItem', dataParam)}
                 key={item.id}
                 id={item.id}
                 idTenant={item.id_tenant}
-                name={item.name}
-                ingredients={item.ingredients}
+                name={data[1].desc}
+                ingredients={data[0].desc}
                 price={item.price}
                 status={item.is_active}
                 imagePath={item.picturePath}
-                onValue={1}  
-          />
-          )
-        })}
-      </ScrollView>
-     
-      )
-      
-
+                onValue={1}
+              />
+            );
+          })}
+        </View>
+      );
     } else if (foodMenu === 'food') {
       return (
         <View>
-          <ListFoodCourt />
-          <ListFoodCourt />
+          {foodMenuUsers.map(item => {
+            const dataParam = {
+              ...item,
+              nama_tenant,
+              lokasi_kantin,
+            };
+            const dataSubstring = [
+              {desc: item.ingredients, value: 40},
+              {desc: item.name, value: 25},
+            ];
+            var fixedDesc;
+            var data = [];
+            for (var i = 0; i < dataSubstring.length; i++) {
+              if (dataSubstring[i].desc.length > dataSubstring[i].value) {
+                fixedDesc =
+                  dataSubstring[i].desc.substring(0, dataSubstring[i].value) +
+                  '...';
+              } else {
+                fixedDesc = dataSubstring[i].desc;
+              }
+              data.push({
+                key: i,
+                desc: fixedDesc,
+              });
+            }
+            return (
+              <ListFoodCourt
+                onPress={() => navigation.navigate('DetailFoodItem', dataParam)}
+                key={item.id}
+                id={item.id}
+                idTenant={item.id_tenant}
+                name={data[1].desc}
+                ingredients={data[0].desc}
+                price={item.price}
+                status={item.is_active}
+                imagePath={item.picturePath}
+                onValue={1}
+              />
+            );
+          })}
         </View>
       );
     } else if (foodMenu === 'baverages') {
       return (
         <View>
-          <ListFoodCourt />
+          {beveragesMenu.map(item => {
+            const dataParam = {
+              ...item,
+              nama_tenant,
+              lokasi_kantin,
+            };
+            const dataSubstring = [
+              {desc: item.ingredients, value: 40},
+              {desc: item.name, value: 25},
+            ];
+            var fixedDesc;
+            var data = [];
+            for (var i = 0; i < dataSubstring.length; i++) {
+              if (dataSubstring[i].desc.length > dataSubstring[i].value) {
+                fixedDesc =
+                  dataSubstring[i].desc.substring(0, dataSubstring[i].value) +
+                  '...';
+              } else {
+                fixedDesc = dataSubstring[i].desc;
+              }
+              data.push({
+                key: i,
+                desc: fixedDesc,
+              });
+            }
+            return (
+              <ListFoodCourt
+                onPress={() => navigation.navigate('DetailFoodItem', dataParam)}
+                key={item.id}
+                id={item.id}
+                idTenant={item.id_tenant}
+                name={data[1].desc}
+                ingredients={data[0].desc}
+                price={item.price}
+                status={item.is_active}
+                imagePath={item.picturePath}
+                onValue={1}
+              />
+            );
+          })}
         </View>
       );
     }
-    
   };
 
   return (

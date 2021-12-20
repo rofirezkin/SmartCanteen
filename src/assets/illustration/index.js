@@ -7,8 +7,12 @@ import GetSTRThree from './getSTRThree.svg';
 import ILCash from './ILCash.svg';
 import ILFoodCourt from './foodcourt.png';
 import ILSuccessOrder from './SuccessOrder.png';
-import ILBannerRec from './banner_recomen.png'
+import ILBannerRec from './banner_recomen.png';
+import ILHelpCenter from './helpcenter.svg';
+import ILMaintenance from './maintenance.svg';
 export {
+  ILMaintenance,
+  ILHelpCenter,
   ILSuccessOrder,
   ILCash,
   ILFoodCourt,
@@ -18,5 +22,5 @@ export {
   GetSTRThree,
   GetStartedOne,
   GetStartedPNG,
-  ILBannerRec
+  ILBannerRec,
 };

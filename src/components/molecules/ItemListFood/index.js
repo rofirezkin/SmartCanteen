@@ -17,6 +17,7 @@ const ItemListFood = ({
   totalOrder,
   urlPhoto,
   rating,
+  status,
 }) => {
   const renderContent = () => {
     switch (type) {
@@ -26,25 +27,22 @@ const ItemListFood = ({
             <View>
               <Text style={styles.title}>{name}</Text>
               <Text style={styles.subTitle}>{ingredients}</Text>
+              <Text style={styles.subTitle}>{canteen}</Text>
+
               <Text style={styles.subTitle}>
-                {canteen}
-              </Text>
-              <Rating ratingCard number={rating} />
-              <Text style={styles.subTitle}>
-                {items} Item . <Number style={styles.subTitle} number={totalOrder} />
+                <Number style={styles.subTitle} number={totalOrder} />
               </Text>
             </View>
           </View>
         );
 
-
       case 'in-progress':
         return (
           <View style={styles.container}>
             <View>
-              <Text style={styles.title}>Soup Bumil</Text>
-              <Text style={styles.subTitle}>Nasi, Telur, Ayam ...</Text>
-              <Text style={styles.statusInProgress}>Process</Text>
+              <Text style={styles.title}>{name}</Text>
+              <Text style={styles.subTitle}>{ingredients}</Text>
+              <Text style={styles.statusInProgress}>{status}</Text>
               <Text style={styles.subTitle}>
                 {items} Item . Rp{totalOrder}
               </Text>
@@ -59,18 +57,15 @@ const ItemListFood = ({
         return (
           <View style={styles.container}>
             <View>
-              <Text style={styles.title}>Soup Bumil</Text>
-              <Text style={styles.subTitle}>Nasi, Telur, Ayam ...</Text>
-              <Text style={styles.subTitle}>
-                Kantin Fak. Teknik, Foodcourt A
-              </Text>
+              <Text style={styles.title}>{name}</Text>
+              <Text style={styles.subTitle}>{ingredients}</Text>
+
               <Text style={styles.subTitle}>
                 {items} Item . Rp{totalOrder}
               </Text>
-            </View>
-            <View>
-              <Text style={styles.date}>{date}</Text>
-              <Text style={styles.statusOrder(statusOrder)}>{statusOrder}</Text>
+              <View>
+                <Text style={styles.statusOrder(status)}>{status}</Text>
+              </View>
             </View>
           </View>
         );
@@ -80,13 +75,11 @@ const ItemListFood = ({
             <View>
               <Text style={styles.title}>{name}</Text>
               <Text style={styles.subTitle}>{ingredients}</Text>
-              <Text style={styles.subTitle}>
-                {canteen}
-              </Text>
+              <Text style={styles.subTitle}>{canteen}</Text>
               <Number style={styles.subTitle} number={price} />
             </View>
             <View>
-              <Rating ratingCard rating={rating}/>
+              <Rating ratingCard rating={rating} />
             </View>
           </View>
         );
@@ -96,7 +89,7 @@ const ItemListFood = ({
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <View style={styles.tabview}>
-        <Image source={{ uri: urlPhoto }} style={styles.avatar} />
+        <Image source={{uri: urlPhoto}} style={styles.avatar} />
         {renderContent()}
       </View>
     </TouchableOpacity>
@@ -132,8 +125,8 @@ const styles = StyleSheet.create({
   subTitle: {
     fontFamily: 'Poppins-Regular',
     fontSize: 13,
+    flex: 1,
     color: '#8D92A3',
-    width: 300
   },
   container: {
     marginLeft: 10,
@@ -143,9 +136,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1,
   },
-  statusOrder: statusOrder => ({
+  statusOrder: status => ({
     fontSize: 14,
     fontFamily: 'Poppins-Regular',
-    color: statusOrder === 'Cancelled' ? '#D9435E' : '#1ABC9C',
+    color: status === 'CANCEL ORDER' ? '#D9435E' : '#1ABC9C',
   }),
 });

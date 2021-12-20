@@ -29,8 +29,13 @@ import OrderList from './OrderList';
 import CustomTab from './CustomTab';
 import NotificationSection from './NotificationSection';
 import CategoryMenu from './CategoryMenu/CategoryMenu';
-
+import ShoppingCart from './ShoppingCart/ShoppingCart';
+import Modals from './Modals';
+import Loading from './Loading';
 export {
+  Loading,
+  Modals,
+  ShoppingCart,
   NotificationSection,
   OrderList,
   CustomTab,
@@ -61,5 +66,5 @@ export {
   ShortProfile,
   Carousel,
   BottomNavigator,
-  CategoryMenu
+  CategoryMenu,
 };

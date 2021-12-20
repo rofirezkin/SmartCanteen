@@ -1,21 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {EmptyOrder, Header, OrderTabSection} from '../../components';
+import {getInProgress} from '../../redux/action';
 
-const Transaction = () => {
+const Transaction = ({navigation}) => {
   const [isEmpty] = useState(false);
+  const dispatch = useDispatch();
+  const [dataTransaksi, setDataTransaksi] = useState([]);
+  // const {numberId} = useSelector(state => state.globalReducer);
+
+  // useEffect(() => {
+  //   dispatch(getInProgress(numberId));
+  // }, []);
+
   return (
     <View style={styles.page(isEmpty)}>
-      {isEmpty ? (
-        <EmptyOrder />
-      ) : (
-        <View style={styles.order}>
-          <Header title="Your Orders" subtTitle="Wait for the best meal" />
-          <View style={styles.container}>
-            <OrderTabSection />
-          </View>
+      <View style={styles.order}>
+        <Header title="Your Orders" subtTitle="Wait for the best meal" />
+        <View style={styles.container}>
+          <OrderTabSection />
         </View>
-      )}
+      </View>
     </View>
   );
 };

@@ -30,3 +30,34 @@ export const listData = [
     value: 'Gedung Kuliah Umum',
   },
 ];
+
+export const method = [
+  {
+    id: 1,
+    label: 'Dine In',
+    value: 'Dine In',
+  },
+  {
+    id: 2,
+    label: 'Delivery',
+    value: 'Delivery',
+  },
+  {
+    id: 3,
+    label: 'Take Away',
+    value: 'Take Away',
+  },
+];
+
+export const paymentMethod = [
+  {
+    id: 1,
+    label: 'Cash',
+    value: 'Cash',
+  },
+  {
+    id: 2,
+    label: 'Online Payment',
+    value: 'Online Payment',
+  },
+];

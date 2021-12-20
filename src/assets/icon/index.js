@@ -29,10 +29,14 @@ import ICCart from './IcCart.svg';
 import ICUserAccount from './userAccount.svg';
 import ICGeneral from './userGeneral.svg';
 import ICLogout from './logout.svg';
-import IcLocation from './ic_location.svg'
-import IcStore from './ic_store.svg'
+import IcLocation from './ic_location.svg';
+import IcStore from './ic_store.svg';
 import ICCArtHome from './cartHome.png';
+import ICGmail from './gmail.svg';
+import ICWhatsapp from './whatsapp.svg';
 export {
+  ICGmail,
+  ICWhatsapp,
   ICCArtHome,
   ICUserAccount,
   ICGeneral,
@@ -66,5 +70,5 @@ export {
   ICRemovePhoto,
   ICAddPhoto,
   IcLocation,
-  IcStore
+  IcStore,
 };

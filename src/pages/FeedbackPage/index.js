@@ -9,23 +9,31 @@ import {
   RatingFeedback,
 } from '../../components';
 
-const FeedbackPage = ({navigation}) => {
+const FeedbackPage = ({navigation, route}) => {
+  const dataParams = route.params;
+  console.log('data', dataParams);
   return (
     <View style={styles.page}>
       <Header
-        subtTitle="FoodCourt A"
+        subtTitle={dataParams.tenant.nama_tenant}
         title="Feedback for Canteen"
         onBack
         onPress={() => navigation.goBack()}
       />
       <View style={styles.container}>
-        <DetailFoodCourt type />
+        <DetailFoodCourt
+          nameCanteen={dataParams.tenant.nama_tenant}
+          desc={dataParams.tenant.desc_kantin}
+          locKantin={dataParams.tenant.lokasi_kantin}
+          image={dataParams.tenant.profile_photo_path}
+          type
+        />
         <Gap height={20} />
         <View style={styles.rating}>
           <RatingFeedback />
         </View>
         <Gap height={15} />
-        <TextInput
+        {/* <TextInput
           style={styles.textArea}
           underlineColorAndroid="transparent"
           placeholder="Isi Feedback anda disini"
@@ -34,9 +42,14 @@ const FeedbackPage = ({navigation}) => {
           multiline={true}
           //   onChangeText={value => setDescription(value)}
           //   value={description}
-        />
+        /> */}
         <Gap height={15} />
-        <Button label="Submit" onPress={() => navigation.navigate('')} />
+        <Button
+          label="Submit"
+          onPress={() =>
+            navigation.reset({index: 0, routes: [{name: 'MainApp'}]})
+          }
+        />
       </View>
     </View>
   );

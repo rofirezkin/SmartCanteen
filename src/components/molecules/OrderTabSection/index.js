@@ -1,135 +1,160 @@
-import {useNavigation} from '@react-navigation/core';
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {ItemListFood, ListFoodCourt} from '..';
-import {Button, Gap} from '../..';
+import {
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import ItemListFood from '../ItemListFood';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {getInProgress, getPastOrders} from '../../../redux/action';
 
-const OrderTabSection = () => {
+const renderTabBar = props => (
+  <TabBar
+    {...props}
+    indicatorStyle={styles.indicatorStyle}
+    style={styles.topBar}
+    contentContainerStyle={{
+      justifyContent: 'space-around',
+    }}
+    tabStyle={styles.tabStyle}
+    renderLabel={({route, focused, color}) => (
+      <Text style={styles.tabText(focused)}>{route.title}</Text>
+    )}
+  />
+);
+
+const InProgress = () => {
   const navigation = useNavigation();
-  const [data, setData] = useState('onProgress');
-  const [onProgress, setOnProgress] = useState('red');
-  const [pastOrder, setPastOrder] = useState('#909090');
+  const dispatch = useDispatch();
+  const {inProgress} = useSelector(state => state.transactionsReducer);
+  const [refreshing, setRefreshing] = useState(false);
+  const {numberId} = useSelector(state => state.globalReducer);
 
   useEffect(() => {
-    if (data === 'onProgress') {
-      setOnProgress('red');
-      setPastOrder('#909090');
-    } else if (data === 'pastOrder') {
-      setOnProgress('#909090');
-      setPastOrder('red');
-    }
-  }, [data]);
+    dispatch(getInProgress(numberId));
+  }, []);
 
-  const getData = value => {
-    setData(value);
-  };
-
-  const AllFood = () => {
-    if (data === 'onProgress') {
-      return (
-        <ScrollView>
-          <ItemListFood
-            type="in-progress"
-            date="Jun 12, 14:00"
-            items={3}
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('OrderDetail')}
-          />
-          <ItemListFood
-            type="in-progress"
-            date="Jun 12, 14:00"
-            items={3}
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('OrderDetail')}
-          />
-          <ItemListFood
-            type="in-progress"
-            date="Jun 12, 14:00"
-            items={3}
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('OrderDetail')}
-          />
-          <ItemListFood
-            type="in-progress"
-            date="Jun 12, 14:00"
-            items={3}
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('OrderDetail')}
-          />
-          <ItemListFood
-            type="in-progress"
-            date="Jun 12, 14:00"
-            items={3}
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('OrderDetail')}
-          />
-          <ItemListFood
-            type="in-progress"
-            date="Jun 12, 14:00"
-            items={3}
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('OrderDetail')}
-          />
-          <ItemListFood
-            type="in-progress"
-            date="Jun 12, 14:00"
-            items={3}
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('OrderDetail')}
-          />
-          <ItemListFood
-            type="in-progress"
-            date="Jun 12, 14:00"
-            items={3}
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('OrderDetail')}
-          />
-        </ScrollView>
-      );
-    } else if (data === 'pastOrder') {
-      return (
-        <ScrollView>
-          <ItemListFood
-            type="past-orders"
-            date="Jun 12, 14:00"
-            items={3}
-            statusOrder="Cancelled"
-            totalOrder="3.000.000"
-            onPress={() => navigation.navigate('FeedbackPage')}
-          />
-        </ScrollView>
-      );
-    }
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(getInProgress(numberId));
+    setRefreshing(false);
   };
 
   return (
-    <View>
-      <View style={styles.buttonSection}>
-        <Button
-          color={onProgress}
-          costumerOrder
-          label="In Progress"
-          onPress={() => getData('onProgress')}
-        />
-        <Button
-          color={pastOrder}
-          costumerOrder
-          label="Past Order"
-          onPress={() => getData('pastOrder')}
-        />
-      </View>
-      <Gap height={15} />
-      <AllFood />
-    </View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      {inProgress.map(order => {
+        return (
+          <ItemListFood
+            urlPhoto={order.menu.picturePath}
+            name={order.menu.name}
+            ingredients={order.menu.ingredients}
+            key={order.id}
+            status={order.status}
+            type="in-progress"
+            items={order.quantity}
+            totalOrder={order.total}
+            onPress={() => navigation.navigate('OrderDetail', order)}
+          />
+        );
+      })}
+    </ScrollView>
   );
 };
 
-export default OrderTabSection;
+const PastOrder = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {pastOrder} = useSelector(state => state.transactionsReducer);
+  const [refreshing, setRefreshing] = useState(false);
+  const {numberId} = useSelector(state => state.globalReducer);
+
+  useEffect(() => {
+    dispatch(getPastOrders(numberId));
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(getPastOrders(numberId));
+    setRefreshing(false);
+  };
+
+  console.log('pastOrder', pastOrder);
+  return (
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      {pastOrder.map(order => {
+        return (
+          <ItemListFood
+            urlPhoto={order.menu.picturePath}
+            name={order.menu.name}
+            ingredients={order.menu.ingredients}
+            key={order.id}
+            status={order.status}
+            type="past-orders"
+            items={order.quantity}
+            totalOrder={order.total}
+            onPress={() => navigation.navigate('OrderDetail', order)}
+          />
+        );
+      })}
+    </ScrollView>
+  );
+};
+
+const renderScene = SceneMap({
+  1: InProgress,
+  2: PastOrder,
+});
+const TabViewFoodCourt = () => {
+  const layout = useWindowDimensions();
+
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    {key: '1', title: 'In Progress'},
+    {key: '2', title: 'Past Order'},
+  ]);
+  return (
+    <TabView
+      renderTabBar={renderTabBar}
+      navigationState={{index, routes}}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={{width: layout.width}}
+      style={styles.tabView}
+    />
+  );
+};
+
+export default TabViewFoodCourt;
 
 const styles = StyleSheet.create({
-  buttonSection: {
-    marginTop: 10,
-    paddingHorizontal: 19,
-    flexDirection: 'row',
+  tabView: {backgroundColor: 'white'},
+  topBar: {
+    backgroundColor: 'white',
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomColor: '#F2F2F2',
+    borderBottomWidth: 1,
+    paddingLeft: 10,
   },
+  indicatorStyle: {
+    backgroundColor: '#020202',
+    marginLeft: 10,
+  },
+  tabStyle: {elevation: 0},
+  tabText: focused => ({
+    fontFamily: 'Poppins-Medium',
+    color: focused ? '#020202' : '#8D92A3',
+  }),
 });

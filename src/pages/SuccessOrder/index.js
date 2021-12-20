@@ -26,7 +26,11 @@ const SuccessOrder = ({navigation}) => {
             }
           />
           <Gap height={20} />
-          <Button label="View My Order" color="#8D92A3" />
+          <Button
+            onPress={() => navigation.replace('MainApp', {screen: 'Order'})}
+            label="View My Order"
+            color="#8D92A3"
+          />
         </View>
       </View>
     </View>

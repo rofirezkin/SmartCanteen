@@ -25,9 +25,9 @@ const ShortProfile = ({fullName, role, url}) => {
           <Image source={ICCArtHome} style={styles.carthome} />
         </TouchableOpacity>
         <Gap width={20} />
-        <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
           <IcNotif />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

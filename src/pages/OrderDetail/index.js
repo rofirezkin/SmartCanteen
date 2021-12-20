@@ -1,13 +1,46 @@
+import axios from 'axios';
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {Button, Gap, Header, ItemListFood, ItemValue} from '../../components';
-import { ENDPOINT_SMART_CANTEEN } from '../../utils/API/httpClient';
+import {setLoading} from '../../redux/action';
+import {showMessage} from '../../utils';
+import {
+  ENDPOINT_API_SMART_CANTEEN,
+  ENDPOINT_SMART_CANTEEN,
+} from '../../utils/API/httpClient';
 
 const OrderDetail = ({navigation, route}) => {
-
+  const dispatch = useDispatch();
   const params = route.params;
+  console.log(route.params.id);
 
-  console.log(params)
+  const onCancel = async () => {
+    const status = {
+      status: 'CANCEL ORDER',
+    };
+    dispatch(setLoading(true));
+    const dataSubmit = await axios({
+      method: 'POST',
+      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus/${route.params.id}`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: status,
+    })
+      .then(res => {
+        dispatch(setLoading(false));
+        showMessage('Cancel your Order Success', 'success');
+        navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
+      })
+      .catch(err => {
+        dispatch(setLoading(false));
+        console.log(err.response);
+      });
+
+    return Promise.resolve(dataSubmit);
+  };
+  console.log('daad', params);
   return (
     <ScrollView>
       <View style={styles.page}>
@@ -19,21 +52,25 @@ const OrderDetail = ({navigation, route}) => {
         />
         <View style={styles.container}>
           <View>
-            <ItemListFood 
-              type="product" 
-              items={params.totalItem} 
-              totalOrder={params.totalOrder}
-              name={params.name}
-              ingredients={params.ingredients}
-              rating={params.ratingMenu}
-              urlPhoto={`${ENDPOINT_SMART_CANTEEN}/storage/${params.picturePath}`}
-              />
+            <ItemListFood
+              type="product"
+              items={params.quantity}
+              canteen={params.method}
+              totalOrder={params.menu.price}
+              name={params.menu.name}
+              ingredients={params.menu.ingredients}
+              status={params.status}
+              urlPhoto={params.menu.picturePath}
+            />
           </View>
           <View style={styles.detailCard}>
             <Text style={styles.text}>Detail Transaction</Text>
-            <ItemValue title="Subtotal" value="Rp18.00" />
-            <ItemValue title="Tax 10%" value="Rp1.000" />
-            <ItemValue title="Total Price" colorValue value="Rp19.000" />
+
+            <ItemValue
+              title={`Total Price ${params.quantity} Item`}
+              colorValue
+              value={params.total}
+            />
             <Gap height={15} />
           </View>
         </View>
@@ -42,17 +79,30 @@ const OrderDetail = ({navigation, route}) => {
           <View style={styles.detailCard}>
             <Text style={styles.text}>Order Status</Text>
             <Gap height={15} />
-            <ItemValue title="#68FLLWW" colorValue="#1ABC9C" value="Paid" />
+            <ItemValue
+              title={`Kode Transaksi:  ${params.kode_transaksi}`}
+              colorValue
+              name={params.status}
+            />
             <Gap height={15} />
           </View>
         </View>
 
         <View style={styles.detailCard}>
-          <Button
-            label="Cancel My Order"
-            color="#8D92A3"
-            onPress={() => navigation.navigate('SecureCheckout')}
-          />
+          {params.status === 'PENDING' && (
+            <Button
+              label="Cancel My Order"
+              color="#8D92A3"
+              onPress={onCancel}
+            />
+          )}
+          {params.status === 'DELIVERED' && (
+            <Button
+              label="Rate Your Order"
+              color="red"
+              onPress={() => navigation.navigate('FeedbackPage', params)}
+            />
+          )}
         </View>
       </View>
     </ScrollView>

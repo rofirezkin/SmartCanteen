@@ -3,9 +3,10 @@ import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Image, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-import {deleteUser} from '../../../utils/AsyncStoreServices'
+import {deleteUser} from '../../../utils/AsyncStoreServices';
 
 import {ItemListMenu} from '..';
+import {useSelector} from 'react-redux';
 
 const renderTabBar = props => (
   <TabBar
@@ -21,25 +22,25 @@ const renderTabBar = props => (
 
 const Account = () => {
   const navigation = useNavigation();
-
-   const signOut = async () => {
-    await deleteUser()
-
-    navigation.replace('SignIn')
-  }
+  const {globalReducer} = useSelector(state => state);
+  const signOut = async () => {
+    await deleteUser();
+    navigation.replace('SignIn');
+  };
   return (
     <View>
       <ItemListMenu
         icon="edit-profile"
         name="Data Akun anda"
         desc="Lihat dan edit akun anda"
-        onPress={() => navigation.navigate('EditProfile')}
+        onPress={() => navigation.navigate('UserProfile', globalReducer)}
       />
       <ItemListMenu
         name="Bantuan Admin"
         icon="tutup-buka"
         desc="Hubungi admin jika ada masalah"
         icon="bantuan"
+        onPress={() => navigation.navigate('HelpCenter')}
       />
       <ItemListMenu
         label="Log Out"
@@ -60,7 +61,6 @@ const SmartCanteen = () => {
         icon="edit-profile"
         name="Tentang SmartCanteen"
         desc="Lihat Profile SmartCanten"
-        onPress={() => navigation.navigate('EditProfile')}
       />
       <ItemListMenu
         name="Bantuan Admin"
@@ -68,19 +68,13 @@ const SmartCanteen = () => {
         desc="Hubungi admin jika ada masalah"
         icon="bantuan"
       />
-      <ItemListMenu
-        label="Log Out"
-        name="Log Out"
-        desc="Keluar dari akun anda"
-        icon="tutup-buka"
-      />
     </View>
   );
 };
 
 const renderScene = SceneMap({
   1: Account,
-  2: SmartCanteen,
+  // 2: SmartCanteen,
 });
 const ProfileTabSection = () => {
   const layout = useWindowDimensions();
@@ -88,7 +82,7 @@ const ProfileTabSection = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: '1', title: 'Account'},
-    {key: '2', title: 'SmartCanteen'},
+    // {key: '2', title: 'SmartCanteen'},
   ]);
   return (
     <TabView

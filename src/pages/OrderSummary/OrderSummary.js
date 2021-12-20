@@ -1,15 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import {ScrollView, StyleSheet, Text, View, Image, TextInput} from 'react-native';
-import { IcStore } from '../../assets';
-import {Button, Gap, Header, ItemListFood, ItemValue} from '../../components';
-import { ENDPOINT_SMART_CANTEEN } from '../../utils/API/httpClient';
-import { getUser } from '../../utils/AsyncStoreServices';
+import React, {useEffect, useState} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+} from 'react-native';
+import {IcStore} from '../../assets';
+import {Button, Gap, Header, ItemValue, Modals, Select} from '../../components';
+import {
+  ENDPOINT_API_SMART_CANTEEN,
+  ENDPOINT_SMART_CANTEEN,
+} from '../../utils/API/httpClient';
+import {getData, getUser, storeData} from '../../utils/AsyncStoreServices';
 import Number from '../../utils/Number/Number';
+import {listData, method, paymentMethod} from '../../utils/ListData';
+import useForm from '../../utils/useForm';
+import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+import {showMessage} from '../../utils';
+import {setLoading} from '../../redux/action';
 
 const OrderSummary = ({navigation, route}) => {
-
   const params = route.params;
+  const dispatch = useDispatch();
+  const {cartItems, optionReducer} = useSelector(state => state);
+  const methodUser = optionReducer;
+  const allCart = cartItems.allCart;
+  console.log('methopd', methodUser);
+  const [getKodeTransaksi, setGetKodeTransaksi] = useState('');
+  const [showWarningOpen, SetshowWarningOpen] = useState(false);
+  let arrayData = {};
+  let namaTenant = '';
+  let lokasiTenant = '';
+  if (params.status) {
+    arrayData = params.data.data;
+    namaTenant = params.data.nama_tenant;
+    lokasiTenant = params.data.lokasi_kantin;
+  } else {
+    arrayData = params.data;
+    namaTenant = params.nama_tenant;
+    lokasiTenant = params.lokasi_kantin;
+  }
+
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/getKode`,
+
+      data: sendData,
+    })
+      .then(res => {
+        console.log('ress', res);
+        setGetKodeTransaksi(res.data.data);
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
+  }, []);
+
   const [text, onChangeText] = React.useState('');
+
+  const [form, setForm] = useForm({
+    methodUser: methodUser.method,
+    location: methodUser.method == 'Delivery' ? methodUser.location : '',
+    detailLocation:
+      methodUser.method == 'Delivery' ? methodUser.speclocation : '',
+    paymentMethod: 'Cash',
+  });
   const [profile, setProfile] = useState({
     fullName: '',
     numberId: '',
@@ -17,12 +76,26 @@ const OrderSummary = ({navigation, route}) => {
     faculty: '',
     studentClass: '',
     role: '',
-    phone: ''
+    phone: '',
   });
 
+  const sumData = condition => {
+    let dataNilai = 0;
+    let totalItem = 0;
+    for (let i = 0; i < arrayData.length; i++) {
+      dataNilai += arrayData[i].totalOrder;
+      totalItem += arrayData[i].totalItem;
+    }
 
-
-  const totalPrice = params.totalOrder + 1000 + 2000
+    const totalPrice = dataNilai + 2000 + 100;
+    if (condition == 'item') {
+      return totalItem;
+    } else if (condition == 'total') {
+      return totalPrice;
+    } else if (condition == 'order') {
+      return dataNilai;
+    }
+  };
 
   const user = async () => {
     const dataUser = await getUser();
@@ -31,79 +104,242 @@ const OrderSummary = ({navigation, route}) => {
       fullName: dataUser.fullName,
       numberId: dataUser.numberId,
       role: dataUser.role,
-      phone: dataUser.phone
+      phone: dataUser.phone,
     });
   };
 
+  const sendData = [];
 
-  const onSubmit =  () => {
-      navigation.navigate('SecureCheckout')
+  for (let i = 0; i < arrayData.length; i++) {
+    const data = {
+      kode_transaksi: getKodeTransaksi,
+      id_user: profile.numberId,
+      nama_pelanggan: profile.fullName,
+      nim: profile.numberId,
+      id_menu: arrayData[i].id,
+      id_tenant: arrayData[i].id_tenant,
+      status: 'PENDING',
+      method:
+        form.methodUser == 'Delivery'
+          ? `${form.methodUser}, location : ${form.location}, detail location : ${form.detailLocation}`
+          : form.methodUser,
+      quantity: arrayData[i].totalItem,
+      catatan: text == '' ? 'tidak ada' : text,
+      phoneNumber: profile.phone,
+      total: arrayData[i].totalOrder,
+    };
+    sendData.push(data);
   }
 
-  useEffect(() => {
-    user()
-  },[])
+  const onSubmit = async () => {
+    if (form.paymentMethod == 'Online Payment') {
+      showMessage('Untuk sekarang, tidak bisa melakukan online payment');
+    } else {
+      console.log('sendata', sendData);
+      dispatch(setLoading(true));
+      const dataSubmit = await axios({
+        method: 'POST',
+        url: `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: sendData,
+      })
+        .then(res => {
+          dispatch(setLoading(false));
+          navigation.reset({index: 0, routes: [{name: 'SuccessOrder'}]});
+        })
+        .catch(err => {
+          dispatch(setLoading(false));
+          console.log(err.response);
+        });
 
-  console.log(params)
+      return Promise.resolve(dataSubmit);
+    }
+  };
+
+  useEffect(() => {
+    user();
+  }, []);
+
+  const onSubmitDeleteCart = async () => {
+    if (form.paymentMethod == 'Online Payment') {
+      showMessage('Untuk sekarang, tidak bisa melakukan online payment');
+    } else {
+      console.log('sendata', sendData);
+      dispatch(setLoading(true));
+      const dataSubmit = await axios({
+        method: 'POST',
+        url: `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: sendData,
+      })
+        .then(res => {
+          delete allCart[arrayData[0].id_tenant];
+
+          storeData('dataCart', allCart);
+          dispatch(setLoading(false));
+          navigation.reset({index: 0, routes: [{name: 'SuccessOrder'}]});
+        })
+        .catch(err => {
+          dispatch(setLoading(false));
+
+          console.log(err.response);
+        });
+
+      return Promise.resolve(dataSubmit);
+    }
+  };
+
   return (
     <ScrollView>
-        <Header
-          title="Confirmation Order"
-          onBack
-          subtTitle="Check your order for confirmation"
-          onPress={() => navigation.goBack()}
-        />
+      <Header
+        title="Confirmation Order"
+        onBack
+        subtTitle="Check your order for confirmation"
+        onPress={() => navigation.goBack()}
+      />
+      <Modals
+        type="buka"
+        visible={showWarningOpen}
+        onRequestClose={() => SetshowWarningOpen(false)}
+        showWarningFalse={() => SetshowWarningOpen(false)}
+      />
       <View style={styles.page}>
         <View style={styles.container}>
           <View style={styles.header}>
-             <IcStore />
-            <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 13, marginLeft: 5 }}>{`${params.nama_tenant} - ${params.lokasi_kantin}`}</Text>
+            <IcStore />
+            <Text
+              style={{
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 13,
+                marginLeft: 5,
+              }}>{`${namaTenant} - ${lokasiTenant}`}</Text>
           </View>
-          <View style={styles.content}>
-                <Gap height={30} />
-                <Image source={{ uri: `${ENDPOINT_SMART_CANTEEN}/storage/${params.picturePath}` }} style={{ width: 90, height: 90, borderRadius: 10 }} />
-                <View style={{ marginLeft: 10 }}>
-                    <Text style={{ fontFamily: 'Poppins-Regular', width:250 }}>{params.name}</Text>
-                    <Text style={{ fontFamily: 'Poppins-Regular', width:250, color:'#8D92A3' }}>Jumlah pesanan: {params.totalItem}x</Text>
-                    <Text style={{ fontFamily: 'Poppins-Regular', width:250, color:'#8D92A3' }}><Number number={params.totalOrder} /></Text>
+          <View>
+            <Gap height={30} />
+            {arrayData.map(res => {
+              return (
+                <View style={styles.content}>
+                  <Image
+                    source={{
+                      uri: `${ENDPOINT_SMART_CANTEEN}/storage/${res.picturePath}`,
+                    }}
+                    style={{width: 90, height: 90, borderRadius: 10}}
+                  />
+                  <View style={{marginLeft: 10, flex: 1}}>
+                    <Text style={{fontFamily: 'Poppins-Regular'}}>
+                      {res.name}
+                    </Text>
+                    <Text
+                      style={{fontFamily: 'Poppins-Regular', color: '#8D92A3'}}>
+                      Jumlah pesanan: {res.totalItem}x
+                    </Text>
+                    <Text
+                      style={{fontFamily: 'Poppins-Regular', color: '#8D92A3'}}>
+                      <Number number={res.totalOrder} />
+                    </Text>
+                  </View>
                 </View>
+              );
+            })}
           </View>
           <View style={styles.detailCardCatatan}>
-            <Text style={{ fontFamily: 'Poppins-Regular'}}>Catatan: </Text>
-            <TextInput 
-                style={{ fontSize: 12, textAlign: 'right' }}  
-                placeholder="Mohon meninggalkan catatan..." 
-                onChangeText={onChangeText}
-                value={text}
-                />
+            <Text style={{fontFamily: 'Poppins-Regular'}}>Catatan: </Text>
+            <TextInput
+              style={{fontSize: 12, textAlign: 'right'}}
+              placeholder="Mohon meninggalkan catatan..."
+              onChangeText={onChangeText}
+              value={text}
+            />
           </View>
 
-         <View style={styles.detailCard}>
+          <View style={styles.detailCard}>
             <Text style={styles.text}>Detail Customer</Text>
             <Gap height={10} />
-            <ItemValue title={`Customer Name`} name={profile.fullName}/>
+            <ItemValue title={`Customer Name`} name={profile.fullName} />
             <ItemValue title="NIM" name={profile.numberId} />
             <ItemValue title="Status" name={profile.role} />
             <ItemValue title="Phone Number" name={profile.phone} />
             <Gap height={15} />
           </View>
+        </View>
 
-          <View style={styles.detailCard}>
-            <Text style={styles.text}>Detail Transaction</Text>
+        <View style={styles.container}>
+          <View style={{paddingVertical: 16}}>
+            <Select
+              order
+              label="Method"
+              value={form.methodUser}
+              onValueChange={value => setForm('methodUser', value)}
+              selectItem={method}
+            />
             <Gap height={10} />
-            <ItemValue title={`Subtotal Item (${params.totalItem} Item)`} value={params.totalOrder} />
-            <ItemValue title="Tax 10%" value={1000} />
-            <ItemValue title="Services Price" value={2000} />
-            <ItemValue title="Total Price" colorValue value={totalPrice} />
-            <Gap height={15} />
+            {form.methodUser === 'Delivery' && (
+              <View>
+                <Select
+                  order
+                  label="Location"
+                  value={form.location}
+                  onValueChange={value => setForm('location', value)}
+                  selectItem={listData}
+                />
+                <Gap height={10} />
+                <TextInput
+                  value={form.detailLocation}
+                  onChangeText={value => setForm('detailLocation', value)}
+                  style={styles.textInput}
+                  underlineColorAndroid="transparent"
+                  placeholder="input Detail Location"
+                />
+              </View>
+            )}
           </View>
         </View>
 
-        <View style={styles.detailCard}>
-          <Button
-            label="Order Now"
-            onPress={onSubmit}
-          />
+        <View style={styles.container}>
+          <View style={{paddingVertical: 16}}>
+            <Select
+              order
+              label="Payment Method"
+              value={form.paymentMethod}
+              onValueChange={value => setForm('paymentMethod', value)}
+              selectItem={paymentMethod}
+            />
+          </View>
+        </View>
+
+        <View style={styles.container}>
+          <View style={styles.detailCard}>
+            <Text style={styles.text}>Detail Transaction</Text>
+            <Gap height={10} />
+            <ItemValue
+              title={`Subtotal Item (${sumData('item')} Item)`}
+              value={sumData('order')}
+            />
+            <ItemValue title="Tax 10%" value={1000} />
+            <ItemValue title="Services Price" value={2000} />
+            <ItemValue
+              title="Total Price"
+              colorValue
+              value={sumData('total')}
+            />
+            <Gap height={15} />
+          </View>
+        </View>
+        <Gap height={18} />
+        <View style={styles.onSubmit}>
+          {getKodeTransaksi != '' && (
+            <View>
+              {params.status ? (
+                <Button label="Order Now" onPress={onSubmit} />
+              ) : (
+                <Button label="Order Now" onPress={onSubmitDeleteCart} />
+              )}
+            </View>
+          )}
         </View>
         <Gap height={18} />
       </View>
@@ -116,7 +352,6 @@ export default OrderSummary;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    paddingHorizontal: 19
   },
   detailCardCatatan: {
     marginTop: 15,
@@ -129,21 +364,30 @@ const styles = StyleSheet.create({
   detailCard: {
     marginTop: 15,
   },
-  content:{
+  content: {
+    justifyContent: 'space-between',
+    marginTop: 10,
     flexDirection: 'row',
-    marginTop: 10
   },
   container: {
     backgroundColor: 'white',
     marginTop: 15,
+    paddingHorizontal: 19,
   },
   text: {
     fontSize: 14,
     fontFamily: 'Poppins-Regular',
     fontWeight: 'bold',
   },
-  header:{
-
-      flexDirection: 'row'
-  }
+  header: {
+    flexDirection: 'row',
+    paddingTop: 17,
+  },
+  onSubmit: {
+    paddingHorizontal: 19,
+  },
+  textInput: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  },
 });

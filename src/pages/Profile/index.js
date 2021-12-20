@@ -1,19 +1,25 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
 import {PhotoProfileUser} from '../../assets';
 import {Gap, ProfileTabSection} from '../../components';
 
 const Profile = () => {
+  const {globalReducer} = useSelector(state => state);
+  console.log(';fgad', globalReducer);
   return (
     <View style={styles.page}>
       <View style={styles.profileDetail}>
         <View style={styles.photo}>
           <View style={styles.borderPhoto}>
-            <Image source={PhotoProfileUser} style={styles.photoContainer} />
+            <Image
+              source={{uri: globalReducer.photo}}
+              style={styles.photoContainer}
+            />
           </View>
         </View>
-        <Text style={styles.name}>Rita Hutami</Text>
-        <Text style={styles.status}>Mahasiswa</Text>
+        <Text style={styles.name}>{globalReducer.fullName}</Text>
+        <Text style={styles.status}>{globalReducer.role}</Text>
       </View>
       <Gap height={15} />
       <View style={styles.container}>

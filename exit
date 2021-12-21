@@ -1,0 +1,167 @@
+[33mcommit 74ba7379385564d5918479fa7363ac1060dd128b[m[33m ([m[1;36mHEAD -> [m[1;32mRatingCanteen[m[33m)[m
+Author: boomberkiri <booomberkiri@gmail.com>
+Date:   Tue Dec 21 07:58:04 2021 +0700
+
+    update
+
+[33mcommit a1ece6ddd4cff4749d936145e5fd603fbce677ca[m[33m ([m[1;32mfix_transaction[m[33m)[m
+Author: boomberkiri <booomberkiri@gmail.com>
+Date:   Tue Dec 21 05:16:11 2021 +0700
+
+    Rating Canteen
+
+[33mcommit 5b31f7b1a034324260a32a1eeeae3b29cd817aea[m[33m ([m[1;31morigin/fix_transaction[m[33m)[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Mon Dec 13 22:58:49 2021 +0700
+
+    Not Fix
+
+[33mcommit aca3f743d91f818235182b0bf9aa8f1687a3df96[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Fri Dec 10 13:28:06 2021 +0700
+
+    not fix
+
+[33mcommit 216fe1a1d3f151bf9804af020dabcd4721b092d0[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Thu Dec 9 00:31:39 2021 +0700
+
+    Fix loading
+
+[33mcommit d987184fd54d2dd19d22a4e013c355605fe053e6[m[33m ([m[1;31morigin/origin/FEATURE_TRANSACTION_MULTI_DATA[m[33m, [m[1;32morigin/FEATURE_TRANSACTION_MULTI_DATA[m[33m)[m
+Author: mfajarna <invasionfajar@gmail.com>
+Date:   Wed Dec 8 17:41:57 2021 +0700
+
+    Fix api
+
+[33mcommit befa478d8726d4b11914f3d7d2b56d91a4e42695[m[33m ([m[1;31morigin/FEATURE_TRANSACTION_MULTI_DATA[m[33m)[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Wed Dec 8 02:38:00 2021 +0700
+
+    fix api transaction
+
+[33mcommit 0ec827102cedbda340d71a19f7257f46ac019ed2[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Tue Dec 7 22:58:31 2021 +0700
+
+    fix api transaction
+
+[33mcommit baeb5685d0f372b9d33b69c63d6df4539577fb2b[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Mon Dec 6 16:25:51 2021 +0700
+
+    fixing app
+
+[33mcommit 0223de0e3130ad78fc5185fc74fd740f73d9b93b[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Sat Dec 4 00:56:52 2021 +0700
+
+    add tenant
+
+[33mcommit dda5420c4c7e35e82bd2d2e8760de60857e1f7a1[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Wed Dec 1 02:55:08 2021 +0700
+
+    Adding fix
+
+[33mcommit f0cc3267ccef75cc3585eea5b12dff4f29541ddf[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Tue Nov 30 21:08:04 2021 +0700
+
+    Add Confirmation Order
+
+[33mcommit d483d61ff8330bae2f198c08d11be36b5ea770de[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Tue Nov 30 03:42:25 2021 +0700
+
+    Fix and Add Detail Menu
+
+[33mcommit 4585e5c014100fc16cae2ee0c6f4cac3a4338fd7[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Mon Nov 29 04:45:00 2021 +0700
+
+    Add feature canteen
+
+[33mcommit 0e981c7c912e15a11e502dca0e189160829911af[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Sun Nov 28 08:44:59 2021 +0700
+
+    Add Feature fetch Data users API
+
+[33mcommit 56434a13df354b8a31e519a5943a717a2ea41ac7[m[33m ([m[1;31morigin/main[m[33m)[m
+Merge: 53031f2 025382f
+Author: rofirezkin <45537240+rofirezkin@users.noreply.github.com>
+Date:   Sun Nov 21 17:46:55 2021 +0700
+
+    Merge pull request #2 from rofirezkin/Notification
+    
+    Notification
+
+[33mcommit 025382f9ff63a8820c796115ce4418a54137a631[m[33m ([m[1;31morigin/Notification[m[33m, [m[1;32mNotification[m[33m)[m
+Author: rofirezkin <rofirezkin@gmail.com>
+Date:   Sun Nov 21 17:34:02 2021 +0700
+
+    perbaikan
+
+[33mcommit e8bcf6653c2fe5d7f1c5a19e6eb7c54e87e99224[m[33m ([m[1;32mFEATURE_AUTH_SSO[m[33m)[m
+Author: rofirezkin <rofirezkin@gmail.com>
+Date:   Sun Nov 21 17:17:56 2021 +0700
+
+    restructure Design
+
+[33mcommit 53031f20f656a5032b1b5f0cb15d76d05613a7a4[m
+Merge: f07b210 a15599f
+Author: mfajarna <invasionfajar@gmail.com>
+Date:   Sun Nov 21 17:11:36 2021 +0700
+
+    Merge pull request #1 from rofirezkin/FEATURE_AUTH_SSO
+    
+    Feature auth sso
+
+[33mcommit a15599f8c9eae69bf7a3a7d11a3820705337b440[m[33m ([m[1;31morigin/FEATURE_AUTH_SSO[m[33m)[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Sun Nov 21 17:11:04 2021 +0700
+
+    Allow
+
+[33mcommit c261d677670735463e993421c94b230c467864b4[m
+Author: Muhammad Fajar <invasionfajar@gmail.com>
+Date:   Tue Nov 16 11:45:22 2021 -0800
+
+    Add Skeleton Done
+
+[33mcommit c65363781d2f3c330ea66d7c65d4449b95e11d6d[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Tue Nov 16 01:45:28 2021 +0700
+
+    Skeleton Home Not Done
+
+[33mcommit 2b5ba3fce6609a0e00cc09322873f9212350905b[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Mon Nov 15 22:25:12 2021 +0700
+
+    Optimize Login
+
+[33mcommit 425a2636ce2b72a9a174798c4b8f895008712ed5[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Mon Nov 15 21:16:19 2021 +0700
+
+    Login Fix
+
+[33mcommit 01638d8b7d36b9f58ea556a68588b335a2bdb288[m
+Author: muhammad fajar <invasionfajar@gmail.com>
+Date:   Mon Nov 15 09:23:29 2021 +0700
+
+    AUTH Bug
+
+[33mcommit f07b210a3fd07d045a04b80221a0cc73ce01e3c3[m[33m ([m[1;32mmain[m[33m)[m
+Author: rofirezkin <rofirezkin@gmail.com>
+Date:   Fri Nov 12 13:38:58 2021 +0700
+
+    tambahan
+
+[33mcommit e42ffe83157367a763f9015deae9b8f5ec6c3d23[m
+Author: rofirezkin <rofirezkin@gmail.com>
+Date:   Mon Oct 18 00:30:32 2021 +0700
+
+    First Commit

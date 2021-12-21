@@ -265,8 +265,8 @@ const Home = ({navigation}) => {
                     style={{alignItems: 'center'}}
                     onPress={() =>
                       navigation.navigate('AllMenuByCategory', [
-                        (titleMenu = 'New Menu'),
-                        (paramsQuery = 'New Menu'),
+                        (titleMenu = 'New Taste'),
+                        (paramsQuery = 'New Taste'),
                       ])
                     }>
                     <Text style={styles.desc}>see more</Text>

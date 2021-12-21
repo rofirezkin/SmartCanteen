@@ -38,7 +38,7 @@ const DetailFoodItem = ({navigation, route}) => {
         ...params,
         totalItem,
         totalOrder,
-        kode_transaksi: 'AD12a3asdasds',
+        kode_transaksi: '',
       },
     ],
   };
@@ -46,7 +46,7 @@ const DetailFoodItem = ({navigation, route}) => {
     ...params,
     totalItem,
     totalOrder,
-    kode_transaksi: 'AD12a3asdasds',
+    kode_transaksi: '',
   };
 
   const directOrder = {

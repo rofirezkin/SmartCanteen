@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {useEffect} from 'react';
+import {Alert, BackHandler, StyleSheet, Text, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {Button, Gap, Header, TextInput} from '../../components';
-
+import {setLoading} from '../../redux/action';
 import {
   ENDPOINT,
   ENDPOINT_PROFILE,
@@ -17,11 +19,11 @@ const SignIn = ({navigation}) => {
     username: '',
     password: '',
   });
-
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const {isLoading} = useSelector(state => state.globalReducer);
 
   const onSubmit = async () => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     const payload = JSON.stringify({
       username: form.username,
@@ -32,11 +34,10 @@ const SignIn = ({navigation}) => {
 
     if (result.hasOwnProperty('message')) {
       // Handing Error
-      setLoading(false);
+      dispatch(setLoading(false));
       Alert.alert('Oops!', result.message);
     } else {
       // Handling Success
-      setLoading(false);
 
       const resToken = await result.token;
       const issueProfile = await useRequestWithToken(
@@ -63,10 +64,23 @@ const SignIn = ({navigation}) => {
         phone: issueProfile.phone,
         authenticated: true,
       });
-
+      dispatch(setLoading(false));
       navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
     }
   };
+
+  const backAction = () => {
+    if (isLoading !== true) {
+      BackHandler.exitApp();
+    }
+    return true;
+  };
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, [isLoading]);
 
   return (
     <View style={styles.page}>
@@ -92,9 +106,9 @@ const SignIn = ({navigation}) => {
         />
         <Gap height={24} />
         <Button
-          label={loading ? 'Loading...' : 'Sign In'}
+          label={isLoading ? 'Loading...' : 'Sign In'}
           onPress={onSubmit}
-          disabled={loading ? true : false}
+          disabled={isLoading ? true : false}
         />
         <Gap height={13} />
         <Button

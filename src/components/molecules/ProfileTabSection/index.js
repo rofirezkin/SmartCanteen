@@ -25,6 +25,7 @@ const Account = () => {
   const {globalReducer} = useSelector(state => state);
   const signOut = async () => {
     await deleteUser();
+    await AsyncStorage.removeItem('dataCart');
     navigation.replace('SignIn');
   };
   return (

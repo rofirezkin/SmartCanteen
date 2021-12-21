@@ -32,9 +32,9 @@ const MyCart = ({navigation}) => {
       />
       <View style={styles.container}>
         {convertData().map(res => {
-          console.log(res.data);
           return (
             <OrderList
+              status={res.data.data[0].status}
               image={res.data.picturePath}
               onPress={() => navigation.navigate('OrderSummary', res.data)}
               key={res.id}

@@ -5,7 +5,14 @@ import {DummyFood1} from '../../../assets';
 import {fonts} from '../../../utils';
 import {ENDPOINT_SMART_CANTEEN} from '../../../utils/API/httpClient';
 
-const OrderList = ({namaTenant, lokasiTenant, totalMenu, onPress, image}) => {
+const OrderList = ({
+  namaTenant,
+  lokasiTenant,
+  totalMenu,
+  onPress,
+  status,
+  image,
+}) => {
   const navigation = useNavigation();
   let dataLokasiTenant = '';
   switch (lokasiTenant) {
@@ -62,7 +69,9 @@ const OrderList = ({namaTenant, lokasiTenant, totalMenu, onPress, image}) => {
           <Text style={styles.title}>
             {namaTenant} - {dataLokasiTenant}
           </Text>
-          <Text style={styles.subtitle}>{totalMenu} Menu - Dine In </Text>
+          <Text style={styles.subtitle}>
+            {totalMenu} Menu - {status}{' '}
+          </Text>
         </View>
         <Image
           source={{uri: `${ENDPOINT_SMART_CANTEEN}/storage/${image}`}}

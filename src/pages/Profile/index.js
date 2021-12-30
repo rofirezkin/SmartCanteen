@@ -6,7 +6,7 @@ import {Gap, ProfileTabSection} from '../../components';
 
 const Profile = () => {
   const {globalReducer} = useSelector(state => state);
-  console.log(';fgad', globalReducer);
+
   return (
     <View style={styles.page}>
       <View style={styles.profileDetail}>

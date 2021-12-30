@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {useEffect} from 'react';
-import {Alert, BackHandler, StyleSheet, Text, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {Alert, StyleSheet, Text, View} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {Button, Gap, Header, TextInput} from '../../components';
-import {setLoading} from '../../redux/action';
+
 import {
   ENDPOINT,
   ENDPOINT_PROFILE,
@@ -15,15 +14,16 @@ import {setUser} from '../../utils/AsyncStoreServices';
 import useForm from '../../utils/useForm';
 
 const SignIn = ({navigation}) => {
+  const dispatch = useDispatch();
   const [form, setForm] = useForm({
     username: '',
     password: '',
   });
-  const dispatch = useDispatch();
-  const {isLoading} = useSelector(state => state.globalReducer);
+
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
-    dispatch(setLoading(true));
+    setLoading(true);
 
     const payload = JSON.stringify({
       username: form.username,
@@ -34,17 +34,19 @@ const SignIn = ({navigation}) => {
 
     if (result.hasOwnProperty('message')) {
       // Handing Error
-      dispatch(setLoading(false));
+      setLoading(false);
       Alert.alert('Oops!', result.message);
     } else {
       // Handling Success
-
+      setLoading(false);
       const resToken = await result.token;
       const issueProfile = await useRequestWithToken(
         ENDPOINT_PROFILE,
         resToken,
         'get',
+        dispatch,
       );
+
       const resultRole = await useRequestWithToken(
         ENDPOINT_ROLE,
         resToken,
@@ -64,23 +66,10 @@ const SignIn = ({navigation}) => {
         phone: issueProfile.phone,
         authenticated: true,
       });
-      dispatch(setLoading(false));
+
       navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
     }
   };
-
-  const backAction = () => {
-    if (isLoading !== true) {
-      BackHandler.exitApp();
-    }
-    return true;
-  };
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-
-    return () =>
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-  }, [isLoading]);
 
   return (
     <View style={styles.page}>
@@ -106,16 +95,11 @@ const SignIn = ({navigation}) => {
         />
         <Gap height={24} />
         <Button
-          label={isLoading ? 'Loading...' : 'Sign In'}
+          label={loading ? 'Loading...' : 'Sign In'}
           onPress={onSubmit}
-          disabled={isLoading ? true : false}
+          disabled={loading ? true : false}
         />
         <Gap height={13} />
-        <Button
-          label="Create New Account"
-          color="#8D92A3"
-          onPress={() => navigation.navigate('SignUp')}
-        />
       </View>
     </View>
   );

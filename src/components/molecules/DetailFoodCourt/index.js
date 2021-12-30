@@ -14,9 +14,35 @@ const DetailFoodCourt = ({
   rating,
   status,
 }) => {
+  if (status == 'inactive') {
+    return (
+      <View style={styles.container(status)}>
+        <View style={styles.boxFoodCourt}>
+          <Image
+            source={{uri: `${ENDPOINT_SMART_CANTEEN}/storage/${image}`}}
+            style={styles.image}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{nameCanteen}</Text>
+            <Text style={styles.description}>{desc}</Text>
+            {type ? (
+              <View>
+                <Text style={styles.description}>{locKantin}</Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={styles.statusText(status)}>{status}</Text>
+              </View>
+            )}
+            <Rating number={rating} />
+          </View>
+        </View>
+      </View>
+    );
+  }
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
-      <View style={styles.container}>
+      <View style={styles.container(status)}>
         <View style={styles.boxFoodCourt}>
           <Image
             source={{uri: `${ENDPOINT_SMART_CANTEEN}/storage/${image}`}}
@@ -45,14 +71,14 @@ const DetailFoodCourt = ({
 export default DetailFoodCourt;
 
 const styles = StyleSheet.create({
-  container: {
+  container: status => ({
     backgroundColor: 'white',
-
+    opacity: status == 'inactive' ? 0.5 : 1,
     marginTop: 15,
     paddingBottom: 15,
     borderBottomColor: '#EEEEEE',
     borderBottomWidth: 1,
-  },
+  }),
   boxFoodCourt: {
     paddingHorizontal: 12,
     flexDirection: 'row',

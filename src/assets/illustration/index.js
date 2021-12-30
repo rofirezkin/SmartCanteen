@@ -10,7 +10,9 @@ import ILSuccessOrder from './SuccessOrder.png';
 import ILBannerRec from './banner_recomen.png';
 import ILHelpCenter from './helpcenter.svg';
 import ILMaintenance from './maintenance.svg';
+import ILNodata from './nodata.svg';
 export {
+  ILNodata,
   ILMaintenance,
   ILHelpCenter,
   ILSuccessOrder,

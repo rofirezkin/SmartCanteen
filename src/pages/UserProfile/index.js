@@ -54,12 +54,12 @@ const UserProfile = ({navigation, route}) => {
         />
         <ItemValue profile title="NIM" value={`: ${globalReducer.numberId}`} />
       </View>
-      <View style={styles.button}>
+      {/* <View style={styles.button}>
         <Button
           label="Edit Profie"
           onPress={() => navigation.navigate('Maintenance')}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

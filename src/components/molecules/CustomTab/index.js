@@ -58,6 +58,7 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
       return (
         <View>
           {allMenu.map(item => {
+            console.log('item', item);
             const dataParam = {
               ...item,
               nama_tenant,

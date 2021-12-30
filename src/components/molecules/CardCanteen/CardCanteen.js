@@ -9,7 +9,7 @@ const CardCanteen = ({onPress, avatar, name}) => {
         <View style={styles.textContainer}>
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.subTitle}>
-            Menyediakan Makanan yang higenis dekat dengan {name}
+            Menyediakan Makanan yang sehat dan higenis pada {name}
           </Text>
         </View>
       </View>
@@ -21,7 +21,6 @@ export default CardCanteen;
 
 const styles = StyleSheet.create({
   container: {
-      
     backgroundColor: 'white',
     width: 200,
     height: 300,
@@ -32,14 +31,13 @@ const styles = StyleSheet.create({
     elevation: 14,
     borderRadius: 18,
     marginTop: 20,
-    marginRight: 20
+    marginRight: 20,
   },
   image: {
     borderTopRightRadius: 18,
     borderTopLeftRadius: 18,
     width: 200,
     height: 110,
-
   },
   textContainer: {
     padding: 13,

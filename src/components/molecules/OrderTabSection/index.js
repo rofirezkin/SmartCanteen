@@ -12,7 +12,13 @@ import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import ItemListFood from '../ItemListFood';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getInProgress, getPastOrders} from '../../../redux/action';
+import {
+  getFeedbackOrder,
+  getInProgress,
+  getPastOrders,
+} from '../../../redux/action';
+import {ILNodata} from '../../../assets';
+import {Gap} from '../..';
 
 const renderTabBar = props => (
   <TabBar
@@ -48,6 +54,7 @@ const InProgress = () => {
 
   return (
     <ScrollView
+      contentContainerStyle={{flexGrow: 1}}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
@@ -66,6 +73,72 @@ const InProgress = () => {
           />
         );
       })}
+      {inProgress.length == 0 && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ILNodata />
+          <Gap height={10} />
+          <Text>No data Order</Text>
+        </View>
+      )}
+    </ScrollView>
+  );
+};
+
+const Feedback = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {feedback} = useSelector(state => state.transactionsReducer);
+  const [refreshing, setRefreshing] = useState(false);
+  const {numberId} = useSelector(state => state.globalReducer);
+
+  useEffect(() => {
+    dispatch(getFeedbackOrder(numberId));
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(getFeedbackOrder(numberId));
+    setRefreshing(false);
+  };
+
+  return (
+    <ScrollView
+      contentContainerStyle={{flexGrow: 1}}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      {feedback.map(order => {
+        return (
+          <ItemListFood
+            urlPhoto={order.menu.picturePath}
+            name={order.menu.name}
+            ingredients={order.menu.ingredients}
+            key={order.id}
+            status={order.status}
+            type="past-orders"
+            items={order.quantity}
+            totalOrder={order.total}
+            onPress={() => navigation.navigate('OrderDetail', order)}
+          />
+        );
+      })}
+      {feedback.length == 0 && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ILNodata />
+          <Gap height={10} />
+          <Text>No data Order</Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -87,9 +160,9 @@ const PastOrder = () => {
     setRefreshing(false);
   };
 
-  console.log('pastOrder', pastOrder);
   return (
     <ScrollView
+      contentContainerStyle={{flexGrow: 1}}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
@@ -108,13 +181,26 @@ const PastOrder = () => {
           />
         );
       })}
+      {pastOrder.length == 0 && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ILNodata />
+          <Gap height={10} />
+          <Text>No data Order</Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
 
 const renderScene = SceneMap({
   1: InProgress,
-  2: PastOrder,
+  2: Feedback,
+  3: PastOrder,
 });
 const TabViewFoodCourt = () => {
   const layout = useWindowDimensions();
@@ -122,7 +208,8 @@ const TabViewFoodCourt = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: '1', title: 'In Progress'},
-    {key: '2', title: 'Past Order'},
+    {key: '2', title: 'Feedback Canteen'},
+    {key: '3', title: 'Past Order'},
   ]);
   return (
     <TabView

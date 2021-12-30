@@ -39,7 +39,7 @@ const ItemListFood = ({
       case 'in-progress':
         return (
           <View style={styles.container}>
-            <View>
+            <View style={{flex: 1}}>
               <Text style={styles.title}>{name}</Text>
               <Text style={styles.subTitle}>{ingredients}</Text>
               <Text style={styles.statusInProgress}>{status}</Text>

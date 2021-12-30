@@ -52,7 +52,6 @@ const OrderSummary = ({navigation, route}) => {
       data: sendData,
     })
       .then(res => {
-        console.log('ress', res);
         setGetKodeTransaksi(res.data.data);
       })
       .catch(err => {
@@ -64,7 +63,10 @@ const OrderSummary = ({navigation, route}) => {
 
   const [form, setForm] = useForm({
     methodUser: methodUser.method,
-    location: methodUser.method == 'Delivery' ? methodUser.location : '',
+    location:
+      methodUser.method == 'Delivery'
+        ? methodUser.location
+        : 'Fakultas Ilmu Terapan',
     detailLocation:
       methodUser.method == 'Delivery' ? methodUser.speclocation : '',
     paymentMethod: 'Cash',
@@ -124,6 +126,7 @@ const OrderSummary = ({navigation, route}) => {
           ? `${form.methodUser}, location : ${form.location}, detail location : ${form.detailLocation}`
           : form.methodUser,
       quantity: arrayData[i].totalItem,
+      created_at : '',
       catatan: text == '' ? 'tidak ada' : text,
       phoneNumber: profile.phone,
       total: arrayData[i].totalOrder,

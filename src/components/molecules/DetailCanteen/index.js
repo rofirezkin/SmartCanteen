@@ -9,7 +9,7 @@ const DetailCanteen = ({onPress, name, avatar}) => {
         <View style={styles.textContainer}>
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.subTitle}>
-            Menyediakan Makanan yang higenis dekat dengan fakultas teknik
+            Menyediakan Makanan yang higenis dan sehat pada {name}
           </Text>
         </View>
       </View>

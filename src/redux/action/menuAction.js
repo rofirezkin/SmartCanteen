@@ -36,11 +36,10 @@ export const getDataMenuSeveralByTypes = types => async dispatch => {
       }
       if (types === 'Recommended') {
         dispatch({type: 'SET_SEVERAL_RECOMMENDED', value: res.data.data.data});
-        console.log(res.data.data.data);
       }
     })
     .catch(err => {
-      console.log(err.message);
+      console.log('several recommended dll', err.response);
     });
 
   return Promise.resolve(result);
@@ -53,7 +52,7 @@ export const getDataFetchMenu = () => async dispatch => {
       dispatch({type: 'SET_ALL_MENU', value: res.data.data});
     })
     .catch(err => {
-      console.log(err.message);
+      console.log('all menu, di action', err.message);
     });
 
   return Promise.resolve(result);
@@ -76,7 +75,7 @@ export const getAllMenuUsers = id_tenant => async dispatch => {
       dispatch({type: 'SET_BEVERAGES_MENU', value: baveragesMenu});
     })
     .catch(err => {
-      console.log(err.response);
+      console.log('makanan or minuman', err.response);
     });
 
   return Promise.resolve(result);

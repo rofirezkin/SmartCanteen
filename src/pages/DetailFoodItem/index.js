@@ -12,6 +12,7 @@ import {ENDPOINT_SMART_CANTEEN} from '../../utils/API/httpClient';
 import Number from '../../utils/Number/Number';
 import {getData, removeItem, storeData} from '../../utils/AsyncStoreServices';
 import {useDispatch, useSelector} from 'react-redux';
+import {showMessage} from '../../utils';
 
 const DetailFoodItem = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -55,7 +56,8 @@ const DetailFoodItem = ({navigation, route}) => {
   };
 
   const addToCart = async () => {
-    if (allCart == null || allCart == '') {
+    if (allCart == null || allCart == '' || allCart.length == 0) {
+      console.log('haloo');
       storeData('dataCart', {[id_tenant]: dataOrder});
     } else {
       if (allCart.hasOwnProperty(`${id_tenant}`)) {
@@ -83,7 +85,7 @@ const DetailFoodItem = ({navigation, route}) => {
       console.log('res', res);
       dispatch({type: 'GET_DATA_CART', value: res});
     });
-
+    showMessage('success add to cart', 'success');
     navigation.goBack();
   };
 

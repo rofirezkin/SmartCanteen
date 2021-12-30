@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginLeft: 14,
+    flex: 1,
   },
   statusText: {
     color: '#1CBD49',

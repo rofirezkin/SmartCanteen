@@ -1,87 +1,85 @@
+import {showMessage} from '..';
+
 export const ENDPOINT = 'https://gateway.telkomuniversity.ac.id/issueauth';
-export const ENDPOINT_PROFILE = 'https://gateway.telkomuniversity.ac.id/issueprofile'
-export const ENDPOINT_ROLE = 'https://gateway.telkomuniversity.ac.id/issuerole'
-export const ENDPOINT_API_SMART_CANTEEN = 'http://27.112.78.169/api/'
-export const ENDPOINT_SMART_CANTEEN = 'http://27.112.78.169'
+export const ENDPOINT_PROFILE =
+  'https://gateway.telkomuniversity.ac.id/issueprofile';
+export const ENDPOINT_ROLE = 'https://gateway.telkomuniversity.ac.id/issuerole';
+export const ENDPOINT_API_SMART_CANTEEN = 'http://27.112.78.169/api/';
+export const ENDPOINT_SMART_CANTEEN = 'http://27.112.78.169';
 
-
-
-const headersResponseAPITELKOM = (methodH = '',payloadH,tokenH = '') => {
-  switch(methodH){
+const headersResponseAPITELKOM = (methodH = '', payloadH, tokenH = '') => {
+  switch (methodH) {
     case 'post':
       return {
         methodH,
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${tokenH}`,
-            'X-Orgid': 'l6WxJyXH6toDsTnOIOZYxy8jBshOlEzDZzp2iqdxg7dT60Wh52BDw0Dhq276qcSlQCbayrWOpdHCXGmvZTA1UU0R16Knj76FDCGkOlpSlWsj1MlkqOrHtkQWWataMfsm',
-            redirect: 'follow',
-         },
-         body: JSON.stringify(payloadH),
-      }
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenH}`,
+          'X-Orgid':
+            'l6WxJyXH6toDsTnOIOZYxy8jBshOlEzDZzp2iqdxg7dT60Wh52BDw0Dhq276qcSlQCbayrWOpdHCXGmvZTA1UU0R16Knj76FDCGkOlpSlWsj1MlkqOrHtkQWWataMfsm',
+          redirect: 'follow',
+        },
+        body: JSON.stringify(payloadH),
+      };
     case 'get':
       return {
         methodH,
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${tokenH}`,
-            'X-Orgid': 'l6WxJyXH6toDsTnOIOZYxy8jBshOlEzDZzp2iqdxg7dT60Wh52BDw0Dhq276qcSlQCbayrWOpdHCXGmvZTA1UU0R16Knj76FDCGkOlpSlWsj1MlkqOrHtkQWWataMfsm',
-            redirect: 'follow',
-         },
-      }
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenH}`,
+          'X-Orgid':
+            'l6WxJyXH6toDsTnOIOZYxy8jBshOlEzDZzp2iqdxg7dT60Wh52BDw0Dhq276qcSlQCbayrWOpdHCXGmvZTA1UU0R16Knj76FDCGkOlpSlWsj1MlkqOrHtkQWWataMfsm',
+          redirect: 'follow',
+        },
+      };
   }
-}
+};
 
-const headersResponseWithToken = (methodH = '',payloadH,tokenH = '') => {
-  switch(methodH){
+const headersResponseWithToken = (methodH = '', payloadH, tokenH = '') => {
+  switch (methodH) {
     case 'post':
       return {
         methodH,
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${tokenH}`,
-            redirect: 'follow',
-         },
-         body: JSON.stringify(payloadH),
-      }
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenH}`,
+          redirect: 'follow',
+        },
+        body: JSON.stringify(payloadH),
+      };
     case 'get':
       return {
         methodH,
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${tokenH}`,
-            redirect: 'follow',
-         },
-      }
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenH}`,
+          redirect: 'follow',
+        },
+      };
   }
-}
+};
 
-
-const headersResponseWithoutToken = (methodH = '',payloadH) => {
-  switch(methodH){
+const headersResponseWithoutToken = (methodH = '', payloadH) => {
+  switch (methodH) {
     case 'post':
       return {
         methodH,
         headers: {
-            'Content-Type': 'application/json',
-            redirect: 'follow',
-         },
-         body: JSON.stringify(payloadH),
-      }
+          'Content-Type': 'application/json',
+          redirect: 'follow',
+        },
+        body: JSON.stringify(payloadH),
+      };
     case 'get':
       return {
         methodH,
         headers: {
-            'Content-Type': 'application/json',
-            redirect: 'follow',
-         },
-      }
+          'Content-Type': 'application/json',
+          redirect: 'follow',
+        },
+      };
   }
-}
-
-
-
-
+};
 
 /**
  * make a request to api without token
@@ -97,13 +95,15 @@ export const useRequestLogin = async (url, method, payload) => {
       Authorization: 'Bearer ',
       'Content-Type': 'application/json',
       redirect: 'follow',
-      'X-Orgid': 'l6WxJyXH6toDsTnOIOZYxy8jBshOlEzDZzp2iqdxg7dT60Wh52BDw0Dhq276qcSlQCbayrWOpdHCXGmvZTA1UU0R16Knj76FDCGkOlpSlWsj1MlkqOrHtkQWWataMfsm'
+      'X-Orgid':
+        'l6WxJyXH6toDsTnOIOZYxy8jBshOlEzDZzp2iqdxg7dT60Wh52BDw0Dhq276qcSlQCbayrWOpdHCXGmvZTA1UU0R16Knj76FDCGkOlpSlWsj1MlkqOrHtkQWWataMfsm',
     },
     body: payload,
-    
   })
-    .then((res) => res.json())
-    .then((responseJson) => responseJson)
+    .then(res => res.json())
+    .catch(err => console.log('eror', err))
+    .then(responseJson => responseJson);
+
   return Promise.resolve(request);
 };
 
@@ -121,19 +121,18 @@ export const useRequest = async (url, method, payload) => {
       Authorization: 'Basic ',
       'Content-Type': 'application/json',
       redirect: 'follow',
-      'Accept-Encoding' : 'gzip, deflate, br'
+      'Accept-Encoding': 'gzip, deflate, br',
     },
     body: JSON.stringify(payload),
   })
-    .then((res) => res.json())
-    .then((responseJson) => responseJson)
-    .catch((err) => {
-      console.log('error', err);
+    .then(res => res.json())
+    .then(responseJson => responseJson)
+    .catch(err => {
+      console.log('error bos', err);
     });
 
   return Promise.resolve(request);
 };
-
 
 /**
  * make a request to api with token
@@ -143,20 +142,27 @@ export const useRequest = async (url, method, payload) => {
  * @param {object=} payload
  * @returns object
  */
-export const useRequestWithToken = async (url, token, method, payload) => {
-    const request = await fetch(url, headersResponseAPITELKOM(method,payload,token))
-    .then((res) => res.json())
-    .then((responseJson) => responseJson)
-    .catch((err) => {
-      console.log('error', err);
+export const useRequestWithToken = async (
+  url,
+  token,
+  method,
+  payload,
+  dispatch,
+) => {
+  const request = await fetch(
+    url,
+    headersResponseAPITELKOM(method, payload, token),
+  )
+    .then(res => res.json())
+    .then(responseJson => responseJson)
+    .catch(err => {
+      showMessage('Akun anda tidak terdaftar');
+
+      console.log('error nich', err.message);
     });
 
-    
-    return Promise.resolve(request);
+  return Promise.resolve(request);
 };
-
-
-
 
 /**
  * make a request to api with token
@@ -168,10 +174,9 @@ export const useRequestWithToken = async (url, token, method, payload) => {
  */
 
 export const useRequestFetchData = async (url, method, payload) => {
-  const request = await fetch(url, headersResponseWithoutToken(method,payload))
-    .then((res) => res.json())
-    .then((responseJson) => console.log(responseJson))
+  const request = await fetch(url, headersResponseWithoutToken(method, payload))
+    .then(res => res.json())
+    .then(responseJson => console.log(responseJson));
 
   return Promise.resolve(request);
-}
-
+};

@@ -45,7 +45,7 @@ const OrderDetail = ({navigation, route}) => {
     <ScrollView>
       <View style={styles.page}>
         <Header
-          title="Payment"
+          title="Order Detail"
           onBack
           subtTitle="You deserve better meal"
           onPress={() => navigation.goBack()}
@@ -96,7 +96,7 @@ const OrderDetail = ({navigation, route}) => {
               onPress={onCancel}
             />
           )}
-          {params.status === 'DELIVERED' && (
+          {params.status === 'FEEDBACK' && (
             <Button
               label="Rate Your Order"
               color="red"

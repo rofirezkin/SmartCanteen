@@ -32,6 +32,7 @@ const FoodCourt = ({navigation, route}) => {
         setIsLoading(false);
       })
       .catch(err => {
+        setIsLoading(false);
         console.log(err.message);
       });
   };
@@ -59,8 +60,14 @@ const FoodCourt = ({navigation, route}) => {
   };
 
   const loadMoreItem = () => {
-    setCurrentPage(currentPage + 1);
+    if (items.length < 5) {
+      console.log('halooooo');
+    } else {
+      setCurrentPage(currentPage + 1);
+    }
   };
+
+  console.log('item', items);
 
   const renderLoader = () => {
     return isLoading ? (

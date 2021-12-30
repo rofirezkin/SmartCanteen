@@ -11,7 +11,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+
 import {
   DummyCanteen,
   DummyFood1,
@@ -57,15 +57,17 @@ const Home = ({navigation}) => {
     setLoading(true);
     setRefresh(true);
     user();
-    wait(2000)
-      .then(() => setRefresh(false))
-      .then(() => setLoading(false));
+    dispatch(getDataMenuSeveralByTypes('Recommended'));
+    dispatch(getDataMenuSeveralByTypes('New Taste'));
+    dispatch(getDataMenuSeveralByTypes('Popular'));
+    setLoading(false);
+    setRefresh(false);
   }, []);
 
   const user = async () => {
     const dataUser = await getUser();
     setLoading(false);
-    console.log('data', dataUser);
+
     dispatch({type: 'SET_GLOBAL_USER', value: dataUser});
   };
 
@@ -85,7 +87,6 @@ const Home = ({navigation}) => {
       } else {
         dispatch({type: 'GET_DATA_CART', value: res});
       }
-      console.log('resss cart', res);
     });
     dispatch(getDataMenuSeveralByTypes('Recommended'));
     dispatch(getDataMenuSeveralByTypes('New Taste'));
@@ -235,11 +236,13 @@ const Home = ({navigation}) => {
                           Math.floor(Math.random() * charactersLength),
                         );
                       }
-
+                      console.log('data recomeended', data.is_active);
                       return (
                         <CategoryMenu
+                          isActive={data.is_active}
+                          status={data.status}
                           key={result}
-                          rating={data.ratingMenu}
+                          rating={data.rating}
                           avatar={DummyFood1}
                           name={nameCanteen}
                           canteen={data.lokasi_kantin}
@@ -285,11 +288,13 @@ const Home = ({navigation}) => {
                           Math.floor(Math.random() * charactersLength),
                         );
                       }
-                      console.log(';dattt', data);
+                      console.log('haloo', data);
                       return (
                         <CategoryMenu
+                          isActive={data.is_active}
+                          status={data.status}
                           key={result}
-                          rating={data.ratingMenu}
+                          rating={data.rating}
                           avatar={DummyFood1}
                           name={nameCanteen}
                           canteen={data.lokasi_kantin}
@@ -339,8 +344,10 @@ const Home = ({navigation}) => {
                       const idKey = `${data.id}001`;
                       return (
                         <CategoryMenu
+                          isActive={data.is_active}
+                          status={data.status}
                           key={result}
-                          rating={data.ratingMenu}
+                          rating={data.rating}
                           avatar={DummyFood1}
                           name={nameCanteen}
                           canteen={data.lokasi_kantin}

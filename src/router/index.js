@@ -42,7 +42,6 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainApp = ({route}) => {
-  const routingData = route.params;
   return (
     <Tab.Navigator tabBar={props => <BottomNavigator {...props} />}>
       <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
@@ -62,7 +61,7 @@ const MainApp = ({route}) => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="SuccessOrder">
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}

@@ -21,6 +21,7 @@ import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {showMessage} from '../../utils';
 import {setLoading} from '../../redux/action';
+import WebView from 'react-native-webview';
 
 const OrderSummary = ({navigation, route}) => {
   const params = route.params;
@@ -28,9 +29,10 @@ const OrderSummary = ({navigation, route}) => {
   const {cartItems, optionReducer} = useSelector(state => state);
   const methodUser = optionReducer;
   const allCart = cartItems.allCart;
-  console.log('methopd', methodUser);
   const [getKodeTransaksi, setGetKodeTransaksi] = useState('');
   const [showWarningOpen, SetshowWarningOpen] = useState(false);
+  const [midtransUrl, setMidtransUrl] = React.useState('');
+  const [orderId, setOrderId] = React.useState('');
   let arrayData = {};
   let namaTenant = '';
   let lokasiTenant = '';
@@ -99,6 +101,25 @@ const OrderSummary = ({navigation, route}) => {
     }
   };
 
+  //midtrans setting
+  const SubmitTopUp = async () => {
+    axios
+      .post(`https://emoneydti.basicteknologi.co.id/index.php/api/snap/token`, {
+        id_user: profile.numberId,
+        nominal_topup: sumData('total'),
+      })
+      .then(function (response) {
+        console.log('bugr', response.data.data);
+        setMidtransUrl(response.data.data.redirect_url);
+        setOrderId(response.data.data.order_id);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  //end midtrans
+
   const user = async () => {
     const dataUser = await getUser();
 
@@ -126,7 +147,7 @@ const OrderSummary = ({navigation, route}) => {
           ? `${form.methodUser}, location : ${form.location}, detail location : ${form.detailLocation}`
           : form.methodUser,
       quantity: arrayData[i].totalItem,
-      created_at : '',
+      created_at: '',
       catatan: text == '' ? 'tidak ada' : text,
       phoneNumber: profile.phone,
       total: arrayData[i].totalOrder,
@@ -134,67 +155,120 @@ const OrderSummary = ({navigation, route}) => {
     sendData.push(data);
   }
 
-  const onSubmit = async () => {
-    if (form.paymentMethod == 'Online Payment') {
-      showMessage('Untuk sekarang, tidak bisa melakukan online payment');
-    } else {
-      console.log('sendata', sendData);
-      dispatch(setLoading(true));
-      const dataSubmit = await axios({
-        method: 'POST',
-        url: `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: sendData,
-      })
-        .then(res => {
-          dispatch(setLoading(false));
-          navigation.reset({index: 0, routes: [{name: 'SuccessOrder'}]});
-        })
-        .catch(err => {
-          dispatch(setLoading(false));
-          console.log(err.response);
-        });
-
-      return Promise.resolve(dataSubmit);
-    }
-  };
-
   useEffect(() => {
     user();
   }, []);
 
-  const onSubmitDeleteCart = async () => {
-    if (form.paymentMethod == 'Online Payment') {
-      showMessage('Untuk sekarang, tidak bisa melakukan online payment');
-    } else {
-      console.log('sendata', sendData);
-      dispatch(setLoading(true));
-      const dataSubmit = await axios({
-        method: 'POST',
-        url: `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: sendData,
+  const apiSubmit = async () => {
+    dispatch(setLoading(true));
+    const dataSubmit = await axios({
+      method: 'POST',
+      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: sendData,
+    })
+      .then(res => {
+        dispatch(setLoading(false));
+        if (paymentMethod == 'Online Payment') {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'SuccessOrder', params: orderId}],
+          });
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'SuccessOrder', params: orderId}],
+          });
+        }
       })
-        .then(res => {
-          delete allCart[arrayData[0].id_tenant];
+      .catch(err => {
+        dispatch(setLoading(false));
+        console.log(err.response);
+      });
 
-          storeData('dataCart', allCart);
-          dispatch(setLoading(false));
-          navigation.reset({index: 0, routes: [{name: 'SuccessOrder'}]});
-        })
-        .catch(err => {
-          dispatch(setLoading(false));
+    return Promise.resolve(dataSubmit);
+  };
+  const apiSubmitCart = async () => {
+    dispatch(setLoading(true));
+    const dataSubmit = await axios({
+      method: 'POST',
+      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: sendData,
+    })
+      .then(res => {
+        delete allCart[arrayData[0].id_tenant];
 
-          console.log(err.response);
-        });
+        storeData('dataCart', allCart);
+        dispatch(setLoading(false));
+        if (paymentMethod == 'Online Payment') {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'SuccessOrder', params: orderId}],
+          });
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'SuccessOrder', params: orderId}],
+          });
+        }
+      })
+      .catch(err => {
+        dispatch(setLoading(false));
 
-      return Promise.resolve(dataSubmit);
+        console.log(err.response);
+      });
+
+    return Promise.resolve(dataSubmit);
+  };
+
+  const onSubmit = async () => {
+    if (form.paymentMethod == 'Online Payment') {
+      SubmitTopUp();
+    } else {
+      apiSubmit();
     }
   };
+
+  const onSubmitDeleteCart = async () => {
+    if (form.paymentMethod == 'Online Payment') {
+      SubmitTopUp();
+    } else {
+      apiSubmitCart();
+    }
+  };
+
+  if (midtransUrl != '') {
+    return (
+      <>
+        <Header
+          title="Online Payment"
+          onBack
+          onPress={() => setMidtransUrl('')}
+        />
+        <WebView
+          source={{uri: midtransUrl}}
+          onNavigationStateChange={navState => {
+            if (navState.url.search('basicteknologi.co.id') > 0) {
+              // navigation.navigate('TopUpSuccess', {
+              //   orderId: orderId,
+              // });
+
+              if (params.status) {
+                apiSubmit(orderId);
+              } else {
+                apiSubmitCart(orderId);
+              }
+            }
+          }}
+        />
+      </>
+    );
+  }
 
   return (
     <ScrollView>

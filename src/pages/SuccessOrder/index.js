@@ -18,7 +18,6 @@ const SuccessOrder = ({navigation, route}) => {
         `https://emoneydti.basicteknologi.co.id/index.php/api/snap/transactionstatus?order_id=${orderId}`,
       )
       .then(res => {
-        console.log(res.data);
         setNominalTopUp(res.data.data.nominal_topup);
         setTransactionTime(res.data.data.transaction_time);
         setBank(res.data.data.bank);

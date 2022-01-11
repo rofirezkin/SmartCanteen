@@ -10,7 +10,6 @@ import {
 import {fonts, getData} from '../../utils';
 
 const UserProfile = ({navigation, route}) => {
-  console.log('data', route.params);
   const globalReducer = route.params;
   return (
     <View style={styles.page}>

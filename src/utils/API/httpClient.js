@@ -1,5 +1,3 @@
-import {showMessage} from '..';
-
 export const ENDPOINT = 'https://gateway.telkomuniversity.ac.id/issueauth';
 export const ENDPOINT_PROFILE =
   'https://gateway.telkomuniversity.ac.id/issueprofile';

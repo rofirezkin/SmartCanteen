@@ -118,9 +118,11 @@ const DetailFoodItem = ({navigation, route}) => {
             </View>
             <Counter payment onValueChange={onCounterChange} />
           </View>
+
           <Text style={styles.label}>Deskripsi Makanan</Text>
           <Text style={styles.description}>{params.ingredients}</Text>
-
+          <Text style={styles.label}>Nama Kantin</Text>
+          <Text style={styles.description}>{params.nama_tenant}</Text>
           <View>
             <Text style={styles.label}>Harga</Text>
             <Text style={styles.description}>
@@ -142,7 +144,8 @@ const DetailFoodItem = ({navigation, route}) => {
               double
               onPress={addToCart}
               label="Add To Cart"
-              color="#B7B7B7"
+              color="white"
+              textColor="red"
             />
           </View>
           <View style={styles.button}>

@@ -1,8 +1,12 @@
-import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {Alert, Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {PhotoProfileUser} from '../../assets';
-import {Gap, ProfileTabSection} from '../../components';
+import {Button, Gap, ProfileTabSection} from '../../components';
+import {device} from '../../data';
+
+import NotifService from '../../utils/notification/NotifService';
 
 const Profile = () => {
   const {globalReducer} = useSelector(state => state);
@@ -24,6 +28,8 @@ const Profile = () => {
       <Gap height={15} />
       <View style={styles.container}>
         <ProfileTabSection />
+
+        <Gap height={20} />
       </View>
     </View>
   );

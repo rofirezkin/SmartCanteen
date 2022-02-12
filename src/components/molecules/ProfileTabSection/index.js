@@ -1,12 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/core';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-import {deleteUser} from '../../../utils/AsyncStoreServices';
+import {deleteUser, getData, setUser} from '../../../utils/AsyncStoreServices';
 
 import {ItemListMenu} from '..';
 import {useSelector} from 'react-redux';
+import axios from 'axios';
+import {ENDPOINT_API_SMART_CANTEEN} from '../../../utils/API/httpClient';
 
 const renderTabBar = props => (
   <TabBar
@@ -23,10 +25,33 @@ const renderTabBar = props => (
 const Account = () => {
   const navigation = useNavigation();
   const {globalReducer} = useSelector(state => state);
+  const [userName, setUserName] = useState('');
+  console.log('global Reducer', globalReducer);
+
+  useEffect(() => {
+    getData('userApk').then(res => {
+      setUserName(res.value);
+    });
+  }, []);
   const signOut = async () => {
+    const userData = {
+      nama: userName.nama,
+      is_login: '0',
+      device_token: userName.device_token,
+    };
+
     await deleteUser();
-    await AsyncStorage.removeItem('dataCart');
-    navigation.replace('SignIn');
+    axios
+      .post(`${ENDPOINT_API_SMART_CANTEEN}userapk`, userData)
+      .then(res => {
+        AsyncStorage.removeItem('dataCart');
+        AsyncStorage.removeItem('token');
+        AsyncStorage.removeItem('userApk');
+        navigation.reset({index: 0, routes: [{name: 'SignIn'}]});
+      })
+      .catch(err => {
+        console.log('errorr di bagian post userAPK', err);
+      });
   };
   return (
     <View>

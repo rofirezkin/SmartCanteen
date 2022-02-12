@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "660571253316",
+    "project_id": "smartcanteen-80744",
+    "storage_bucket": "smartcanteen-80744.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660571253316:android:b435d19caaa839e37fea11",
+        "android_client_info": {
+          "package_name": "com.smartcanteen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660571253316-bloq5rm0h1k7432vt3lhru8o1273sk59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcAZWCRSL2jQr6__1JPdPYCK-5d0zdZuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660571253316-bloq5rm0h1k7432vt3lhru8o1273sk59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660571253316:android:5e39d3c542e57fce7fea11",
+        "android_client_info": {
+          "package_name": "com.tenantsc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660571253316-bloq5rm0h1k7432vt3lhru8o1273sk59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcAZWCRSL2jQr6__1JPdPYCK-5d0zdZuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660571253316-bloq5rm0h1k7432vt3lhru8o1273sk59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

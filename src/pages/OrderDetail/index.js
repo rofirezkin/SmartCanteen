@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Button, Gap, Header, ItemListFood, ItemValue} from '../../components';
@@ -10,10 +10,19 @@ import {
   ENDPOINT_SMART_CANTEEN,
 } from '../../utils/API/httpClient';
 
-const OrderDetail = ({navigation, route}) => {
+const OrderDetail = ({ navigation, route }) => {
+
   const dispatch = useDispatch();
   const params = route.params;
   console.log(route.params.id);
+
+  useEffect(() => {fai
+    axios.get(`http://27.112.78.169/api/transactions/user/detail?id_transaksi=${route.params}`).then(res => {
+      console.log('testing data', res)
+    }).catch(err => {
+      console.log('err',err)
+    })
+  },[])
 
   const onCancel = async () => {
     const status = {
@@ -40,6 +49,8 @@ const OrderDetail = ({navigation, route}) => {
 
     return Promise.resolve(dataSubmit);
   };
+
+  
   console.log('daad', params);
   return (
     <ScrollView>

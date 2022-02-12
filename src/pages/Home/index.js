@@ -37,6 +37,7 @@ import {skeletonHome} from '../../components/skeleton/skeletonHome';
 import {useSelector} from 'react-redux';
 import {getDataMenuSeveralByTypes} from '../../redux/action/menuAction';
 import CardCanteen from '../../components/molecules/CardCanteen/CardCanteen';
+import {getInProgress, getInProgressBadges} from '../../redux/action';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -67,7 +68,6 @@ const Home = ({navigation}) => {
   const user = async () => {
     const dataUser = await getUser();
     setLoading(false);
-
     dispatch({type: 'SET_GLOBAL_USER', value: dataUser});
   };
 
@@ -91,6 +91,7 @@ const Home = ({navigation}) => {
     dispatch(getDataMenuSeveralByTypes('Recommended'));
     dispatch(getDataMenuSeveralByTypes('New Taste'));
     dispatch(getDataMenuSeveralByTypes('Popular'));
+    // dispatch(getInProgressBadges(globalReducer.numberId));
     // getData('dataCart').then(res => {
     //   dispatch({type: 'GET_DATA_CART', value: res});
     // });

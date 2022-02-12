@@ -28,8 +28,10 @@ import OrderSummary from './OrderSummary/OrderSummary';
 import UserProfile from './UserProfile';
 import HelpCenter from './HelpCenter';
 import Maintenance from './Maintenance';
+import TestNotification from './TestNotification';
 
 export {
+  TestNotification,
   Maintenance,
   HelpCenter,
   UserProfile,

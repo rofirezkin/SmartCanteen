@@ -6,6 +6,7 @@ const initStateRegister = {
   address: '',
   city: '',
   house: '',
+  device_token: 't',
 };
 
 export const registerReducer = (state = initStateRegister, action) => {
@@ -25,6 +26,12 @@ export const registerReducer = (state = initStateRegister, action) => {
       city: action.value.city,
       houseNumber: action.value.houseNumber,
       phoneNumber: action.value.phoneNumber,
+    };
+  }
+  if (action.type === 'SET_DEVICE_TOKEN') {
+    return {
+      ...state,
+      device_token: action.value,
     };
   }
   return state;

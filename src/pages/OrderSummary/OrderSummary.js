@@ -17,13 +17,20 @@ import {getData, getUser, storeData} from '../../utils/AsyncStoreServices';
 import Number from '../../utils/Number/Number';
 import {listData, method, paymentMethod} from '../../utils/ListData';
 import useForm from '../../utils/useForm';
-import axios from 'axios';
+
 import {useDispatch, useSelector} from 'react-redux';
-import {showMessage} from '../../utils';
+import {getChatTime, getUidTime, showMessage} from '../../utils';
 import {setLoading} from '../../redux/action';
 import WebView from 'react-native-webview';
+import NotifService from '../../utils/notification/NotifService';
+import axios from 'axios';
 
 const OrderSummary = ({navigation, route}) => {
+  const onNotif = notif => {
+    Alert.alert(notif.title, notif.message);
+    navigation.replace('MainApp', {screen: 'Transaction'});
+  };
+  const notif = new NotifService(onNotif);
   const params = route.params;
   const dispatch = useDispatch();
   const {cartItems, optionReducer} = useSelector(state => state);
@@ -32,6 +39,8 @@ const OrderSummary = ({navigation, route}) => {
   const [getKodeTransaksi, setGetKodeTransaksi] = useState('');
   const [showWarningOpen, SetshowWarningOpen] = useState(false);
   const [midtransUrl, setMidtransUrl] = React.useState('');
+  const [userApk, setUserApk] = useState('');
+  const [token, setToken] = useState('');
   const [orderId, setOrderId] = React.useState('');
   let arrayData = {};
   let namaTenant = '';
@@ -47,18 +56,28 @@ const OrderSummary = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    axios({
-      method: 'GET',
-      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/getKode`,
-
-      data: sendData,
-    })
-      .then(res => {
-        setGetKodeTransaksi(res.data.data);
-      })
-      .catch(err => {
-        console.log(err.response);
-      });
+    user();
+    getData('token').then(resToken => {
+      console.log('userToken', resToken.value);
+      setToken(resToken.value);
+      axios
+        .get(`${ENDPOINT_API_SMART_CANTEEN}transactions/getKode`, {
+          headers: {
+            Authorization: `Bearer ${resToken.value}`,
+          },
+        })
+        .then(res => {
+          console.log('resss data kode', res.data.data);
+          setGetKodeTransaksi(res.data.data);
+          getData('userApk').then(res => {
+            console.log('user nihh', res.value);
+            setUserApk(res.value);
+          });
+        })
+        .catch(err => {
+          console.log('test', err.response);
+        });
+    });
   }, []);
 
   const [text, onChangeText] = React.useState('');
@@ -101,22 +120,22 @@ const OrderSummary = ({navigation, route}) => {
     }
   };
 
-  //midtrans setting
-  const SubmitTopUp = async () => {
-    axios
-      .post(`https://emoneydti.basicteknologi.co.id/index.php/api/snap/token`, {
-        id_user: profile.numberId,
-        nominal_topup: sumData('total'),
-      })
-      .then(function (response) {
-        console.log('bugr', response.data.data);
-        setMidtransUrl(response.data.data.redirect_url);
-        setOrderId(response.data.data.order_id);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  // //midtrans setting
+  // const SubmitTopUp = async () => {
+  //   axios
+  //     .post(`https://emoneydti.basicteknologi.co.id/index.php/api/snap/token`, {
+  //       id_user: profile.numberId,
+  //       nominal_topup: sumData('total'),
+  //     })
+  //     .then(function (response) {
+  //       console.log('bugr', response.data.data);
+  //       setMidtransUrl(response.data.data.redirect_url);
+  //       setOrderId(response.data.data.order_id);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
 
   //end midtrans
 
@@ -132,11 +151,14 @@ const OrderSummary = ({navigation, route}) => {
   };
 
   const sendData = [];
+  const today = new Date();
+  const dateForTransaction = getUidTime(today);
+  console.log('testing ', dateForTransaction);
 
   for (let i = 0; i < arrayData.length; i++) {
     const data = {
       kode_transaksi: getKodeTransaksi,
-      id_user: profile.numberId,
+      id_user: userApk.id,
       nama_pelanggan: profile.fullName,
       nim: profile.numberId,
       id_menu: arrayData[i].id,
@@ -147,17 +169,18 @@ const OrderSummary = ({navigation, route}) => {
           ? `${form.methodUser}, location : ${form.location}, detail location : ${form.detailLocation}`
           : form.methodUser,
       quantity: arrayData[i].totalItem,
-      created_at: '',
+      created_at: dateForTransaction,
       catatan: text == '' ? 'tidak ada' : text,
       phoneNumber: profile.phone,
+      is_cash: form.paymentMethod,
       total: arrayData[i].totalOrder,
     };
     sendData.push(data);
   }
 
-  useEffect(() => {
-    user();
-  }, []);
+  // useEffect(() => {
+
+  // }, []);
 
   const apiSubmit = async () => {
     dispatch(setLoading(true));
@@ -165,21 +188,27 @@ const OrderSummary = ({navigation, route}) => {
       method: 'POST',
       url: `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       data: sendData,
     })
       .then(res => {
+        notif.localNotif();
         dispatch(setLoading(false));
+        const dataOrder = {
+          methodPayment: form.paymentMethod,
+          total: sendData[0].total,
+        };
         if (paymentMethod == 'Online Payment') {
           navigation.reset({
             index: 0,
-            routes: [{name: 'SuccessOrder', params: orderId}],
+            routes: [{name: 'SuccessOrder', params: dataOrder}],
           });
         } else {
           navigation.reset({
             index: 0,
-            routes: [{name: 'SuccessOrder', params: orderId}],
+            routes: [{name: 'SuccessOrder', params: dataOrder}],
           });
         }
       })
@@ -196,24 +225,30 @@ const OrderSummary = ({navigation, route}) => {
       method: 'POST',
       url: `${ENDPOINT_API_SMART_CANTEEN}transactions/add`,
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       data: sendData,
     })
       .then(res => {
+        notif.localNotif();
         delete allCart[arrayData[0].id_tenant];
 
+        const dataOrder = {
+          methodPayment: form.paymentMethod,
+          total: sendData.total,
+        };
         storeData('dataCart', allCart);
         dispatch(setLoading(false));
         if (paymentMethod == 'Online Payment') {
           navigation.reset({
             index: 0,
-            routes: [{name: 'SuccessOrder', params: orderId}],
+            routes: [{name: 'SuccessOrder', params: dataOrder}],
           });
         } else {
           navigation.reset({
             index: 0,
-            routes: [{name: 'SuccessOrder', params: orderId}],
+            routes: [{name: 'SuccessOrder', params: dataOrder}],
           });
         }
       })
@@ -228,7 +263,8 @@ const OrderSummary = ({navigation, route}) => {
 
   const onSubmit = async () => {
     if (form.paymentMethod == 'Online Payment') {
-      SubmitTopUp();
+      // SubmitTopUp();
+      showMessage('Saat Ini tidak bisa melakukan online Payment');
     } else {
       apiSubmit();
     }
@@ -236,7 +272,8 @@ const OrderSummary = ({navigation, route}) => {
 
   const onSubmitDeleteCart = async () => {
     if (form.paymentMethod == 'Online Payment') {
-      SubmitTopUp();
+      showMessage('Saat Ini tidak bisa melakukan online Payment');
+      // SubmitTopUp();
     } else {
       apiSubmitCart();
     }
@@ -270,6 +307,7 @@ const OrderSummary = ({navigation, route}) => {
     );
   }
 
+  console.log('userr pkc', userApk.id);
   return (
     <ScrollView>
       <Header

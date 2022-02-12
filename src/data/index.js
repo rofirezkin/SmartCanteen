@@ -21,3 +21,8 @@ export const dummyData = [
     id: 3,
   },
 ];
+
+export const device = {
+  device_token:
+    'ey4wzrabQ4OFbU1wzD16jS:APA91bHf9lNae7Dj6F5QaLwR_2oUu3VecFuZCTh4weH8Hgc-0uyaSp3qENbU9DiamaeoMUKKkbRcf-3u6GONnSTL07qJz1ljk2WzERS1CNSYSmh_SuQHKb_NkUlaTwBedlt_FmPCdAvY',
+};

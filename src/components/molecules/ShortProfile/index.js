@@ -1,12 +1,29 @@
 import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useSelector} from 'react-redux';
 import {Gap} from '../..';
 import {ICCArtHome, ICCartShopping, IcNotif, UserDummy} from '../../../assets';
 import {normalizeFont} from '../../../utils/normalizeFont';
 
 const ShortProfile = ({fullName, role, url}) => {
   const navigation = useNavigation();
+
+  const {allCart} = useSelector(state => state.cartItems);
+
+  const convertData = () => {
+    if (allCart) {
+      const data = [];
+      Object.keys(allCart).map(key => {
+        data.push({
+          id: key,
+          data: allCart[key],
+        });
+      });
+      return data;
+    }
+  };
+  console.log('my car in profile', convertData());
   return (
     <View style={styles.container}>
       <View style={styles.boxProfile}>
@@ -23,6 +40,22 @@ const ShortProfile = ({fullName, role, url}) => {
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('MyCart')}>
           <Image source={ICCArtHome} style={styles.carthome} />
+          {convertData() !== undefined && (
+            <>
+              {convertData().length > 0 && (
+                <View
+                  style={{
+                    width: 13,
+                    height: 13,
+                    backgroundColor: '#FEA34F',
+                    position: 'absolute',
+                    borderRadius: 13 / 2,
+                    bottom: 2,
+                  }}
+                />
+              )}
+            </>
+          )}
         </TouchableOpacity>
         <Gap width={20} />
         {/* <TouchableOpacity onPress={() => navigation.navigate('Notification')}>

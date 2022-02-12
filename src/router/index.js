@@ -1,7 +1,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BottomNavigator} from '../components';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -36,24 +36,86 @@ import {
   UserProfile,
   HelpCenter,
   Maintenance,
+  TestNotification,
 } from '../pages';
+import {useSelector, useDispatch} from 'react-redux';
+import {getInProgress, getInProgressBadges} from '../redux/action';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainApp = ({route}) => {
+  const {inProgressBadges} = useSelector(state => state.transactionsReducer);
+  const {numberId} = useSelector(state => state.globalReducer);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getInProgressBadges(numberId));
+  }, [numberId]);
+  console.log('transaction', numberId);
+  console.log('transaction kdua', inProgressBadges);
+  var cntTransaction = 0;
+  for (let i = 0; i < inProgressBadges.length; i++) {
+    cntTransaction += +inProgressBadges[i].quantity;
+  }
+  // console.log('testing', cntTransaction);
+
   return (
-    <Tab.Navigator tabBar={props => <BottomNavigator {...props} />}>
-      <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
+    // <Tab.Navigator tabBar={props => <BottomNavigator {...props} />}>
+    //   <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
+    //   <Tab.Screen
+    //     options={{headerShown: false, tabBarBadge: 3}}
+    //     name="Order"
+    //     component={Transaction}
+    //   />
+    //   <Tab.Screen
+    //     options={{headerShown: false}}
+    //     name="Profile"
+    //     component={Profile}
+    //   />
+    // </Tab.Navigator>
+    <Tab.Navigator
+      barStyle={{backgroundColor: 'white'}}
+      screenOptions={() => ({
+        tabBarActiveTintColor: '#ED212B',
+        tabBarInactiveTintColor: 'gray',
+        tabBarBadgeStyle: {backgroundColor: '#FEA34F', color: 'white'},
+      })}
+      // tabBar={props => <BottomNavigator {...props} />}
+    >
       <Tab.Screen
-        options={{headerShown: false}}
-        name="Order"
-        component={Transaction}
+        name="Menu"
+        component={Home}
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => <Icon name="home" color={color} size={26} />,
+        }}
       />
       <Tab.Screen
-        options={{headerShown: false}}
+        name="Transaction"
+        component={Transaction}
+        options={{
+          tabBarBadge: cntTransaction > 0 ? cntTransaction : null,
+          // tabBarBadge: dataNilai,
+
+          headerShown: false,
+          tabBarLabel: 'My Order',
+
+          tabBarIcon: ({color}) => (
+            <Icon name="shopping-cart" color={color} size={26} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
         name="Profile"
         component={Profile}
+        options={{
+          headerShown: false,
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({color}) => <Icon name="cog" color={color} size={26} />,
+        }}
       />
     </Tab.Navigator>
   );
@@ -80,6 +142,11 @@ const Router = () => {
       <Stack.Screen
         name="SearchSection"
         component={SearchSection}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TestNotification"
+        component={TestNotification}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -200,6 +267,11 @@ const Router = () => {
       <Stack.Screen
         name="OrderSummary"
         component={OrderSummary}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Transaction"
+        component={Transaction}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

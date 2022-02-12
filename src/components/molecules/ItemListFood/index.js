@@ -1,6 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {DummyList1, Next} from '../../../assets';
+import {ENDPOINT_SMART_CANTEEN} from '../../../utils/API/httpClient';
 import Number from '../../../utils/Number/Number';
 import Rating from '../Rating';
 
@@ -41,11 +42,11 @@ const ItemListFood = ({
           <View style={styles.container}>
             <View style={{flex: 1}}>
               <Text style={styles.title}>{name}</Text>
-              <Text style={styles.subTitle}>{ingredients}</Text>
               <Text style={styles.statusInProgress}>{status}</Text>
               <Text style={styles.subTitle}>
-                {items} Item . Rp{totalOrder}
+                {items} {items > 1 ? 'items' : 'item'}
               </Text>
+              <Text style={styles.subTitle}>Order Date : {ingredients}</Text>
             </View>
             <View>
               <Next />
@@ -89,7 +90,10 @@ const ItemListFood = ({
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <View style={styles.tabview}>
-        <Image source={{uri: urlPhoto}} style={styles.avatar} />
+        <Image
+          source={{uri: `${ENDPOINT_SMART_CANTEEN}/storage/${urlPhoto}`}}
+          style={styles.avatar}
+        />
         {renderContent()}
       </View>
     </TouchableOpacity>

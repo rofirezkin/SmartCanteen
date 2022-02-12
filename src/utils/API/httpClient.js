@@ -1,3 +1,7 @@
+import {useDispatch} from 'react-redux';
+import {showMessage} from '..';
+import {setLoading} from '../../redux/action';
+
 export const ENDPOINT = 'https://gateway.telkomuniversity.ac.id/issueauth';
 export const ENDPOINT_PROFILE =
   'https://gateway.telkomuniversity.ac.id/issueprofile';
@@ -140,13 +144,7 @@ export const useRequest = async (url, method, payload) => {
  * @param {object=} payload
  * @returns object
  */
-export const useRequestWithToken = async (
-  url,
-  token,
-  method,
-  payload,
-  dispatch,
-) => {
+export const useRequestWithToken = async (url, token, method, payload) => {
   const request = await fetch(
     url,
     headersResponseAPITELKOM(method, payload, token),

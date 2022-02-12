@@ -1,29 +1,44 @@
-import React, {useState} from 'react';
-import {Alert, StyleSheet, Text, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  BackHandler,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {Button, Gap, Header, TextInput} from '../../components';
+import {setLoading} from '../../redux/action';
 
 import {
   ENDPOINT,
+  ENDPOINT_API_SMART_CANTEEN,
   ENDPOINT_PROFILE,
   ENDPOINT_ROLE,
   useRequestLogin,
   useRequestWithToken,
 } from '../../utils/API/httpClient';
-import {setUser} from '../../utils/AsyncStoreServices';
+import {setUser, storeData} from '../../utils/AsyncStoreServices';
+
 import useForm from '../../utils/useForm';
 
-const SignIn = ({navigation}) => {
+const SignIn = ({navigation, route}) => {
+  const {isLoading} = useSelector(state => state.loadingReducer);
+  const {device_token} = useSelector(state => state.registerReducer);
+  // const deviceToken = route.params;
+  console.log('testing token nih ', device_token);
+
   const dispatch = useDispatch();
   const [form, setForm] = useForm({
     username: '',
     password: '',
   });
 
-  const [loading, setLoading] = useState(false);
-
   const onSubmit = async () => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     const payload = JSON.stringify({
       username: form.username,
@@ -34,17 +49,14 @@ const SignIn = ({navigation}) => {
 
     if (result.hasOwnProperty('message')) {
       // Handing Error
-      setLoading(false);
+      dispatch(setLoading(false));
       Alert.alert('Oops!', result.message);
     } else {
-      // Handling Success
-      setLoading(false);
       const resToken = await result.token;
       const issueProfile = await useRequestWithToken(
         ENDPOINT_PROFILE,
         resToken,
         'get',
-        dispatch,
       );
 
       const resultRole = await useRequestWithToken(
@@ -52,7 +64,7 @@ const SignIn = ({navigation}) => {
         resToken,
         'get',
       );
-
+      dispatch(setLoading(false));
       await setUser({
         token: resToken,
         token_expired: result.expired,
@@ -66,10 +78,38 @@ const SignIn = ({navigation}) => {
         phone: issueProfile.phone,
         authenticated: true,
       });
-
-      navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
+      const userData = {
+        nama: form.username,
+        is_login: '1',
+        device_token: device_token,
+      };
+      console.log('user data', userData);
+      axios
+        .post(`${ENDPOINT_API_SMART_CANTEEN}userapk`, userData)
+        .then(res => {
+          storeData('token', {value: res.data.data.access_token});
+          storeData('userApk', {value: res.data.data.user});
+          console.log('respon user apk', res);
+          navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
+        })
+        .catch(err => {
+          console.log('errorr di bagian post userAPK', err);
+        });
     }
   };
+
+  const backAction = () => {
+    if (isLoading !== true) {
+      BackHandler.exitApp();
+    }
+    return true;
+  };
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, [isLoading]);
 
   return (
     <View style={styles.page}>
@@ -85,6 +125,7 @@ const SignIn = ({navigation}) => {
           value={form.email}
           onChangeText={value => setForm('username', value)}
         />
+
         <Gap height={16} />
         <TextInput
           value={form.password}
@@ -94,11 +135,7 @@ const SignIn = ({navigation}) => {
           secureTextEntry
         />
         <Gap height={24} />
-        <Button
-          label={loading ? 'Loading...' : 'Sign In'}
-          onPress={onSubmit}
-          disabled={loading ? true : false}
-        />
+        <Button label="Sign In" onPress={onSubmit} />
         <Gap height={13} />
       </View>
     </View>

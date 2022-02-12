@@ -19,6 +19,7 @@ import {
 } from '../../../redux/action';
 import {ILNodata} from '../../../assets';
 import {Gap} from '../..';
+import {getData} from '../../../utils/AsyncStoreServices';
 
 const renderTabBar = props => (
   <TabBar
@@ -43,7 +44,11 @@ const InProgress = () => {
   const {numberId} = useSelector(state => state.globalReducer);
 
   useEffect(() => {
-    dispatch(getInProgress(numberId));
+    getData('token').then(resToken => {
+      console.log('testing in progress token', resToken.value);
+
+      dispatch(getInProgress(numberId));
+    });
   }, []);
 
   const onRefresh = () => {
@@ -51,6 +56,8 @@ const InProgress = () => {
     dispatch(getInProgress(numberId));
     setRefreshing(false);
   };
+
+  console.log('transaction order', inProgress);
 
   return (
     <ScrollView
@@ -61,14 +68,14 @@ const InProgress = () => {
       {inProgress.map(order => {
         return (
           <ItemListFood
-            urlPhoto={order.menu.picturePath}
-            name={order.menu.name}
-            ingredients={order.menu.ingredients}
+            urlPhoto={order.profile_photo_path}
+            name={order.nama_tenant}
+            ingredients={order.created_at}
             key={order.id}
             status={order.status}
             type="in-progress"
             items={order.quantity}
-            totalOrder={order.total}
+            // totalOrder={order.total}
             onPress={() => navigation.navigate('OrderDetail', order)}
           />
         );

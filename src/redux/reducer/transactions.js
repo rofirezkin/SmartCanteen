@@ -1,6 +1,7 @@
 const initFilterOrder = {
   orders: [],
   inProgress: [],
+  detailProgress: [],
   pastOrder: [],
   feedback: [],
   inProgressBadges: [],
@@ -10,6 +11,12 @@ export const transactionsReducer = (state = initFilterOrder, action) => {
     return {
       ...state,
       inProgress: action.value,
+    };
+  }
+  if (action.type === 'SET_DETAIL_PROGRESS') {
+    return {
+      ...state,
+      detailProgress: action.value,
     };
   }
   if (action.type === 'SET_IN_PROGRESS_BADGES') {

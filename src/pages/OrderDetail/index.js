@@ -1,28 +1,55 @@
 import axios from 'axios';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Button, Gap, Header, ItemListFood, ItemValue} from '../../components';
-import {setLoading} from '../../redux/action';
+import {getDetailProgress, setLoading} from '../../redux/action';
 import {showMessage} from '../../utils';
-import {
-  ENDPOINT_API_SMART_CANTEEN,
-  ENDPOINT_SMART_CANTEEN,
-} from '../../utils/API/httpClient';
+import {ENDPOINT_API_SMART_CANTEEN} from '../../utils/API/httpClient';
+import {getData} from '../../utils/AsyncStoreServices';
 
-const OrderDetail = ({ navigation, route }) => {
-
+const OrderDetail = ({navigation, route}) => {
   const dispatch = useDispatch();
-  const params = route.params;
-  console.log(route.params.id);
+  const [detailData, setDetailData] = useState([]);
+  const [token, setToken] = useState('');
+  const [totalOrder, setTotalOrder] = useState('');
 
-  useEffect(() => {fai
-    axios.get(`http://27.112.78.169/api/transactions/user/detail?id_transaksi=${route.params}`).then(res => {
-      console.log('testing data', res)
-    }).catch(err => {
-      console.log('err',err)
-    })
-  },[])
+  const params = route.params;
+  console.log(route.params);
+  console.log('detail progress', params);
+
+  useEffect(() => {
+    getData('token').then(resToken => {
+      setToken(resToken.value);
+      axios
+        .get(
+          `${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=6705184061&status=${params.status}`,
+          {
+            headers: {
+              Authorization: `Bearer ${resToken.value}`,
+            },
+          },
+        )
+        .then(res => {
+          console.log('ressssss', res);
+          const dataOrder = res.data.data;
+
+          setDetailData(res.data.data);
+        })
+        .catch(err => {
+          console.log('eror pada detail order data', err);
+        });
+    });
+
+    // dispatch(getDetailProgress(params.nim, params.idTenant));
+  }, [params]);
+
+  var totalPrice = 3000;
+  var totalItem = 0;
+  for (let i = 0; i < detailData.length; i++) {
+    totalPrice += +detailData[i].total;
+    totalItem += +detailData[i].total;
+  }
 
   const onCancel = async () => {
     const status = {
@@ -31,9 +58,10 @@ const OrderDetail = ({ navigation, route }) => {
     dispatch(setLoading(true));
     const dataSubmit = await axios({
       method: 'POST',
-      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus/${route.params.id}`,
+      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus?kode_transaksi=${params.kode_transaksi}&status=CANCEL`,
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       data: status,
     })
@@ -50,8 +78,8 @@ const OrderDetail = ({ navigation, route }) => {
     return Promise.resolve(dataSubmit);
   };
 
-  
-  console.log('daad', params);
+  console.log('detail data', detailData);
+
   return (
     <ScrollView>
       <View style={styles.page}>
@@ -63,25 +91,33 @@ const OrderDetail = ({ navigation, route }) => {
         />
         <View style={styles.container}>
           <View>
-            <ItemListFood
-              type="product"
-              items={params.quantity}
-              canteen={params.method}
-              totalOrder={params.menu.price}
-              name={params.menu.name}
-              ingredients={params.menu.ingredients}
-              status={params.status}
-              urlPhoto={params.menu.picturePath}
-            />
+            {detailData.map(res => {
+              return (
+                <>
+                  <ItemListFood
+                    type="product"
+                    items={res.quantity}
+                    canteen={res.method}
+                    totalOrder={res.total}
+                    name={res.name}
+                    // status={params.status}
+                    urlPhoto={res.picturePath}
+                  />
+                </>
+              );
+            })}
           </View>
           <View style={styles.detailCard}>
             <Text style={styles.text}>Detail Transaction</Text>
-
+            <ItemValue title={`Nama Kantin`} name={params.nama_tenant} />
+            <ItemValue title={`Lokasi Kantin`} name={params.lokasi_kantin} />
             <ItemValue
               title={`Total Price ${params.quantity} Item`}
-              colorValue
-              value={params.total}
+              value={totalItem}
             />
+            <ItemValue title={`Tax`} value="1.000" />
+            <ItemValue title={`Services Price`} value="2.000" />
+            <ItemValue title={`Total`} colorValue value={totalPrice} />
             <Gap height={15} />
           </View>
         </View>
@@ -92,7 +128,7 @@ const OrderDetail = ({ navigation, route }) => {
             <Gap height={15} />
             <ItemValue
               title={`Kode Transaksi:  ${params.kode_transaksi}`}
-              colorValue
+              colorValue={params.status}
               name={params.status}
             />
             <Gap height={15} />
@@ -103,7 +139,8 @@ const OrderDetail = ({ navigation, route }) => {
           {params.status === 'PENDING' && (
             <Button
               label="Cancel My Order"
-              color="#8D92A3"
+              textColor="red"
+              color="white"
               onPress={onCancel}
             />
           )}
@@ -128,7 +165,7 @@ const styles = StyleSheet.create({
   },
   detailCard: {
     paddingHorizontal: 19,
-    marginTop: 15,
+    marginVertical: 15,
   },
   container: {
     backgroundColor: 'white',

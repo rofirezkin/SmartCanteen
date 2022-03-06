@@ -23,7 +23,7 @@ const ShortProfile = ({fullName, role, url}) => {
       return data;
     }
   };
-  console.log('my car in profile', convertData());
+
   return (
     <View style={styles.container}>
       <View style={styles.boxProfile}>

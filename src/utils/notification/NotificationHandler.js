@@ -33,7 +33,6 @@ class NotificationHandler extends Component {
   }
 
   attachRegister(handler) {
-    console.log('handler', handler);
     this._onRegister = handler;
   }
 

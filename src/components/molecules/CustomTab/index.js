@@ -9,11 +9,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+
 import {ListFoodCourt} from '..';
 import {Button} from '../..';
-import {getAllMenuUsers} from '../../../redux/action/menuAction';
+
+import {ENDPOINT_API_SMART_CANTEEN} from '../../../utils/API/httpClient';
+import {skeletonChooseFood} from '../../skeleton/skeletonHome';
 
 const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
   const navigation = useNavigation();
@@ -21,19 +23,34 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
   const [all, setAll] = useState('red');
   const [food, setFood] = useState('#909090');
   const [baverages, setBaverages] = useState('#909090');
+  const [menuBavarages, setMenuBavarages] = useState([]);
+  const [menuFood, setMenuFood] = useState([]);
+  const [allMenu, setAllMenu] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const {allMenu, foodMenuUsers, beveragesMenu} = useSelector(
-    state => state.menuReducer,
-  );
 
   useEffect(() => {
-    dispatch(getAllMenuUsers(id_tenant));
+    axios
+      .get(
+        `${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/byTenant?id_tenant=${id_tenant}`,
+      )
+      .then(res => {
+        const dataFood = res.data.data;
+        const foodMenu = dataFood.filter(res => res.category === 'Makanan');
+        const baveragesMenu = dataFood.filter(
+          res => res.category === 'Minuman',
+        );
+        setAllMenu(dataFood);
+        setMenuBavarages(baveragesMenu);
+        setMenuFood(foodMenu);
+        setLoading(false);
+      })
+      .catch(err => {
+        setLoading(false);
+        console.log('error pada makanan atau minuman food', err.response);
+      });
+
     if (foodMenu === 'all') {
       setAll('red');
       setFood('#909090');
@@ -104,7 +121,7 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
     } else if (foodMenu === 'food') {
       return (
         <View>
-          {foodMenuUsers.map(item => {
+          {menuFood.map(item => {
             const dataParam = {
               ...item,
               nama_tenant,
@@ -149,7 +166,7 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
     } else if (foodMenu === 'baverages') {
       return (
         <View>
-          {beveragesMenu.map(item => {
+          {menuBavarages.map(item => {
             const dataParam = {
               ...item,
               nama_tenant,
@@ -216,7 +233,12 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
           label="Baverages"
         />
       </View>
-      <AllFood />
+      <SkeletonContent
+        containerStyle={{flex: 1}}
+        isLoading={loading}
+        layout={skeletonChooseFood}>
+        <AllFood />
+      </SkeletonContent>
     </View>
   );
 };

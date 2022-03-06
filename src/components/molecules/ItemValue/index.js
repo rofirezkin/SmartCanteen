@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
   value: colorValue => ({
     textAlign: 'right',
     fontSize: 13,
-    color: colorValue ? '#1ABC9C' : 'black',
+    color:
+      colorValue == 'CANCEL ORDER' ? 'red' : colorValue ? '#1ABC9C' : 'black',
     fontFamily: 'Poppins-Regular',
     fontWeight: '600',
 

@@ -237,7 +237,7 @@ const Home = ({navigation}) => {
                           Math.floor(Math.random() * charactersLength),
                         );
                       }
-                      console.log('data recomeended', data.is_active);
+
                       return (
                         <CategoryMenu
                           isActive={data.is_active}
@@ -289,7 +289,7 @@ const Home = ({navigation}) => {
                           Math.floor(Math.random() * charactersLength),
                         );
                       }
-                      console.log('haloo', data);
+
                       return (
                         <CategoryMenu
                           isActive={data.is_active}

@@ -10,8 +10,10 @@ const ItemListFood = ({
   name,
   ingredients,
   canteen,
-  date,
+  kodeTransaksi,
   price,
+  orderDate,
+  location,
   statusOrder,
   type,
   items,
@@ -27,7 +29,9 @@ const ItemListFood = ({
           <View style={styles.container}>
             <View>
               <Text style={styles.title}>{name}</Text>
-              <Text style={styles.subTitle}>{ingredients}</Text>
+              <Text style={styles.subTitle}>
+                {items} {items > 1 ? 'items' : 'item'}
+              </Text>
               <Text style={styles.subTitle}>{canteen}</Text>
 
               <Text style={styles.subTitle}>
@@ -44,9 +48,9 @@ const ItemListFood = ({
               <Text style={styles.title}>{name}</Text>
               <Text style={styles.statusInProgress}>{status}</Text>
               <Text style={styles.subTitle}>
-                {items} {items > 1 ? 'items' : 'item'}
+                {items} {items > 1 ? 'items' : 'item'} - {kodeTransaksi}
               </Text>
-              <Text style={styles.subTitle}>Order Date : {ingredients}</Text>
+              <Text style={styles.subTitle}>Location : {location}</Text>
             </View>
             <View>
               <Next />
@@ -59,13 +63,12 @@ const ItemListFood = ({
           <View style={styles.container}>
             <View>
               <Text style={styles.title}>{name}</Text>
-              <Text style={styles.subTitle}>{ingredients}</Text>
-
               <Text style={styles.subTitle}>
-                {items} Item . Rp{totalOrder}
+                {items} Item - {kodeTransaksi}
               </Text>
               <View>
                 <Text style={styles.statusOrder(status)}>{status}</Text>
+                <Text style={styles.subTitle}>Location : {location}</Text>
               </View>
             </View>
           </View>

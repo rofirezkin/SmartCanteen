@@ -6,7 +6,7 @@ const initStateRegister = {
   address: '',
   city: '',
   house: '',
-  device_token: 't',
+  device_token: '',
 };
 
 export const registerReducer = (state = initStateRegister, action) => {

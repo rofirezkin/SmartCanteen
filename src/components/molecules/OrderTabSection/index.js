@@ -44,11 +44,7 @@ const InProgress = () => {
   const {numberId} = useSelector(state => state.globalReducer);
 
   useEffect(() => {
-    getData('token').then(resToken => {
-      console.log('testing in progress token', resToken.value);
-
-      dispatch(getInProgress(numberId));
-    });
+    dispatch(getInProgress(numberId));
   }, []);
 
   const onRefresh = () => {
@@ -57,8 +53,6 @@ const InProgress = () => {
     setRefreshing(false);
   };
 
-  console.log('transaction order', inProgress);
-
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1}}
@@ -66,13 +60,17 @@ const InProgress = () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
       {inProgress.map(order => {
+        console.log('data orderr', order);
+
         return (
           <ItemListFood
             urlPhoto={order.profile_photo_path}
             name={order.nama_tenant}
-            ingredients={order.created_at}
             key={order.id}
+            kodeTransaksi={order.kode_transaksi}
             status={order.status}
+            location={order.lokasi_kantin}
+            orderDate={order.created_at}
             type="in-progress"
             items={order.quantity}
             // totalOrder={order.total}
@@ -122,11 +120,13 @@ const Feedback = () => {
       {feedback.map(order => {
         return (
           <ItemListFood
-            urlPhoto={order.menu.picturePath}
-            name={order.menu.name}
-            ingredients={order.menu.ingredients}
+            urlPhoto={order.profile_photo_path}
+            name={order.nama_tenant}
             key={order.id}
+            kodeTransaksi={order.kode_transaksi}
             status={order.status}
+            location={order.lokasi_kantin}
+            orderDate={order.created_at}
             type="past-orders"
             items={order.quantity}
             totalOrder={order.total}
@@ -176,11 +176,13 @@ const PastOrder = () => {
       {pastOrder.map(order => {
         return (
           <ItemListFood
-            urlPhoto={order.menu.picturePath}
-            name={order.menu.name}
-            ingredients={order.menu.ingredients}
+            urlPhoto={order.profile_photo_path}
+            name={order.nama_tenant}
             key={order.id}
+            kodeTransaksi={order.kode_transaksi}
             status={order.status}
+            location={order.lokasi_kantin}
+            orderDate={order.created_at}
             type="past-orders"
             items={order.quantity}
             totalOrder={order.total}

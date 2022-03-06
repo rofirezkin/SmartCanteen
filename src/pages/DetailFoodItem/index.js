@@ -20,7 +20,7 @@ const DetailFoodItem = ({navigation, route}) => {
   const id_tenant = params.id_tenant;
   const {allCart} = useSelector(state => state.cartItems);
 
-  console.log('dataaaaa', params);
+  console.log('dataaaaa', params.device_token);
 
   console.log('params', allCart);
   const [totalItem, setTotalItem] = useState(1);
@@ -33,6 +33,7 @@ const DetailFoodItem = ({navigation, route}) => {
     lokasi_kantin: params.lokasi_kantin,
     nama_tenant: params.nama_tenant,
     picturePath: params.picturePath,
+    device_token: params.device_token,
 
     data: [
       {
@@ -55,6 +56,7 @@ const DetailFoodItem = ({navigation, route}) => {
     data: dataOrder,
   };
 
+  console.log('data orderrr', dataOrder);
   const addToCart = async () => {
     if (allCart == null || allCart == '' || allCart.length == 0) {
       console.log('haloo');
@@ -82,7 +84,6 @@ const DetailFoodItem = ({navigation, route}) => {
     }
 
     await getData('dataCart').then(res => {
-      console.log('res', res);
       dispatch({type: 'GET_DATA_CART', value: res});
     });
     showMessage('success add to cart', 'success');
@@ -122,7 +123,9 @@ const DetailFoodItem = ({navigation, route}) => {
           <Text style={styles.label}>Deskripsi Makanan</Text>
           <Text style={styles.description}>{params.ingredients}</Text>
           <Text style={styles.label}>Nama Kantin</Text>
-          <Text style={styles.description}>{params.nama_tenant}</Text>
+          <Text style={styles.description}>
+            {params.nama_tenant} - {params.lokasi_kantin}
+          </Text>
           <View>
             <Text style={styles.label}>Harga</Text>
             <Text style={styles.description}>

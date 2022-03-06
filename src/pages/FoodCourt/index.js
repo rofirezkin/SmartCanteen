@@ -46,16 +46,19 @@ const FoodCourt = ({navigation, route}) => {
     } else {
       var result = `${item.nama_tenant}`;
     }
+    console.log('itemmss', item);
 
     return (
-      <DetailFoodCourt
-        status={item.status}
-        image={item.profile_photo_path}
-        nameCanteen={result}
-        desc={item.desc_kantin}
-        rating={item.rating}
-        onPress={() => navigation.navigate('ChooseFood', item)}
-      />
+      <>
+        <DetailFoodCourt
+          status={item.status}
+          image={item.profile_photo_path}
+          nameCanteen={result}
+          desc={item.desc_kantin}
+          rating={item.rating}
+          onPress={() => navigation.navigate('ChooseFood', item)}
+        />
+      </>
     );
   };
 
@@ -107,6 +110,11 @@ const FoodCourt = ({navigation, route}) => {
             onEndReached={loadMoreItem}
             onEndReachedThreshold={0}
           />
+          {items.length == 0 && (
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <Text>Data is Empty !</Text>
+            </View>
+          )}
         </View>
       </View>
     </View>

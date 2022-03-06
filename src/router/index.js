@@ -52,28 +52,12 @@ const MainApp = ({route}) => {
   useEffect(() => {
     dispatch(getInProgressBadges(numberId));
   }, [numberId]);
-  console.log('transaction', numberId);
-  console.log('transaction kdua', inProgressBadges);
   var cntTransaction = 0;
   for (let i = 0; i < inProgressBadges.length; i++) {
     cntTransaction += +inProgressBadges[i].quantity;
   }
-  // console.log('testing', cntTransaction);
 
   return (
-    // <Tab.Navigator tabBar={props => <BottomNavigator {...props} />}>
-    //   <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
-    //   <Tab.Screen
-    //     options={{headerShown: false, tabBarBadge: 3}}
-    //     name="Order"
-    //     component={Transaction}
-    //   />
-    //   <Tab.Screen
-    //     options={{headerShown: false}}
-    //     name="Profile"
-    //     component={Profile}
-    //   />
-    // </Tab.Navigator>
     <Tab.Navigator
       barStyle={{backgroundColor: 'white'}}
       screenOptions={() => ({

@@ -1,3 +1,171 @@
+export const skeletonChooseFood = [
+  {
+    key: 'header',
+    marginTop: 15,
+    borderBottomColor: '#EEEEEE',
+    borderBottomWidth: 1,
+    paddingHorizontal: 18,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    children: [
+      {
+        key: 'containerName',
+        marginLeft: 10,
+        children: [
+          {
+            key: 'name',
+            width: 250,
+            height: 25,
+            marginBottom: 5,
+          },
+          {
+            key: 'status',
+            width: 200,
+            height: 30,
+            marginBottom: 10,
+          },
+          {
+            key: 'price',
+            width: 150,
+            height: 20,
+            marginBottom: 15,
+          },
+        ],
+      },
+      {
+        key: 'image',
+        width: 100,
+        height: 80,
+
+        borderRadius: 13,
+      },
+    ],
+  },
+  {
+    key: 'header',
+    marginTop: 15,
+    borderBottomColor: '#EEEEEE',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    paddingHorizontal: 18,
+    justifyContent: 'space-between',
+    children: [
+      {
+        key: 'containerName',
+        marginLeft: 10,
+        children: [
+          {
+            key: 'name',
+            width: 250,
+            height: 25,
+            marginBottom: 5,
+          },
+          {
+            key: 'status',
+            width: 200,
+            height: 30,
+            marginBottom: 10,
+          },
+          {
+            key: 'price',
+            width: 150,
+            height: 20,
+            marginBottom: 15,
+          },
+        ],
+      },
+      {
+        key: 'image',
+        width: 100,
+        height: 80,
+        borderRadius: 13,
+      },
+    ],
+  },
+  {
+    key: 'header',
+    marginTop: 15,
+    borderBottomColor: '#EEEEEE',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    paddingHorizontal: 18,
+    justifyContent: 'space-between',
+    children: [
+      {
+        key: 'containerName',
+        marginLeft: 10,
+        children: [
+          {
+            key: 'name',
+            width: 250,
+            height: 25,
+            marginBottom: 5,
+          },
+          {
+            key: 'status',
+            width: 200,
+            height: 30,
+            marginBottom: 10,
+          },
+          {
+            key: 'price',
+            width: 150,
+            height: 20,
+            marginBottom: 15,
+          },
+        ],
+      },
+      {
+        key: 'image',
+        width: 100,
+        height: 80,
+        borderRadius: 13,
+      },
+    ],
+  },
+  {
+    key: 'header',
+    marginTop: 15,
+    borderBottomColor: '#EEEEEE',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    paddingHorizontal: 18,
+    justifyContent: 'space-between',
+    children: [
+      {
+        key: 'containerName',
+        marginLeft: 10,
+        children: [
+          {
+            key: 'name',
+            width: 250,
+            height: 25,
+            marginBottom: 5,
+          },
+          {
+            key: 'status',
+            width: 200,
+            height: 30,
+            marginBottom: 10,
+          },
+          {
+            key: 'price',
+            width: 150,
+            height: 20,
+            marginBottom: 15,
+          },
+        ],
+      },
+      {
+        key: 'image',
+        width: 100,
+        height: 80,
+        borderRadius: 13,
+      },
+    ],
+  },
+];
+
 export const skeletonHome = [
   {
     key: 'header',

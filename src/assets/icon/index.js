@@ -34,7 +34,9 @@ import IcStore from './ic_store.svg';
 import ICCArtHome from './cartHome.png';
 import ICGmail from './gmail.svg';
 import ICWhatsapp from './whatsapp.svg';
+import ICQris from './iconQris.png';
 export {
+  ICQris,
   ICGmail,
   ICWhatsapp,
   ICCArtHome,

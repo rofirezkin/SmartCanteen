@@ -59,15 +59,15 @@ const DetailFoodItem = ({navigation, route}) => {
   console.log('data orderrr', dataOrder);
   const addToCart = async () => {
     if (allCart == null || allCart == '' || allCart.length == 0) {
-      console.log('haloo');
       storeData('dataCart', {[id_tenant]: dataOrder});
     } else {
       if (allCart.hasOwnProperty(`${id_tenant}`)) {
         let getDataId = allCart[id_tenant].data;
+        console.log('ini jika dia punya id_tenant atau sudah ada id dicart');
         const filterDataIdMenu = () => {
           for (let i = 0; i < getDataId.length; i++) {
             if (allCart[id_tenant].data[i].id == params.id) {
-              allCart[id_tenant] = dataOrder;
+              allCart[id_tenant].data[i] = dataTambah;
               storeData('dataCart', allCart);
               return true;
             }
@@ -83,11 +83,15 @@ const DetailFoodItem = ({navigation, route}) => {
       }
     }
 
-    await getData('dataCart').then(res => {
-      dispatch({type: 'GET_DATA_CART', value: res});
-    });
-    showMessage('success add to cart', 'success');
-    navigation.goBack();
+    await getData('dataCart')
+      .then(res => {
+        dispatch({type: 'GET_DATA_CART', value: res});
+        showMessage('success add to cart', 'success');
+        navigation.goBack();
+      })
+      .catch(err => {
+        console.log('eror pada saat masukin cart', err);
+      });
   };
 
   return (

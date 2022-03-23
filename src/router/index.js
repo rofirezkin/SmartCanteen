@@ -37,6 +37,7 @@ import {
   HelpCenter,
   Maintenance,
   TestNotification,
+  QRCodeGenerator,
 } from '../pages';
 import {useSelector, useDispatch} from 'react-redux';
 import {getInProgress, getInProgressBadges} from '../redux/action';
@@ -121,6 +122,11 @@ const Router = () => {
       <Stack.Screen
         name="ChooseFood"
         component={ChooseFood}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="QRCodeGenerator"
+        component={QRCodeGenerator}
         options={{headerShown: false}}
       />
       <Stack.Screen

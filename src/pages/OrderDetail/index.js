@@ -12,11 +12,11 @@ const OrderDetail = ({navigation, route}) => {
   const dispatch = useDispatch();
   const [detailData, setDetailData] = useState([]);
   const [token, setToken] = useState('');
-  const [totalOrder, setTotalOrder] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const params = route.params;
   console.log(route.params);
-  console.log('detail progress', params);
+  console.log('detail progress', params.id_tenant);
 
   useEffect(() => {
     getData('token').then(resToken => {
@@ -33,7 +33,8 @@ const OrderDetail = ({navigation, route}) => {
         .then(res => {
           console.log('ressssss', res);
           const dataOrder = res.data.data;
-
+          console.log('dataaa', dataOrder[0].is_cash);
+          setPaymentMethod(dataOrder[0].is_cash);
           setDetailData(res.data.data);
         })
         .catch(err => {
@@ -80,6 +81,32 @@ const OrderDetail = ({navigation, route}) => {
 
   console.log('detail data', detailData);
 
+  const feedbackTenant = () => {
+    dispatch(setLoading(true));
+    axios
+      .get(`${ENDPOINT_API_SMART_CANTEEN}getTenant?id=${params.id_tenant}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(res => {
+        const dataCanteen = res.data.data;
+        const dataTenant = {
+          quantity: parseInt(params.quantity),
+          kode_transaksi: params.kode_transaksi,
+          tenant: dataCanteen,
+        };
+        console.log('data canteen', dataCanteen);
+        navigation.navigate('FeedbackPage', dataTenant);
+        dispatch(setLoading(false));
+      })
+      .catch(err => {
+        dispatch(setLoading(false));
+        showMessage('error get data detail tenant, hubungi Admin ');
+        console.log('resss', err.response);
+      });
+  };
+
   return (
     <ScrollView>
       <View style={styles.page}>
@@ -100,6 +127,7 @@ const OrderDetail = ({navigation, route}) => {
                     canteen={res.method}
                     totalOrder={res.total}
                     name={res.name}
+                    key={res.name}
                     // status={params.status}
                     urlPhoto={res.picturePath}
                   />
@@ -131,6 +159,11 @@ const OrderDetail = ({navigation, route}) => {
               colorValue={params.status}
               name={params.status}
             />
+            <ItemValue
+              title={`Payment Method:`}
+              colorValue={params.status}
+              name={paymentMethod == 0 ? 'Cash' : 'Online Payment'}
+            />
             <Gap height={15} />
           </View>
         </View>
@@ -148,7 +181,7 @@ const OrderDetail = ({navigation, route}) => {
             <Button
               label="Rate Your Order"
               color="red"
-              onPress={() => navigation.navigate('FeedbackPage', params)}
+              onPress={feedbackTenant}
             />
           )}
         </View>

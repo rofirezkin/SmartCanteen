@@ -11,7 +11,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-
+import messaging from '@react-native-firebase/messaging';
 import {
   DummyCanteen,
   DummyFood1,
@@ -57,7 +57,6 @@ const Home = ({navigation}) => {
   const onRefresh = React.useCallback(() => {
     setLoading(true);
     setRefresh(true);
-    user();
     dispatch(getDataMenuSeveralByTypes('Recommended'));
     dispatch(getDataMenuSeveralByTypes('New Taste'));
     dispatch(getDataMenuSeveralByTypes('Popular'));
@@ -76,6 +75,32 @@ const Home = ({navigation}) => {
   };
 
   useEffect(() => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+    dispatch(getDataMenuSeveralByTypes('Recommended'));
+    dispatch(getDataMenuSeveralByTypes('New Taste'));
+    dispatch(getDataMenuSeveralByTypes('Popular'));
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.data,
+      );
+      navigation.replace('MainApp', {screen: 'CostumerOrder'});
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          navigation.replace('MainApp', {screen: 'CostumerOrder'});
+          setInitialRoute('MainApp'); // e.g. "Settings"
+        }
+      });
+
     navigation.addListener('focus', () => {
       dispatch({type: 'SET_OPTION_USER', value: method});
     });
@@ -88,15 +113,15 @@ const Home = ({navigation}) => {
         dispatch({type: 'GET_DATA_CART', value: res});
       }
     });
-    dispatch(getDataMenuSeveralByTypes('Recommended'));
-    dispatch(getDataMenuSeveralByTypes('New Taste'));
-    dispatch(getDataMenuSeveralByTypes('Popular'));
+
     // dispatch(getInProgressBadges(globalReducer.numberId));
     // getData('dataCart').then(res => {
     //   dispatch({type: 'GET_DATA_CART', value: res});
     // });
   }, []);
   var nameCanteen = '';
+
+  console.log('jalan berapa kali');
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -132,7 +157,7 @@ const Home = ({navigation}) => {
                     iconData="quickOrder"
                     data="Quick Order"
                     onPress={() =>
-                      navigation.navigate('Maintenance', 'Quick Order')
+                      navigation.navigate('QRCodeGenerator', 'Quick Order')
                     }
                   />
                   <OptionUser

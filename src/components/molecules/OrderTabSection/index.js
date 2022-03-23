@@ -60,8 +60,6 @@ const InProgress = () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
       {inProgress.map(order => {
-        console.log('data orderr', order);
-
         return (
           <ItemListFood
             urlPhoto={order.profile_photo_path}

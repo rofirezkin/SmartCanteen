@@ -20,6 +20,7 @@ import {setLoading} from '../../redux/action';
 
 import {showMessage} from '../../utils';
 import {ENDPOINT_API_SMART_CANTEEN} from '../../utils/API/httpClient';
+import {getData} from '../../utils/AsyncStoreServices';
 
 const FeedbackPage = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -27,8 +28,10 @@ const FeedbackPage = ({navigation, route}) => {
   console.log(dataParams);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
   const [defaultRating, setDefaultRating] = useState(2);
-  const id_tenant = dataParams.id_tenant;
+  const id_tenant = dataParams.tenant.id_tenant;
 
+  console.log('idddddd', id_tenant);
+  console.log('dsffssffsfs', dataParams.kode_transaksi);
   // Perhitungan Rating inputan user
   const perhitungan = defaultRating * dataParams.quantity;
 
@@ -75,42 +78,68 @@ const FeedbackPage = ({navigation, route}) => {
     dispatch(setLoading(true));
     const status = {
       status: 'DELIVERED',
+      kode_transaksi: dataParams.kode_transaksi,
     };
-
-    axios.all([
-      axios.post(
-        `${ENDPOINT_API_SMART_CANTEEN}tenant/rating/${id_tenant}`,
-        data1,
-      ),
-      axios.post(
-        `${ENDPOINT_API_SMART_CANTEEN}tenant/updatePerhitunganAkhir/${id_tenant}`,
-        datab,
-      ),
-      axios.post(
-        `${ENDPOINT_API_SMART_CANTEEN}tenant/updateTotalJumlahOrder/${id_tenant}`,
-        datac,
-      ),
-      axios
-        .post(
-          `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus/${route.params.id}`,
-          status,
-        )
-        .then(
-          axios.spread((res1, res2, res3) => {
-            dispatch(setLoading(false));
-            showMessage(
-              'Thankyou for your compliment we are waiting for the next order',
-              'success',
-            );
-            navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
-          }),
-        )
-        .catch(err => {
-          dispatch(setLoading(false));
-          showMessage('gagal memberikan rating');
-          console.log(err.response);
-        }),
-    ]);
+    console.log('dataaa 1', data1);
+    console.log('dataaa 2', datab);
+    console.log('dataaa c', datac);
+    getData('token')
+      .then(resToken => {
+        console.log('ress token', resToken.value);
+        axios.all([
+          axios.post(
+            `${ENDPOINT_API_SMART_CANTEEN}tenant/rating/${dataParams.tenant.id}`,
+            data1,
+          ),
+          axios.post(
+            `${ENDPOINT_API_SMART_CANTEEN}tenant/updatePerhitunganAkhir/${dataParams.tenant.id}`,
+            datab,
+          ),
+          axios
+            .post(
+              `${ENDPOINT_API_SMART_CANTEEN}tenant/updateTotalJumlahOrder/${dataParams.tenant.id}`,
+              datac,
+            )
+            .then(
+              axios.spread((res1, res2) => {
+                axios
+                  .post(
+                    `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus?kode_transaksi=${dataParams.kode_transaksi}&status=DELIVERED`,
+                    status,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${resToken.value}`,
+                      },
+                    },
+                  )
+                  .then(res => {
+                    dispatch(setLoading(false));
+                    console.log('ressss');
+                    showMessage(
+                      'Thankyou for your compliment we are waiting for the next order',
+                      'success',
+                    );
+                    navigation.reset({index: 0, routes: [{name: 'MainApp'}]});
+                  })
+                  .catch(err => {
+                    console.log('errror di stTUS', err);
+                    dispatch(setLoading(false));
+                    showMessage('gagal memberikan rating');
+                  });
+              }),
+            )
+            .catch(err => {
+              dispatch(setLoading(false));
+              showMessage('gagal memberikan rating');
+              console.log('eeerrr', err);
+            }),
+        ]);
+      })
+      .catch(err => {
+        dispatch(setLoading(false));
+        console.log('errr');
+        showMessage('error get token feedback');
+      });
   };
 
   const starImgFilled =

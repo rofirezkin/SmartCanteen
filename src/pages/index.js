@@ -29,8 +29,10 @@ import UserProfile from './UserProfile';
 import HelpCenter from './HelpCenter';
 import Maintenance from './Maintenance';
 import TestNotification from './TestNotification';
+import QRCodeGenerator from './QRCodeGenerator';
 
 export {
+  QRCodeGenerator,
   TestNotification,
   Maintenance,
   HelpCenter,

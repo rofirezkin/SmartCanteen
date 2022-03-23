@@ -63,6 +63,7 @@ const OrderSummary = ({navigation, route}) => {
   }
 
   useEffect(() => {
+    dispatch(setLoading(true));
     user();
     getData('token').then(resToken => {
       setToken(resToken.value);
@@ -73,13 +74,15 @@ const OrderSummary = ({navigation, route}) => {
           },
         })
         .then(res => {
+          dispatch(setLoading(false));
           setGetKodeTransaksi(res.data.data);
           getData('userApk').then(res => {
             setUserApk(res.value);
           });
         })
         .catch(err => {
-          console.log('error get token', err.response);
+          dispatch(setLoading(false));
+          showMessage('Error pada get kode transaksi, hubungi admin');
         });
     });
   }, []);
@@ -225,21 +228,11 @@ const OrderSummary = ({navigation, route}) => {
   };
 
   const onSubmit = async () => {
-    if (form.paymentMethod == 'Online Payment') {
-      // SubmitTopUp();
-      showMessage('Saat Ini tidak bisa melakukan online Payment');
-    } else {
-      apiSubmit();
-    }
+    apiSubmit();
   };
 
   const onSubmitDeleteCart = async () => {
-    if (form.paymentMethod == 'Online Payment') {
-      showMessage('Saat Ini tidak bisa melakukan online Payment');
-      // SubmitTopUp();
-    } else {
-      apiSubmitCart();
-    }
+    apiSubmitCart();
   };
 
   if (midtransUrl != '') {

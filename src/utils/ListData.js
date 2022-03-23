@@ -57,7 +57,7 @@ export const paymentMethod = [
   },
   {
     id: 2,
-    label: 'Online Payment',
-    value: 'Online Payment',
+    label: 'QRIS Payment',
+    value: 'QRIS Payment',
   },
 ];

@@ -6,9 +6,10 @@ import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {deleteUser, getData, setUser} from '../../../utils/AsyncStoreServices';
 
 import {ItemListMenu} from '..';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 import {ENDPOINT_API_SMART_CANTEEN} from '../../../utils/API/httpClient';
+import {setLoading} from '../../../redux/action';
 
 const renderTabBar = props => (
   <TabBar
@@ -23,6 +24,7 @@ const renderTabBar = props => (
 );
 
 const Account = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const {globalReducer} = useSelector(state => state);
   const [userName, setUserName] = useState('');
@@ -34,6 +36,7 @@ const Account = () => {
     });
   }, []);
   const signOut = async () => {
+    dispatch(setLoading(true));
     const userData = {
       nama: userName.nama,
       is_login: '0',
@@ -47,9 +50,11 @@ const Account = () => {
         AsyncStorage.removeItem('dataCart');
         AsyncStorage.removeItem('token');
         AsyncStorage.removeItem('userApk');
+        dispatch(setLoading(false));
         navigation.reset({index: 0, routes: [{name: 'SignIn'}]});
       })
       .catch(err => {
+        dispatch(setLoading(false));
         console.log('errorr di bagian post userAPK', err);
       });
   };
@@ -63,7 +68,6 @@ const Account = () => {
       />
       <ItemListMenu
         name="Bantuan Admin"
-        icon="tutup-buka"
         desc="Hubungi admin jika ada masalah"
         icon="bantuan"
         onPress={() => navigation.navigate('HelpCenter')}
@@ -90,7 +94,6 @@ const SmartCanteen = () => {
       />
       <ItemListMenu
         name="Bantuan Admin"
-        icon="tutup-buka"
         desc="Hubungi admin jika ada masalah"
         icon="bantuan"
       />

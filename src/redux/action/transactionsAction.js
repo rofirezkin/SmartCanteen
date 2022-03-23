@@ -272,17 +272,18 @@ export const postTransaction =
           })
           .then(res => {
             console.log('resss', res);
+            console.log('kedua', paymentMethod);
             notif.localNotif();
 
             const dataOrder = {
               methodPayment: form.paymentMethod,
               total: sumData,
             };
-            if (paymentMethod == 'Online Payment') {
+            if (dataOrder.methodPayment == 'QRIS Payment') {
               dispatch(setLoading(false));
               navigation.reset({
                 index: 0,
-                routes: [{name: 'SuccessOrder', params: dataOrder}],
+                routes: [{name: 'QRCodeGenerator', params: dataOrder}],
               });
             } else {
               dispatch(setLoading(false));
@@ -350,10 +351,10 @@ export const postTransactionCart =
               total: sumData,
             };
             storeData('dataCart', allCart);
-            if (paymentMethod == 'Online Payment') {
+            if (dataOrder.methodPayment == 'QRIS Payment') {
               navigation.reset({
                 index: 0,
-                routes: [{name: 'SuccessOrder', params: dataOrder}],
+                routes: [{name: 'QRCodeGenerator', params: dataOrder}],
               });
             } else {
               navigation.reset({

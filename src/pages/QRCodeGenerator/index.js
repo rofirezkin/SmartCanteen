@@ -1,9 +1,19 @@
-import {StyleSheet, Text, Image, TouchableOpacity, View} from 'react-native';
-import CameraRoll from '@react-native-community/cameraroll';
+import {
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+  View,
+  PermissionsAndroid,
+  Platform,
+  Alert,
+} from 'react-native';
+// import CameraRoll from '@react-native-community/cameraroll';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {ICQris} from '../../assets';
-import {Gap} from '../../components';
+import {Button, Gap} from '../../components';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const QRCodeGenerator = () => {
   const [gambar, setGambar] = useState('');
@@ -33,23 +43,95 @@ const QRCodeGenerator = () => {
       setGambar(dataUrl);
     });
   });
-  console.log('gambar', gambar);
 
-  const downloadPhoto = () => {
+  const checkPermission = async () => {
+    if (Platform.OS === 'ios') {
+      downloadImage();
+    } else {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission required',
+            message: 'App need access to your storage to download photos',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          downloadImage();
+        } else {
+          Alert.alert(
+            'Oops!',
+            `Server Error, hubungi admin (issue update Token Sign In) `,
+          );
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+    }
     console.log('download');
-    CameraRoll.save(gambar, {type, album})
-      .then(res => {
-        console.log('ress image', res);
-        alert('Done', 'Photo added to camera roll!');
-      })
-      .catch(err => console.log('err:', err));
   };
+
+  //   const downloadImage = () => {
+  //     let date = new Date();
+  //     let image_URL = gambar;
+  //     console.log('data gambar', image_URL);
+  //     let ext = getExtention(image_URL);
+  //     console.log('data gamccbar', ext);
+  //     ext = '.' + ext[0];
+  //     //gt config fs from rnfecthblob
+  //     const {config, fs} = RNFetchBlob;
+  //     let PictureDir = fs.dirs.PictureDir;
+  //     let options = {
+  //       fileCache: true,
+  //       addAndroidDownloads: {
+  //         useDownloadManager: true,
+  //         notification: true,
+  //         path:
+  //           PictureDir +
+  //           '/image_' +
+  //           Math.floor(date.getTime() + date.getSeconds() / 2) +
+  //           ext,
+  //         description: 'Image',
+  //       },
+  //     };
+  //     config(options)
+  //       .fetch('GET', image_URL)
+  //       .then(res => {
+  //         // showing alert after success
+  //         console.log('res=> ', JSON.stringify(res));
+  //         alert('Image Downloaded Successfully');
+  //       });
+  //   };
+
+  //   const getExtention = filename => {
+  //     return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
+  //   };
+
+  const downloadImage = () => {
+    var Base64Code = gambar.split('data:application/octet-stream;base64,'); //base64Image is my image base64 string
+    let date = new Date();
+    const dirs = RNFetchBlob.fs.dirs;
+    console.log('baseee', Base64Code);
+
+    var path = dirs.DCIMDir + '/imcccage.jpg';
+    console.log('daaaacs', path);
+
+    RNFetchBlob.fs.writeFile(path, Base64Code[1], 'base64').then(res => {
+      console.log('File : ', res);
+      Alert('Image Downloaded Successfully');
+    });
+  };
+
+  console.log('gambar', gambar);
 
   return (
     <View style={styles.page}>
-      <Text style={styles.title}>QRIS Payment</Text>
-      <View>
+      <View style={{alignItems: 'center'}}>
         <Image source={ICQris} style={{width: 200, height: 30}} />
+        <Gap height={20} />
+        <Text>Kantin Ibu Ica</Text>
+        <Text>Jumlah Yang harus dibayar : 30.000</Text>
+        <Gap height={20} />
       </View>
 
       <View style={styles.image}>
@@ -58,11 +140,7 @@ const QRCodeGenerator = () => {
         )}
         <Gap height={20} />
         <View>
-          <TouchableOpacity
-            style={{backgroundColor: 'yellow'}}
-            onPress={downloadPhoto}>
-            <Text>halloo download</Text>
-          </TouchableOpacity>
+          <Button label="Download Gambar" onPress={downloadImage} />
         </View>
       </View>
     </View>
@@ -74,7 +152,7 @@ export default QRCodeGenerator;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: 'red',
+
     padding: 21,
   },
   title: {
@@ -84,6 +162,5 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
 });

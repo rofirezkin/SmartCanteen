@@ -38,6 +38,7 @@ import {
   Maintenance,
   TestNotification,
   QRCodeGenerator,
+  ImagePayment,
 } from '../pages';
 import {useSelector, useDispatch} from 'react-redux';
 import {getInProgress, getInProgressBadges} from '../redux/action';
@@ -117,6 +118,11 @@ const Router = () => {
       <Stack.Screen
         name="SignIn"
         component={SignIn}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ImagePayment"
+        component={ImagePayment}
         options={{headerShown: false}}
       />
       <Stack.Screen

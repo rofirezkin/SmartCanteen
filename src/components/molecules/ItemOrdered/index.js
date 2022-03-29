@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {Counter} from '../..';
+import Counter from '../../atoms/Counter';
 import {DummyFoodCourt2} from '../../../assets';
 
 const ItemOrdered = () => {

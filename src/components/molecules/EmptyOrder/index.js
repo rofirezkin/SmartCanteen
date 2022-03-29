@@ -1,6 +1,8 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {Button, Gap} from '../..';
+import Button from '../../atoms/Button';
+import Gap from '../../atoms/Gap';
+
 import {ILSuccessOrder} from '../../../assets';
 
 const EmptyOrder = ({navigation}) => {

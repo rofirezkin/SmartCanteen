@@ -1,6 +1,5 @@
 import {useDispatch} from 'react-redux';
-import {showMessage} from '..';
-import {setLoading} from '../../redux/action';
+import showMessage from '../showMessage';
 
 export const ENDPOINT = 'https://gateway.telkomuniversity.ac.id/issueauth';
 export const ENDPOINT_PROFILE =

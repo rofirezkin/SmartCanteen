@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
-const Link = ({title, size, align, onPress}) => {
+const Link = ({title, size, align, linkPayment, onPress}) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <Text style={styles.text(size, align)}>{title}</Text>
+      <Text style={styles.text(size, align, linkPayment)}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -12,9 +12,9 @@ const Link = ({title, size, align, onPress}) => {
 export default Link;
 
 const styles = StyleSheet.create({
-  text: (size, align) => ({
+  text: (size, align, linkPayment) => ({
     fontSize: size,
-    color: '#9E9E9E',
+    color: linkPayment ? 'green' : '#9E9E9E',
     fontFamily: 'Poppins-Regular',
     textDecorationLine: 'underline',
     textAlign: align,

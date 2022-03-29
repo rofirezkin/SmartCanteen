@@ -30,8 +30,10 @@ import HelpCenter from './HelpCenter';
 import Maintenance from './Maintenance';
 import TestNotification from './TestNotification';
 import QRCodeGenerator from './QRCodeGenerator';
+import ImagePayment from './ImagePayment/ImagePayment';
 
 export {
+  ImagePayment,
   QRCodeGenerator,
   TestNotification,
   Maintenance,

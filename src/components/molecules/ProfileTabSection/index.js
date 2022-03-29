@@ -5,7 +5,7 @@ import {Image, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {deleteUser, getData, setUser} from '../../../utils/AsyncStoreServices';
 
-import {ItemListMenu} from '..';
+import ItemListMenu from '../ItemListMenu';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 import {ENDPOINT_API_SMART_CANTEEN} from '../../../utils/API/httpClient';

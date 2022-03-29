@@ -18,8 +18,7 @@ import {
   getPastOrders,
 } from '../../../redux/action';
 import {ILNodata} from '../../../assets';
-import {Gap} from '../..';
-import {getData} from '../../../utils/AsyncStoreServices';
+import Gap from '../../atoms/Gap';
 
 const renderTabBar = props => (
   <TabBar
@@ -60,6 +59,7 @@ const InProgress = () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
       {inProgress.map(order => {
+        order.numberId = numberId;
         return (
           <ItemListFood
             urlPhoto={order.profile_photo_path}

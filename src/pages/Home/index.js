@@ -37,7 +37,6 @@ import {skeletonHome} from '../../components/skeleton/skeletonHome';
 import {useSelector} from 'react-redux';
 import {getDataMenuSeveralByTypes} from '../../redux/action/menuAction';
 import CardCanteen from '../../components/molecules/CardCanteen/CardCanteen';
-import {getInProgress, getInProgressBadges} from '../../redux/action';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -57,9 +56,8 @@ const Home = ({navigation}) => {
   const onRefresh = React.useCallback(() => {
     setLoading(true);
     setRefresh(true);
-    dispatch(getDataMenuSeveralByTypes('Recommended'));
-    dispatch(getDataMenuSeveralByTypes('New Taste'));
-    dispatch(getDataMenuSeveralByTypes('Popular'));
+    dispatch(getDataMenuSeveralByTypes());
+
     setLoading(false);
     setRefresh(false);
   }, []);
@@ -70,15 +68,10 @@ const Home = ({navigation}) => {
     dispatch({type: 'SET_GLOBAL_USER', value: dataUser});
   };
 
-  const method = {
-    method: 'Dine In',
-  };
-
   useEffect(() => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
-    dispatch(getDataMenuSeveralByTypes('Recommended'));
-    dispatch(getDataMenuSeveralByTypes('New Taste'));
-    dispatch(getDataMenuSeveralByTypes('Popular'));
+    dispatch(getDataMenuSeveralByTypes());
+
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log(
         'Notification caused app to open from background state:',
@@ -102,7 +95,7 @@ const Home = ({navigation}) => {
       });
 
     navigation.addListener('focus', () => {
-      dispatch({type: 'SET_OPTION_USER', value: method});
+      dispatch({type: 'SET_OPTION_USER', value: {method: 'Dine In'}});
     });
 
     user();

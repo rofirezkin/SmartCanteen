@@ -1,11 +1,12 @@
 import axios from 'axios';
-import {setLoading} from '.';
+
 import {
   ENDPOINT_API_SMART_CANTEEN,
   ENDPOINT_PROFILE,
   ENDPOINT_ROLE,
 } from '../../utils/API/httpClient';
 import {setUser, storeData} from '../../utils/AsyncStoreServices';
+import {setLoading} from './loading';
 
 /**
  * make a request to api without token

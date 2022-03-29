@@ -24,20 +24,25 @@ export const getDataMenuByTypes = types => async dispatch => {
 
 export const getDataMenuSeveralByTypes = types => async dispatch => {
   const result = await axios
-    .get(
-      `${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/several?category_menu=${types}`,
+    .all([
+      axios.get(
+        `${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/several?category_menu=Recommended`,
+      ),
+      axios.get(
+        `${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/several?category_menu=New Taste`,
+      ),
+      axios.get(
+        `${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch/several?category_menu=Popular`,
+      ),
+    ])
+    .then(
+      axios.spread((res1, res2, res3) => {
+        dispatch({type: 'SET_SEVERAL_RECOMMENDED', value: res1.data.data.data});
+        dispatch({type: 'SET_SEVERAL_NEW_TASTE', value: res2.data.data.data});
+        console.log('ress data several ', res1);
+        dispatch({type: 'SET_SEVERAL_POPULAR', value: res3.data.data.data});
+      }),
     )
-    .then(res => {
-      if (types === 'New Taste') {
-        dispatch({type: 'SET_SEVERAL_NEW_TASTE', value: res.data.data.data});
-      }
-      if (types === 'Popular') {
-        dispatch({type: 'SET_SEVERAL_POPULAR', value: res.data.data.data});
-      }
-      if (types === 'Recommended') {
-        dispatch({type: 'SET_SEVERAL_RECOMMENDED', value: res.data.data.data});
-      }
-    })
     .catch(err => {
       console.log('several recommended dll', err.response);
     });

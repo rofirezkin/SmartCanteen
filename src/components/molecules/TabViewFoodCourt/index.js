@@ -1,11 +1,9 @@
 import React from 'react';
 import {Image, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
-import {DummyList1} from '../../../assets';
+
 import ItemListFood from '../ItemListFood';
-import Rating from '../Rating';
 import {useNavigation} from '@react-navigation/native';
-import ListFoodCourt from '../ListFoodCourt';
 
 const renderTabBar = props => (
   <TabBar

@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Gap} from '../..';
+import Gap from '../../atoms/Gap';
 import {IcDelivery, IcDineIn, IcQuickOrder, IcTakeAway} from '../../../assets';
-import { normalizeFont } from '../../../utils/normalizeFont';
+import {normalizeFont} from '../../../utils/normalizeFont';
 
 const OptionUser = ({
   iconData,

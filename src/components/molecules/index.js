@@ -32,7 +32,9 @@ import CategoryMenu from './CategoryMenu/CategoryMenu';
 import ShoppingCart from './ShoppingCart/ShoppingCart';
 import Modals from './Modals';
 import Loading from './Loading';
+import UploadProofPayment from './UploadProofPayment/UploadProofPayment';
 export {
+  UploadProofPayment,
   Loading,
   Modals,
   ShoppingCart,

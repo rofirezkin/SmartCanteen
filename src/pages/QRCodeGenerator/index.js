@@ -8,20 +8,22 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-// import CameraRoll from '@react-native-community/cameraroll';
+
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+
 import {ICQris} from '../../assets';
-import {Button, Gap} from '../../components';
+import {Button, Gap, Header, Link} from '../../components';
 import RNFetchBlob from 'rn-fetch-blob';
 
-const QRCodeGenerator = () => {
+const QRCodeGenerator = ({navigation, route}) => {
+  const paramData = route.params;
+  console.log('param data', paramData);
   const [gambar, setGambar] = useState('');
 
   const dataQr = {
     cht: 'qr',
     chs: '200x200',
-    chl: '00020101021126660014ID.LINKAJA.WWW011893600911000171900202152003070917190020303UME51440014ID.CO.QRIS.WWW0215ID20200298161760303UME5204581253033605802ID5920Kantin FIT-Tenant 026007BANDUNG61054025762070703A016304A562',
+    chl: paramData.qrString,
   };
   const url = `https://chart.googleapis.com/chart?cht=qr&chl=${dataQr.chl}&chs=${dataQr.chs}`;
 
@@ -61,7 +63,7 @@ const QRCodeGenerator = () => {
         } else {
           Alert.alert(
             'Oops!',
-            `Server Error, hubungi admin (issue update Token Sign In) `,
+            `Server Error, hubungi admin (issue download image qris) `,
           );
         }
       } catch (error) {
@@ -113,24 +115,29 @@ const QRCodeGenerator = () => {
     const dirs = RNFetchBlob.fs.dirs;
     console.log('baseee', Base64Code);
 
-    var path = dirs.DCIMDir + '/imcccage.jpg';
-    console.log('daaaacs', path);
+    const directory = Math.floor(date.getTime() + date.getSeconds() / 2);
+
+    var path = dirs.DCIMDir + `/${directory}qris.jpg`;
 
     RNFetchBlob.fs.writeFile(path, Base64Code[1], 'base64').then(res => {
       console.log('File : ', res);
-      Alert('Image Downloaded Successfully');
+      Alert.alert('Image', 'Image Downloaded Successfully');
     });
   };
 
-  console.log('gambar', gambar);
-
   return (
     <View style={styles.page}>
+      <Header
+        onPress={() => navigation.goBack()}
+        onBack
+        title="QRIS Payment"
+        subtTitle="Scan QRIS Tenant for Payment"
+      />
       <View style={{alignItems: 'center'}}>
         <Image source={ICQris} style={{width: 200, height: 30}} />
         <Gap height={20} />
         <Text>Kantin Ibu Ica</Text>
-        <Text>Jumlah Yang harus dibayar : 30.000</Text>
+        <Text>Jumlah Yang harus dibayar : {paramData.total}</Text>
         <Gap height={20} />
       </View>
 
@@ -140,7 +147,31 @@ const QRCodeGenerator = () => {
         )}
         <Gap height={20} />
         <View>
-          <Button label="Download Gambar" onPress={downloadImage} />
+          <Link
+            align="center"
+            title="Download QRIS"
+            onPress={checkPermission}
+          />
+
+          <Gap height={20} />
+          <Button
+            label="Order Other Food"
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+
+                routes: [{name: 'MainApp'}],
+              })
+            }
+          />
+          <Gap height={20} />
+          <Button
+            onPress={() =>
+              navigation.replace('MainApp', {screen: 'Transaction'})
+            }
+            label="View My Order"
+            color="#8D92A3"
+          />
         </View>
       </View>
     </View>
@@ -152,8 +183,6 @@ export default QRCodeGenerator;
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-
-    padding: 21,
   },
   title: {
     fontSize: 17,

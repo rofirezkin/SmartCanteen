@@ -20,7 +20,7 @@ const DetailFoodItem = ({navigation, route}) => {
   const id_tenant = params.id_tenant;
   const {allCart} = useSelector(state => state.cartItems);
 
-  console.log('dataaaaa', params.device_token);
+  console.log('dataaaaa', params);
 
   console.log('params', allCart);
   const [totalItem, setTotalItem] = useState(1);
@@ -34,6 +34,7 @@ const DetailFoodItem = ({navigation, route}) => {
     nama_tenant: params.nama_tenant,
     picturePath: params.picturePath,
     device_token: params.device_token,
+    qr_string: params.qr_string,
 
     data: [
       {

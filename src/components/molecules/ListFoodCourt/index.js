@@ -1,10 +1,10 @@
 import {useNavigation} from '@react-navigation/core';
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Counter, Gap, Like, Price} from '../..';
-import {DummyFoodCourt2} from '../../../assets';
+import Gap from '../../atoms/Gap';
+import Like from '../../atoms/Like';
+import Price from '../../atoms/Price';
 import {ENDPOINT_SMART_CANTEEN} from '../../../utils/API/httpClient';
-import useForm from '../../../utils/useForm';
 
 const ListFoodCourt = ({
   id,

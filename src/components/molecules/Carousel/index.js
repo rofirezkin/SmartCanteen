@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, FlatList, Animated} from 'react-native';
-import {CarouselItem, Gap} from '../..';
+import CarouselItem from '../../atoms/CarouselItem';
+import Gap from '../../atoms';
 
 const {width} = Dimensions.get('window');
 

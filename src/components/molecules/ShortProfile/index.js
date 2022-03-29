@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import {Gap} from '../..';
+import Gap from '../../atoms/Gap';
 import {ICCArtHome, ICCartShopping, IcNotif, UserDummy} from '../../../assets';
 import {normalizeFont} from '../../../utils/normalizeFont';
 

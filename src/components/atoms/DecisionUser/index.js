@@ -1,13 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {OptionUser} from '../..';
-import {IcDineIn} from '../../../assets';
 
 const Decision = () => {
   return (
     <View style={styles.container}>
       <View style={styles.change}>
-        <OptionUser iconData="dineIn" data="Dine In" profileFood />
         <View style={styles.buttonChange}>
           <Text style={styles.text}>Change</Text>
         </View>

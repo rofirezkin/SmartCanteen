@@ -45,22 +45,28 @@ const OrderSummary = ({navigation, route}) => {
   const allCart = cartItems.allCart;
   const [getKodeTransaksi, setGetKodeTransaksi] = useState('');
   const [showWarningOpen, SetshowWarningOpen] = useState(false);
-  const [midtransUrl, setMidtransUrl] = React.useState('');
+
   const [userApk, setUserApk] = useState('');
   const [token, setToken] = useState('');
-  const [orderId, setOrderId] = React.useState('');
+
   let arrayData = {};
   let namaTenant = '';
   let lokasiTenant = '';
+  let qrString = '';
+
   if (params.status) {
     arrayData = params.data.data;
     namaTenant = params.data.nama_tenant;
     lokasiTenant = params.data.lokasi_kantin;
+    qrString = params.data.qr_string;
   } else {
     arrayData = params.data;
     namaTenant = params.nama_tenant;
     lokasiTenant = params.lokasi_kantin;
+    qrString = params.qrString;
   }
+
+  console.log('data tnenatt', params);
 
   useEffect(() => {
     dispatch(setLoading(true));
@@ -161,7 +167,7 @@ const OrderSummary = ({navigation, route}) => {
       created_at: dateForTransaction,
       catatan: text == '' ? 'tidak ada' : text,
       phoneNumber: profile.phone,
-      is_cash: form.paymentMethod,
+      is_cash: form.paymentMethod == 'Cash' ? 1 : 0,
       total: arrayData[i].totalOrder,
     };
     sendData.push(data);
@@ -193,6 +199,7 @@ const OrderSummary = ({navigation, route}) => {
         notifJSON,
         sumData('total'),
         token,
+        qrString,
       ),
     );
   };
@@ -223,6 +230,7 @@ const OrderSummary = ({navigation, route}) => {
         arrayData,
         sumData('total'),
         token,
+        qrString,
       ),
     );
   };
@@ -235,33 +243,7 @@ const OrderSummary = ({navigation, route}) => {
     apiSubmitCart();
   };
 
-  if (midtransUrl != '') {
-    return (
-      <>
-        <Header
-          title="Online Payment"
-          onBack
-          onPress={() => setMidtransUrl('')}
-        />
-        <WebView
-          source={{uri: midtransUrl}}
-          onNavigationStateChange={navState => {
-            if (navState.url.search('basicteknologi.co.id') > 0) {
-              // navigation.navigate('TopUpSuccess', {
-              //   orderId: orderId,
-              // });
-
-              if (params.status) {
-                apiSubmit(orderId);
-              } else {
-                apiSubmitCart(orderId);
-              }
-            }
-          }}
-        />
-      </>
-    );
-  }
+  console.log('is cash ', form.paymentMethod);
 
   return (
     <ScrollView>

@@ -11,13 +11,13 @@ import {
 } from 'react-native';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 
-import {ListFoodCourt} from '..';
-import {Button} from '../..';
+import ListFoodCourt from '../ListFoodCourt';
+import Button from '../../atoms/Button';
 
 import {ENDPOINT_API_SMART_CANTEEN} from '../../../utils/API/httpClient';
 import {skeletonChooseFood} from '../../skeleton/skeletonHome';
 
-const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
+const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant, qr_string}) => {
   const navigation = useNavigation();
   const [foodMenu, setFoodMenu] = useState('all');
   const [all, setAll] = useState('red');
@@ -80,6 +80,7 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
               ...item,
               nama_tenant,
               lokasi_kantin,
+              qr_string,
             };
 
             const dataSubstring = [
@@ -126,6 +127,7 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
               ...item,
               nama_tenant,
               lokasi_kantin,
+              qr_string,
             };
             const dataSubstring = [
               {desc: item.ingredients, value: 40},
@@ -171,6 +173,7 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant}) => {
               ...item,
               nama_tenant,
               lokasi_kantin,
+              qr_string,
             };
             const dataSubstring = [
               {desc: item.ingredients, value: 40},

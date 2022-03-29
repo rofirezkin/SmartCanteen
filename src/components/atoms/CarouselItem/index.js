@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text, Image, Dimensions} from 'react-native';
-import {Gap} from '..';
+import Gap from '../Gap';
 
 const {width, height} = Dimensions.get('window');
 

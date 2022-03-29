@@ -7,11 +7,9 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {Rating} from '..';
+import Rating from '../Rating';
 import {ENDPOINT_SMART_CANTEEN} from '../../../utils/API/httpClient';
 import {normalizeFont} from '../../../utils/normalizeFont';
-import CardCategoryMenu from '../CardCategoryMenu/CardCategoryMenu';
-
 const CategoryMenu = ({
   isActive,
   categoryName,

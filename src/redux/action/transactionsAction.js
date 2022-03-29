@@ -1,8 +1,9 @@
 import axios from 'axios';
-import {setLoading} from '.';
+
 import {showMessage} from '../../utils';
 import {ENDPOINT_API_SMART_CANTEEN} from '../../utils/API/httpClient';
 import {getData, storeData} from '../../utils/AsyncStoreServices';
+import {setLoading} from './loading';
 
 export const getInProgress = nim => async dispatch => {
   getData('token').then(resToken => {
@@ -38,7 +39,7 @@ export const getInProgress = nim => async dispatch => {
           const pending = res1.data.data;
           const process = res2.data.data;
           const onDelivery = res3.data.data;
-          console.log('data pending', pending);
+          console.log('data pending', res1.data);
           // axios.get(
           //   `${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?id_tenant=61&nim=6705184061&status=PENDING`,
           // );
@@ -250,10 +251,11 @@ export const postTransaction =
     notifJSON,
     sumData,
     token,
+    qrString,
   ) =>
   dispatch => {
     dispatch(setLoading(true));
-
+    console.log('sendata', sendData);
     axios
       .post(`${ENDPOINT_API_SMART_CANTEEN}transactions/add`, sendData, {
         headers: {
@@ -279,11 +281,16 @@ export const postTransaction =
               methodPayment: form.paymentMethod,
               total: sumData,
             };
+            const dataOrderQris = {
+              methodPayment: form.paymentMethod,
+              total: sumData,
+              qrString,
+            };
             if (dataOrder.methodPayment == 'QRIS Payment') {
               dispatch(setLoading(false));
               navigation.reset({
                 index: 0,
-                routes: [{name: 'QRCodeGenerator', params: dataOrder}],
+                routes: [{name: 'QRCodeGenerator', params: dataOrderQris}],
               });
             } else {
               dispatch(setLoading(false));
@@ -322,8 +329,10 @@ export const postTransactionCart =
     arrayData,
     sumData,
     token,
+    qrString,
   ) =>
   dispatch => {
+    console.log('sendata', sendData);
     dispatch(setLoading(true));
     axios
       .post(`${ENDPOINT_API_SMART_CANTEEN}transactions/add`, sendData, {
@@ -350,11 +359,16 @@ export const postTransactionCart =
               methodPayment: form.paymentMethod,
               total: sumData,
             };
+            const dataOrderQris = {
+              methodPayment: form.paymentMethod,
+              total: sumData,
+              qrString,
+            };
             storeData('dataCart', allCart);
             if (dataOrder.methodPayment == 'QRIS Payment') {
               navigation.reset({
                 index: 0,
-                routes: [{name: 'QRCodeGenerator', params: dataOrder}],
+                routes: [{name: 'QRCodeGenerator', params: dataOrderQris}],
               });
             } else {
               navigation.reset({

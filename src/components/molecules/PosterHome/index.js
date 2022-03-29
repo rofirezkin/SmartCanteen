@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Gap} from '../..';
+import Gap from '../../atoms/Gap';
 import {DummyPosterHome} from '../../../assets';
 
 const PosterHome = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {Box} from '../..';
+import Box from '../../atoms/Box';
 
 const DetailReservation = () => {
   return (

@@ -24,7 +24,7 @@ const ChooseFood = ({navigation, route}) => {
   const {allCart} = useSelector(state => state.cartItems);
   const params = route.params;
   const idTenant = params.id;
-  console.log(params);
+  console.log('iniii tuh di cohoho', params);
   console.log('data allcart chose', allCart);
 
   const calculationData = type => {
@@ -74,6 +74,7 @@ const ChooseFood = ({navigation, route}) => {
             <CustomTab
               nama_tenant={params.nama_tenant}
               lokasi_kantin={params.lokasi_kantin}
+              qr_string={params.qr_string}
               id_tenant={idTenant}
             />
           </View>

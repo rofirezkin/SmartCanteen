@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {ItemValue} from '..';
+import ItemValue from '../ItemValue';
 
 const CardChekout = () => {
   return (

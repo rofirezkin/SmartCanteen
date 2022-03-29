@@ -252,6 +252,7 @@ export const postTransaction =
     sumData,
     token,
     qrString,
+    namaTenant,
   ) =>
   dispatch => {
     dispatch(setLoading(true));
@@ -285,6 +286,7 @@ export const postTransaction =
               methodPayment: form.paymentMethod,
               total: sumData,
               qrString,
+              namaTenant,
             };
             if (dataOrder.methodPayment == 'QRIS Payment') {
               dispatch(setLoading(false));
@@ -330,6 +332,7 @@ export const postTransactionCart =
     sumData,
     token,
     qrString,
+    namaTenant,
   ) =>
   dispatch => {
     console.log('sendata', sendData);
@@ -363,6 +366,7 @@ export const postTransactionCart =
               methodPayment: form.paymentMethod,
               total: sumData,
               qrString,
+              namaTenant,
             };
             storeData('dataCart', allCart);
             if (dataOrder.methodPayment == 'QRIS Payment') {

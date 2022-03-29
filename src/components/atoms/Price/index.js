@@ -5,11 +5,11 @@ import Number from '../../../utils/Number/Number';
 const Price = ({price}) => {
   return (
     <View style={styles.container}>
-      <Number style={styles.priceDefault} number={price}/>
-      <Text style={styles.discountFee}>Rp15.000</Text>
+      <Number style={styles.priceDefault} number={price} />
+      {/* <Text style={styles.discountFee}>Rp15.000</Text>
       <View style={styles.statusPromo}>
         <Text style={styles.textPromo}>Promo</Text>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   priceDefault: {
     color: '#535353',
     fontFamily: 'Poppins-Regular',
-    fontSize: 14,
+    fontSize: 17,
     marginRight: 10,
   },
   discountFee: {

@@ -16,6 +16,7 @@ import Button from '../../atoms/Button';
 
 import {ENDPOINT_API_SMART_CANTEEN} from '../../../utils/API/httpClient';
 import {skeletonChooseFood} from '../../skeleton/skeletonHome';
+import {showMessage} from '../../../utils';
 
 const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant, qr_string}) => {
   const navigation = useNavigation();
@@ -48,7 +49,7 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant, qr_string}) => {
       })
       .catch(err => {
         setLoading(false);
-        console.log('error pada makanan atau minuman food', err.response);
+        showMessage('error pada pilih menu makanan dan minunuman ');
       });
 
     if (foodMenu === 'all') {
@@ -75,7 +76,6 @@ const CustomTab = ({id_tenant, lokasi_kantin, nama_tenant, qr_string}) => {
       return (
         <View>
           {allMenu.map(item => {
-            console.log('item', item);
             const dataParam = {
               ...item,
               nama_tenant,

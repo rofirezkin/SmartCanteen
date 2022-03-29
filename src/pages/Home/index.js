@@ -150,7 +150,7 @@ const Home = ({navigation}) => {
                     iconData="quickOrder"
                     data="Quick Order"
                     onPress={() =>
-                      navigation.navigate('QRCodeGenerator', 'Quick Order')
+                      navigation.navigate('Maintenance', 'Quick Order')
                     }
                   />
                   <OptionUser

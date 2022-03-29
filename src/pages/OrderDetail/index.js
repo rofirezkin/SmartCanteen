@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
+import {launchImageLibrary} from 'react-native-image-picker';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   Button,
@@ -20,7 +20,12 @@ import {
   Link,
   UploadProofPayment,
 } from '../../components';
-import {getDetailProgress, setLoading} from '../../redux/action';
+import {
+  skeletonChooseFood,
+  skeletonDetailFood,
+  skeletonDetailTransaction,
+} from '../../components/skeleton/skeletonHome';
+import {setLoading, uploadPembayaranAction} from '../../redux/action';
 import {showMessage} from '../../utils';
 import {ENDPOINT_API_SMART_CANTEEN} from '../../utils/API/httpClient';
 import {getData} from '../../utils/AsyncStoreServices';
@@ -33,39 +38,51 @@ const OrderDetail = ({navigation, route}) => {
   const [dataPhoto, setDataPhoto] = useState('');
   const [fileSelected, setFileSelected] = useState(false);
   const [errorGetData, setErrorGetData] = useState(false);
+  const [loadingSkeleton, setLoadingSkeleton] = useState(true);
+  const [photoProofPayment, setPhotoProofPayment] = useState(null);
 
   const params = route.params;
-  console.log(route.params);
-  console.log('detail progress', params);
+
+  const dataQr = {
+    qrString: params.qr_string,
+    total: params.total,
+    namaTenant: params.nama_tenant,
+    order: true,
+  };
 
   useEffect(() => {
-    dispatch(setLoading(true));
-    getData('token').then(resToken => {
-      setToken(resToken.value);
-      axios
-        .get(
-          `${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=${params.numberId}&status=${params.status}`,
-          {
-            headers: {
-              Authorization: `Bearer ${resToken.value}`,
+    getData('token')
+      .then(resToken => {
+        setToken(resToken.value);
+        axios
+          .get(
+            `${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=${params.numberId}&status=${params.status}`,
+            {
+              headers: {
+                Authorization: `Bearer ${resToken.value}`,
+              },
             },
-          },
-        )
-        .then(res => {
-          console.log('ressssss ini detail', res);
-          const dataOrder = res.data.data;
+          )
+          .then(res => {
+            console.log('ressssss ini detail', res.data.data);
+            setLoadingSkeleton(false);
+            const dataOrder = res.data.data;
+            setPhotoProofPayment(res.data.data[0].photo_bukti_pembayaran);
 
-          setPaymentMethod(dataOrder[0].is_cash);
-          setDetailData(res.data.data);
-          dispatch(setLoading(false));
-        })
-        .catch(err => {
-          dispatch(setLoading(false));
-          console.log('eror pada detail order data', err);
-          setErrorGetData(true);
-          Alert.alert('Error!', 'Error Get Data');
-        });
-    });
+            setPaymentMethod(dataOrder[0].is_cash);
+            setDetailData(res.data.data);
+          })
+          .catch(err => {
+            setLoadingSkeleton(false);
+            console.log('eror pada detail order data', err);
+            setErrorGetData(true);
+            Alert.alert('Error!', 'Error Get Data');
+          });
+      })
+      .catch(err => {
+        setLoadingSkeleton(false);
+        console.log('gagal get token');
+      });
 
     // dispatch(getDetailProgress(params.nim, params.idTenant));
   }, [params]);
@@ -133,21 +150,18 @@ const OrderDetail = ({navigation, route}) => {
   const addPhoto = () => {
     launchImageLibrary(
       {
-        quality: 1,
+        quality: 0.8,
+        includeBase64: true,
       },
       response => {
         if (response.didCancel || response.error) {
           showMessage('Anda tidak memilih photo');
         } else {
-          console.log('reessspone image', response.assets[0].uri);
-          const source = {uri: response.assets[0].uri};
-          const dataImage = {
-            uri: response.assets[0].uri,
-            type: response.assets[0].type,
-            name: response.assets[0].fileName,
-          };
+          console.log('reessspone image', response);
+          const source = `data:${response.assets[0].type};base64, ${response.assets[0].base64}`;
+
           console.log('urri', response.assets[0]);
-          setDataPhoto(dataImage);
+          setDataPhoto(source);
           setFileSelected(true);
         }
       },
@@ -155,140 +169,136 @@ const OrderDetail = ({navigation, route}) => {
   };
 
   const uploadProofPayment = () => {
-    const photoForUpload = new FormData();
-    photoForUpload.append('file', dataPhoto);
-
-    console.log('param id', photoForUpload);
+    const kodeTransaksi = params.kode_transaksi;
     dispatch(setLoading(true));
-    axios
-      .post(
-        `${ENDPOINT_API_SMART_CANTEEN}transactions/user/upload-bukti-bayar/${params.id}`,
-        photoForUpload,
-        {
-          headers: {
-            Authorization: token,
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-      )
-      .then(res => {
-        console.log('rees data upload ', res);
-      })
-      .catch(err => {
-        dispatch(setLoading(false));
-        showMessage('error upload bukti pembayaran, hubungi admin ');
-        console.log('resss', err);
-      });
+    console.log('dataaaa phh', dataPhoto);
+    dispatch(
+      uploadPembayaranAction(dataPhoto, token, kodeTransaksi, navigation),
+    );
   };
+
   return (
     <ScrollView>
-      <View style={styles.page}>
-        <Header
-          title="Order Detail"
-          onBack
-          subtTitle="You deserve better meal"
-          onPress={() => navigation.goBack()}
-        />
-        {!errorGetData && (
-          <>
-            <View style={styles.container}>
-              <View>
-                {detailData.map(res => {
-                  return (
-                    <>
-                      <ItemListFood
-                        type="product"
-                        items={res.quantity}
-                        canteen={res.method}
-                        totalOrder={res.total}
-                        name={res.name}
-                        key={res.name}
-                        // status={params.status}
-                        urlPhoto={res.picturePath}
-                      />
-                    </>
-                  );
-                })}
+      <Header
+        title="Order Detail"
+        onBack
+        subtTitle="You deserve better meal"
+        onPress={() => navigation.goBack()}
+      />
+      <SkeletonContent
+        containerStyle={{flex: 1}}
+        isLoading={loadingSkeleton}
+        layout={skeletonDetailTransaction}>
+        <View style={styles.page}>
+          {!errorGetData && (
+            <>
+              <View style={styles.container}>
+                <View>
+                  {detailData.map(res => {
+                    return (
+                      <>
+                        <ItemListFood
+                          type="product"
+                          items={res.quantity}
+                          canteen={res.method}
+                          totalOrder={res.total}
+                          name={res.name}
+                          key={res.name}
+                          // status={params.status}
+                          urlPhoto={res.picturePath}
+                        />
+                      </>
+                    );
+                  })}
+                </View>
+                <View style={styles.detailCard}>
+                  <Text style={styles.text}>Detail Transaction</Text>
+                  <ItemValue title={`Nama Kantin`} name={params.nama_tenant} />
+                  <ItemValue
+                    title={`Lokasi Kantin`}
+                    name={params.lokasi_kantin}
+                  />
+                  <ItemValue
+                    title={`Total Price ${params.quantity} Item`}
+                    value={totalItem}
+                  />
+                  <ItemValue title={`Tax`} value="1.000" />
+                  <ItemValue title={`Services Price`} value="2.000" />
+                  <ItemValue title={`Total`} colorValue value={totalPrice} />
+                  {paymentMethod == 0 && (
+                    <Link
+                      title="Show QRIS Tenant"
+                      linkPayment
+                      onPress={() =>
+                        navigation.navigate('QRCodeGenerator', dataQr)
+                      }
+                    />
+                  )}
+                  <Gap height={15} />
+                </View>
               </View>
-              <View style={styles.detailCard}>
-                <Text style={styles.text}>Detail Transaction</Text>
-                <ItemValue title={`Nama Kantin`} name={params.nama_tenant} />
-                <ItemValue
-                  title={`Lokasi Kantin`}
-                  name={params.lokasi_kantin}
-                />
-                <ItemValue
-                  title={`Total Price ${params.quantity} Item`}
-                  value={totalItem}
-                />
-                <ItemValue title={`Tax`} value="1.000" />
-                <ItemValue title={`Services Price`} value="2.000" />
-                <ItemValue title={`Total`} colorValue value={totalPrice} />
-                <Link
-                  title="Show QRIS Tenant"
-                  linkPayment
-                  onPress={() => navigation.navigate('QRCodeGenerator')}
-                />
-                <Gap height={15} />
-              </View>
-            </View>
-            {paymentMethod == 0 && (
-              <UploadProofPayment
-                addPhoto={addPhoto}
-                onPress={uploadProofPayment}
-                fileSelected={fileSelected}
-              />
-            )}
-            <View style={styles.container}>
-              <View style={styles.detailCard}>
-                <Link
-                  title="Lihat Bukti Pembayaran"
-                  linkPayment
-                  onPress={() => navigation.navigate('ImagePayment')}
-                />
-              </View>
-            </View>
-
-            <View style={styles.container}>
-              <View style={styles.detailCard}>
-                <Text style={styles.text}>Order Status</Text>
-                <Gap height={15} />
-                <ItemValue
-                  title={`Kode Transaksi:  ${params.kode_transaksi}`}
-                  colorValue={params.status}
-                  name={params.status}
-                />
-
-                <ItemValue
-                  title={`Payment Method:`}
-                  colorValue={params.status}
-                  name={paymentMethod == 1 ? 'Cash' : 'QRIS Payment'}
-                />
-
-                <Gap height={15} />
-              </View>
-            </View>
-
-            <View style={styles.detailCard}>
-              {params.status === 'PENDING' && (
-                <Button
-                  label="Cancel My Order"
-                  textColor="red"
-                  color="white"
-                  onPress={onCancel}
+              {paymentMethod == 0 && photoProofPayment == null && (
+                <UploadProofPayment
+                  addPhoto={addPhoto}
+                  onPress={uploadProofPayment}
+                  fileSelected={fileSelected}
                 />
               )}
-              {params.status === 'FEEDBACK' && (
-                <Button
-                  label="Rate Your Order"
-                  color="red"
-                  onPress={feedbackTenant}
-                />
+              {photoProofPayment != null && (
+                <View style={styles.container}>
+                  <View style={styles.detailCard}>
+                    <Link
+                      title="Show Proof Payment"
+                      linkPayment
+                      onPress={() =>
+                        navigation.navigate('ImagePayment', photoProofPayment)
+                      }
+                    />
+                  </View>
+                </View>
               )}
-            </View>
-          </>
-        )}
-      </View>
+
+              <View style={styles.container}>
+                <View style={styles.detailCard}>
+                  <Text style={styles.text}>Order Status</Text>
+                  <Gap height={15} />
+                  <ItemValue
+                    title={`Kode Transaksi:  ${params.kode_transaksi}`}
+                    colorValue={params.status}
+                    name={params.status}
+                  />
+
+                  <ItemValue
+                    title={`Payment Method:`}
+                    colorValue={params.status}
+                    name={paymentMethod == 1 ? 'Cash' : 'QRIS Payment'}
+                  />
+
+                  <Gap height={15} />
+                </View>
+              </View>
+
+              <View style={styles.detailCard}>
+                {params.status === 'PENDING' && (
+                  <Button
+                    label="Cancel My Order"
+                    textColor="red"
+                    color="white"
+                    onPress={onCancel}
+                  />
+                )}
+                {params.status === 'FEEDBACK' && (
+                  <Button
+                    label="Rate Your Order"
+                    color="red"
+                    onPress={feedbackTenant}
+                  />
+                )}
+              </View>
+            </>
+          )}
+        </View>
+      </SkeletonContent>
     </ScrollView>
   );
 };

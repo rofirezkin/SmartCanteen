@@ -1,20 +1,27 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Header} from '../../components';
 
-const ImagePayment = ({navigation}) => {
+const ImagePayment = ({navigation, route}) => {
+  const imageProofPayment = route.params;
+  console.log('testing proof payment', imageProofPayment);
   return (
-    <View style={styles.page}>
-      <Header
-        title="Proof of payment"
-        onBack
-        subtTitle="You deserve better meal"
-        onPress={() => navigation.goBack()}
-      />
-      <View style={styles.container}>
-        <Text>ImagePayment</Text>
+    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <View style={styles.page}>
+        <Header
+          title="Proof of payment"
+          onBack
+          subtTitle="You deserve better meal"
+          onPress={() => navigation.goBack()}
+        />
+        <View style={styles.container}>
+          <Image
+            source={{uri: imageProofPayment}}
+            style={{width: '100%', height: '100%', resizeMode: 'contain'}}
+          />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -14,6 +14,7 @@ import React, {useEffect, useState} from 'react';
 import {ICQris} from '../../assets';
 import {Button, Gap, Header, Link} from '../../components';
 import RNFetchBlob from 'rn-fetch-blob';
+import Number from '../../utils/Number/Number';
 
 const QRCodeGenerator = ({navigation, route}) => {
   const paramData = route.params;
@@ -127,17 +128,22 @@ const QRCodeGenerator = ({navigation, route}) => {
 
   return (
     <View style={styles.page}>
-      <Header
-        onPress={() => navigation.goBack()}
-        onBack
-        title="QRIS Payment"
-        subtTitle="Scan QRIS Tenant for Payment"
-      />
+      {paramData.order && (
+        <Header
+          onPress={() => navigation.goBack()}
+          onBack
+          title="QRIS Payment"
+          subtTitle="Scan QRIS Tenant for Payment"
+        />
+      )}
+      <Gap height={20} />
       <View style={{alignItems: 'center'}}>
         <Image source={ICQris} style={{width: 200, height: 30}} />
         <Gap height={20} />
-        <Text>Kantin Ibu Ica</Text>
-        <Text>Jumlah Yang harus dibayar : {paramData.total}</Text>
+        <Text style={styles.title}>{paramData.namaTenant}</Text>
+        <Text style={styles.jumlah}>
+          amount to be paid : <Number number={paramData.total + 3000} />
+        </Text>
         <Gap height={20} />
       </View>
 
@@ -146,6 +152,13 @@ const QRCodeGenerator = ({navigation, route}) => {
           <Image source={{uri: gambar}} style={{width: 260, height: 260}} />
         )}
         <Gap height={20} />
+        <View style={{paddingHorizontal: 19}}>
+          <Text style={styles.subtitle}>
+            You can upload proof of payment on the page: My Order {'->'} Order
+            Details {'->'} Upload Proof of Payment
+          </Text>
+        </View>
+        <Gap height={20} />
         <View>
           <Link
             align="center"
@@ -153,25 +166,29 @@ const QRCodeGenerator = ({navigation, route}) => {
             onPress={checkPermission}
           />
 
-          <Gap height={20} />
-          <Button
-            label="Order Other Food"
-            onPress={() =>
-              navigation.reset({
-                index: 0,
+          {!paramData.order && (
+            <View>
+              <Gap height={20} />
+              <Button
+                label="Order Other Food"
+                onPress={() =>
+                  navigation.reset({
+                    index: 0,
 
-                routes: [{name: 'MainApp'}],
-              })
-            }
-          />
-          <Gap height={20} />
-          <Button
-            onPress={() =>
-              navigation.replace('MainApp', {screen: 'Transaction'})
-            }
-            label="View My Order"
-            color="#8D92A3"
-          />
+                    routes: [{name: 'MainApp'}],
+                  })
+                }
+              />
+              <Gap height={20} />
+              <Button
+                onPress={() =>
+                  navigation.replace('MainApp', {screen: 'Transaction'})
+                }
+                label="View My Order"
+                color="#8D92A3"
+              />
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -191,5 +208,11 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     alignItems: 'center',
+  },
+  subtitle: {
+    textAlign: 'center',
+    color: '#8D92B3',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 16,
   },
 });

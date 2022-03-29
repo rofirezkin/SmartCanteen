@@ -200,6 +200,7 @@ const OrderSummary = ({navigation, route}) => {
         sumData('total'),
         token,
         qrString,
+        namaTenant,
       ),
     );
   };
@@ -231,6 +232,7 @@ const OrderSummary = ({navigation, route}) => {
         sumData('total'),
         token,
         qrString,
+        namaTenant,
       ),
     );
   };
@@ -273,8 +275,9 @@ const OrderSummary = ({navigation, route}) => {
           <View>
             <Gap height={30} />
             {arrayData.map(res => {
+              console.log('ressssss', res);
               return (
-                <View style={styles.content}>
+                <View key={res.id} style={styles.content}>
                   <Image
                     source={{
                       uri: `${ENDPOINT_SMART_CANTEEN}/storage/${res.picturePath}`,

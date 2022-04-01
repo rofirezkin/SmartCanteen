@@ -63,10 +63,10 @@ const OrderSummary = ({navigation, route}) => {
     arrayData = params.data;
     namaTenant = params.nama_tenant;
     lokasiTenant = params.lokasi_kantin;
-    qrString = params.qrString;
+    qrString = params.qr_string;
   }
 
-  console.log('data tnenatt', params);
+  console.log('data tnenatt', params.qr_string);
 
   useEffect(() => {
     dispatch(setLoading(true));

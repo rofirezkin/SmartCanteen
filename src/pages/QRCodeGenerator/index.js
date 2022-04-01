@@ -15,9 +15,12 @@ import {ICQris} from '../../assets';
 import {Button, Gap, Header, Link} from '../../components';
 import RNFetchBlob from 'rn-fetch-blob';
 import Number from '../../utils/Number/Number';
+import {useDispatch} from 'react-redux';
+import {setLoading} from '../../redux/action';
 
 const QRCodeGenerator = ({navigation, route}) => {
   const paramData = route.params;
+  const dispatch = useDispatch();
   console.log('param data', paramData);
   const [gambar, setGambar] = useState('');
 
@@ -29,6 +32,7 @@ const QRCodeGenerator = ({navigation, route}) => {
   const url = `https://chart.googleapis.com/chart?cht=qr&chl=${dataQr.chl}&chs=${dataQr.chs}`;
 
   useEffect(() => {
+    dispatch(setLoading(true));
     const toDataURL = url =>
       fetch(url)
         .then(response => response.blob())
@@ -43,6 +47,7 @@ const QRCodeGenerator = ({navigation, route}) => {
         );
 
     toDataURL(url).then(dataUrl => {
+      dispatch(setLoading(false));
       setGambar(dataUrl);
     });
   });
@@ -142,7 +147,7 @@ const QRCodeGenerator = ({navigation, route}) => {
         <Gap height={20} />
         <Text style={styles.title}>{paramData.namaTenant}</Text>
         <Text style={styles.jumlah}>
-          amount to be paid : <Number number={paramData.total + 3000} />
+          amount to be paid : <Number number={paramData.total} />
         </Text>
         <Gap height={20} />
       </View>
@@ -208,6 +213,12 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     alignItems: 'center',
+  },
+  jumlah: {
+    textAlign: 'center',
+    color: 'black',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 16,
   },
   subtitle: {
     textAlign: 'center',

@@ -70,14 +70,13 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
-    dispatch(getDataMenuSeveralByTypes());
 
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log(
         'Notification caused app to open from background state:',
         remoteMessage.data,
       );
-      navigation.replace('MainApp', {screen: 'CostumerOrder'});
+      navigation.replace('MainApp', {screen: 'Transaction'});
     });
 
     // Check whether an initial notification is available
@@ -89,10 +88,11 @@ const Home = ({navigation}) => {
             'Notification caused app to open from quit state:',
             remoteMessage.notification,
           );
-          navigation.replace('MainApp', {screen: 'CostumerOrder'});
+          navigation.replace('MainApp', {screen: 'Transaction'});
           setInitialRoute('MainApp'); // e.g. "Settings"
         }
       });
+    dispatch(getDataMenuSeveralByTypes());
 
     navigation.addListener('focus', () => {
       dispatch({type: 'SET_OPTION_USER', value: {method: 'Dine In'}});

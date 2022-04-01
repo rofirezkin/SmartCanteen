@@ -1,11 +1,19 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 
-const Loading = () => {
+const Loading = ({order}) => {
+  if (order) {
+    return (
+      <View style={styles.container(order)}>
+        <ActivityIndicator size="large" color="red" />
+        <Text style={styles.text(order)}>Loading...</Text>
+      </View>
+    );
+  }
   return (
-    <View style={styles.container}>
+    <View style={styles.container(order)}>
       <ActivityIndicator size="large" color="#1ABC9C" />
-      <Text style={styles.text}>Loading...</Text>
+      <Text style={styles.text(order)}>Loading...</Text>
     </View>
   );
 };
@@ -13,19 +21,19 @@ const Loading = () => {
 export default Loading;
 
 const styles = StyleSheet.create({
-  container: {
+  container: order => ({
     position: 'absolute',
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: order ? 'rgba(0, 1, 0, 0.1)' : 'rgba(0, 0, 0, 0.4)',
     width: '100%',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  text: {
+  }),
+  text: order => ({
     fontSize: 18,
     fontFamily: 'Poppins-Regular',
     marginTop: 12,
-    color: 'white',
-  },
+    color: order ? 'red' : 'white',
+  }),
 });

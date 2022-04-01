@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {Alert} from 'react-native';
+import {showMessage} from '../../utils';
 import {ENDPOINT_API_SMART_CANTEEN} from '../../utils/API/httpClient';
 
 export const getDataMenuByTypes = types => async dispatch => {
@@ -16,6 +18,11 @@ export const getDataMenuByTypes = types => async dispatch => {
       }
     })
     .catch(err => {
+      if (err?.message) {
+        showMessage(err?.message);
+      } else {
+        Alert.alert('Oops!', err?.response?.data?.message);
+      }
       console.log(err.message);
     });
 
@@ -39,12 +46,16 @@ export const getDataMenuSeveralByTypes = types => async dispatch => {
       axios.spread((res1, res2, res3) => {
         dispatch({type: 'SET_SEVERAL_RECOMMENDED', value: res1.data.data.data});
         dispatch({type: 'SET_SEVERAL_NEW_TASTE', value: res2.data.data.data});
-        console.log('ress data several ', res1);
+
         dispatch({type: 'SET_SEVERAL_POPULAR', value: res3.data.data.data});
       }),
     )
     .catch(err => {
-      console.log('several recommended dll', err.response);
+      if (err?.message == 'Network Error') {
+        showMessage(err?.message);
+      } else {
+        Alert.alert('Oops!', err?.response?.data?.message);
+      }
     });
 
   return Promise.resolve(result);
@@ -57,7 +68,11 @@ export const getDataFetchMenu = () => async dispatch => {
       dispatch({type: 'SET_ALL_MENU', value: res.data.data});
     })
     .catch(err => {
-      console.log('all menu, di action', err.message);
+      if (err?.message) {
+        showMessage(err?.message);
+      } else {
+        Alert.alert('Oops!', err?.response?.data?.message);
+      }
     });
 
   return Promise.resolve(result);
@@ -80,7 +95,11 @@ export const getAllMenuUsers = id_tenant => async dispatch => {
       dispatch({type: 'SET_BEVERAGES_MENU', value: baveragesMenu});
     })
     .catch(err => {
-      console.log('makanan or minuman', err.response);
+      if (err?.message == 'Network Error') {
+        showMessage(err?.message);
+      } else {
+        Alert.alert('Oops!', err?.response?.data?.message);
+      }
     });
 
   return Promise.resolve(result);

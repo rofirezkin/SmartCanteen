@@ -35,6 +35,7 @@ const AllMenuByCategory = ({route, navigation}) => {
         `${ENDPOINT_API_SMART_CANTEEN}users/menu/fetch?page=${currentPage}&category_menu=${title[1]}`,
       )
       .then(res => {
+        console.log('dadssddsss ini ambil string', res.data.data);
         setItems([...items, ...res.data.data.data]);
         setIsLoading(false);
       })
@@ -45,6 +46,7 @@ const AllMenuByCategory = ({route, navigation}) => {
   };
 
   const renderItem = ({item}) => {
+    console.log('ssdssdsds', item.qr_string);
     const nameCanteen = `${item.name} - ${item.nama_tenant}`;
     var length = 60;
     if (nameCanteen.length > 60) {

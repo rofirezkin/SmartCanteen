@@ -43,7 +43,6 @@ const MainApp = () => {
   const onNotif = notif => {
     const notifData = new NotifService();
     notifData.localNotifForeground(notif.title, notif.message);
-    Alert.alert(notif.title, notif.message);
   };
 
   const notif = new NotifService(onRegister, onNotif);

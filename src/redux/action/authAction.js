@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {showMessage} from '../../utils';
 
 import {
   ENDPOINT_API_SMART_CANTEEN,
@@ -94,31 +95,54 @@ export const useRequestLogin =
                   })
                   .catch(err => {
                     dispatch(setLoading(false));
-                    Alert.alert(
-                      'Oops!',
-                      `Server Error, hubungi admin (issue update Token Sign In) ${err.response.data.message}`,
-                    );
+                    if (err?.message == 'Network Error') {
+                      showMessage(err?.message);
+                    } else {
+                      Alert.alert(
+                        'Oops!',
+                        `Server Error, hubungi admin (issue update Token Sign In) ${err.response.data.message}`,
+                      );
+                    }
+
                     console.log('errorr di bagian post userAPK', err?.response);
                   });
               })
               .catch(err => {
                 dispatch(setLoading(false));
-                Alert.alert('Oops!', 'Akun anda tidak dikenali  (issue role)');
+                if (err?.message == 'Network Error') {
+                  showMessage(err?.message);
+                } else {
+                  Alert.alert(
+                    'Oops!',
+                    'Akun anda tidak dikenali  (issue role)',
+                  );
+                }
+
                 console.log('eerrrr get role', err);
               });
           })
           .catch(err => {
             dispatch(setLoading(false));
-            Alert.alert(
-              'Oops!',
-              `Akun anda tidak dikenali, hubungi admin (issue profile) ${err?.response?.message}`,
-            );
+            if (err?.message == 'Network Error') {
+              showMessage(err?.message);
+            } else {
+              Alert.alert(
+                'Oops!',
+                `Akun anda tidak dikenali, hubungi admin (issue profile) ${err?.response?.message}`,
+              );
+            }
+
             console.log('eerrrr', err);
           });
       })
       .catch(err => {
         dispatch(setLoading(false));
-        Alert.alert('Oops!', err?.response?.data?.message);
+        if (err?.message == 'Network Error') {
+          showMessage(err?.message);
+        } else {
+          Alert.alert('Oops!', err?.response?.data?.message);
+        }
+
         console.log('eror', err?.response);
       });
   };

@@ -20,7 +20,7 @@ const DetailFoodItem = ({navigation, route}) => {
   const id_tenant = params.id_tenant;
   const {allCart} = useSelector(state => state.cartItems);
 
-  console.log('dataaaaa', params);
+  console.log('dataaaaa', params.qr_string);
 
   console.log('params', allCart);
   const [totalItem, setTotalItem] = useState(1);

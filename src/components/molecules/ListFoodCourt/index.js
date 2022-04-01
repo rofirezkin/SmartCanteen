@@ -77,15 +77,12 @@ const ListFoodCourt = ({
       );
     } else {
       return (
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={styles.container}
-          disabled={true}>
+        <View style={styles.containerDisable}>
           <View>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>{name}</Text>
               <Text style={styles.statusFood((textColor = 'red'))}>
-                Not-Available
+                Inactive
               </Text>
             </View>
             <Text style={styles.description}>{ingredients}</Text>
@@ -113,7 +110,7 @@ const ListFoodCourt = ({
               <Like />
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
       );
     }
   };
@@ -147,6 +144,16 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   }),
   container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    borderBottomColor: '#EEEEEE',
+    borderBottomWidth: 1,
+  },
+  containerDisable: {
+    opacity: 0.3,
+    borderBottomColor: 'black',
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 10,

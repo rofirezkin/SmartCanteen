@@ -43,12 +43,9 @@ const OrderDetail = ({navigation, route}) => {
 
   const params = route.params;
 
-  const dataQr = {
-    qrString: params.qr_string,
-    total: params.total,
-    namaTenant: params.nama_tenant,
-    order: true,
-  };
+  console.log('kodeee', params);
+  console.log('num id', params.numberId);
+  console.log('num idfsf', params.created_at);
 
   useEffect(() => {
     getData('token')
@@ -64,7 +61,7 @@ const OrderDetail = ({navigation, route}) => {
             },
           )
           .then(res => {
-            console.log('ressssss ini detail', res.data.data);
+            console.log('ressssss ini detail', res.data);
             setLoadingSkeleton(false);
             const dataOrder = res.data.data;
             setPhotoProofPayment(res.data.data[0].photo_bukti_pembayaran);
@@ -93,7 +90,12 @@ const OrderDetail = ({navigation, route}) => {
     totalPrice += +detailData[i].total;
     totalItem += +detailData[i].total;
   }
-
+  const dataQr = {
+    qrString: params.qr_string,
+    total: totalPrice,
+    namaTenant: params.nama_tenant,
+    order: true,
+  };
   const onCancel = async () => {
     const status = {
       status: 'CANCEL ORDER',
@@ -150,7 +152,7 @@ const OrderDetail = ({navigation, route}) => {
   const addPhoto = () => {
     launchImageLibrary(
       {
-        quality: 0.8,
+        quality: 0.5,
         includeBase64: true,
       },
       response => {
@@ -170,10 +172,17 @@ const OrderDetail = ({navigation, route}) => {
 
   const uploadProofPayment = () => {
     const kodeTransaksi = params.kode_transaksi;
+    const idTenant = params.id_tenant;
     dispatch(setLoading(true));
     console.log('dataaaa phh', dataPhoto);
     dispatch(
-      uploadPembayaranAction(dataPhoto, token, kodeTransaksi, navigation),
+      uploadPembayaranAction(
+        dataPhoto,
+        token,
+        kodeTransaksi,
+        navigation,
+        idTenant,
+      ),
     );
   };
 
@@ -237,13 +246,16 @@ const OrderDetail = ({navigation, route}) => {
                   <Gap height={15} />
                 </View>
               </View>
-              {paymentMethod == 0 && photoProofPayment == null && (
-                <UploadProofPayment
-                  addPhoto={addPhoto}
-                  onPress={uploadProofPayment}
-                  fileSelected={fileSelected}
-                />
-              )}
+              {paymentMethod == 0 &&
+                photoProofPayment == null &&
+                params.status !== 'CANCEL ORDER' &&
+                params.status !== 'DELIVERED' && (
+                  <UploadProofPayment
+                    addPhoto={addPhoto}
+                    onPress={uploadProofPayment}
+                    fileSelected={fileSelected}
+                  />
+                )}
               {photoProofPayment != null && (
                 <View style={styles.container}>
                   <View style={styles.detailCard}>
@@ -270,10 +282,10 @@ const OrderDetail = ({navigation, route}) => {
 
                   <ItemValue
                     title={`Payment Method:`}
-                    colorValue={params.status}
+                    colorValue="DELIVERED"
                     name={paymentMethod == 1 ? 'Cash' : 'QRIS Payment'}
                   />
-
+                  <ItemValue title={`Created at`} name={params.created_at} />
                   <Gap height={15} />
                 </View>
               </View>

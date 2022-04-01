@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {Header, OrderList} from '../../components';
+import {ILNodata} from '../../assets';
+import {Gap, Header, OrderList} from '../../components';
 import {getData} from '../../utils/AsyncStoreServices';
 
 const MyCart = ({navigation}) => {
@@ -32,6 +33,7 @@ const MyCart = ({navigation}) => {
       />
       <View style={styles.container}>
         {convertData().map(res => {
+          console.log('testing data cart', res);
           return (
             <OrderList
               status={res.data.data[0].status}
@@ -44,6 +46,18 @@ const MyCart = ({navigation}) => {
             />
           );
         })}
+        {convertData().length == 0 && (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ILNodata />
+            <Gap height={10} />
+            <Text>no data</Text>
+          </View>
+        )}
       </View>
     </View>
   );

@@ -19,6 +19,7 @@ import {
 } from '../../../redux/action';
 import {ILNodata} from '../../../assets';
 import Gap from '../../atoms/Gap';
+import Loading from '../Loading';
 
 const renderTabBar = props => (
   <TabBar
@@ -39,6 +40,7 @@ const InProgress = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {inProgress} = useSelector(state => state.transactionsReducer);
+  const {loadingSkeleton} = useSelector(state => state.loadingReducer);
   const [refreshing, setRefreshing] = useState(false);
   const {numberId} = useSelector(state => state.globalReducer);
 
@@ -53,42 +55,45 @@ const InProgress = () => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{flexGrow: 1}}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      {inProgress.map(order => {
-        order.numberId = numberId;
-        return (
-          <ItemListFood
-            urlPhoto={order.profile_photo_path}
-            name={order.nama_tenant}
-            key={order.id}
-            kodeTransaksi={order.kode_transaksi}
-            status={order.status}
-            location={order.lokasi_kantin}
-            orderDate={order.created_at}
-            type="in-progress"
-            items={order.quantity}
-            // totalOrder={order.total}
-            onPress={() => navigation.navigate('OrderDetail', order)}
-          />
-        );
-      })}
-      {inProgress.length == 0 && (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ILNodata />
-          <Gap height={10} />
-          <Text>No data Order</Text>
-        </View>
-      )}
-    </ScrollView>
+    <>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        {inProgress.map(order => {
+          order.numberId = numberId;
+          return (
+            <ItemListFood
+              urlPhoto={order.profile_photo_path}
+              name={order.nama_tenant}
+              key={order.id}
+              kodeTransaksi={order.kode_transaksi}
+              status={order.status}
+              location={order.lokasi_kantin}
+              orderDate={order.created_at}
+              type="in-progress"
+              items={order.quantity}
+              // totalOrder={order.total}
+              onPress={() => navigation.navigate('OrderDetail', order)}
+            />
+          );
+        })}
+        {inProgress.length == 0 && !loadingSkeleton && (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ILNodata />
+            <Gap height={10} />
+            <Text>No data Order</Text>
+          </View>
+        )}
+      </ScrollView>
+      {loadingSkeleton && <Loading order />}
+    </>
   );
 };
 
@@ -97,6 +102,7 @@ const Feedback = () => {
   const dispatch = useDispatch();
   const {feedback} = useSelector(state => state.transactionsReducer);
   const [refreshing, setRefreshing] = useState(false);
+  const {loadingSkeleton} = useSelector(state => state.loadingReducer);
   const {numberId} = useSelector(state => state.globalReducer);
 
   useEffect(() => {
@@ -110,41 +116,45 @@ const Feedback = () => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{flexGrow: 1}}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      {feedback.map(order => {
-        return (
-          <ItemListFood
-            urlPhoto={order.profile_photo_path}
-            name={order.nama_tenant}
-            key={order.id}
-            kodeTransaksi={order.kode_transaksi}
-            status={order.status}
-            location={order.lokasi_kantin}
-            orderDate={order.created_at}
-            type="past-orders"
-            items={order.quantity}
-            totalOrder={order.total}
-            onPress={() => navigation.navigate('OrderDetail', order)}
-          />
-        );
-      })}
-      {feedback.length == 0 && (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ILNodata />
-          <Gap height={10} />
-          <Text>No data Order</Text>
-        </View>
-      )}
-    </ScrollView>
+    <>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        {feedback.map(order => {
+          order.numberId = numberId;
+          return (
+            <ItemListFood
+              urlPhoto={order.profile_photo_path}
+              name={order.nama_tenant}
+              key={order.id}
+              kodeTransaksi={order.kode_transaksi}
+              status={order.status}
+              location={order.lokasi_kantin}
+              orderDate={order.created_at}
+              type="past-orders"
+              items={order.quantity}
+              totalOrder={order.total}
+              onPress={() => navigation.navigate('OrderDetail', order)}
+            />
+          );
+        })}
+        {feedback.length == 0 && !loadingSkeleton && (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ILNodata />
+            <Gap height={10} />
+            <Text>No data Order</Text>
+          </View>
+        )}
+      </ScrollView>
+      {loadingSkeleton && <Loading order />}
+    </>
   );
 };
 
@@ -152,6 +162,7 @@ const PastOrder = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {pastOrder} = useSelector(state => state.transactionsReducer);
+  const {loadingSkeleton} = useSelector(state => state.loadingReducer);
   const [refreshing, setRefreshing] = useState(false);
   const {numberId} = useSelector(state => state.globalReducer);
 
@@ -166,41 +177,45 @@ const PastOrder = () => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{flexGrow: 1}}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      {pastOrder.map(order => {
-        return (
-          <ItemListFood
-            urlPhoto={order.profile_photo_path}
-            name={order.nama_tenant}
-            key={order.id}
-            kodeTransaksi={order.kode_transaksi}
-            status={order.status}
-            location={order.lokasi_kantin}
-            orderDate={order.created_at}
-            type="past-orders"
-            items={order.quantity}
-            totalOrder={order.total}
-            onPress={() => navigation.navigate('OrderDetail', order)}
-          />
-        );
-      })}
-      {pastOrder.length == 0 && (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ILNodata />
-          <Gap height={10} />
-          <Text>No data Order</Text>
-        </View>
-      )}
-    </ScrollView>
+    <>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        {pastOrder.map(order => {
+          order.numberId = numberId;
+          return (
+            <ItemListFood
+              urlPhoto={order.profile_photo_path}
+              name={order.nama_tenant}
+              key={order.id}
+              kodeTransaksi={order.kode_transaksi}
+              status={order.status}
+              location={order.lokasi_kantin}
+              orderDate={order.created_at}
+              type="past-orders"
+              items={order.quantity}
+              totalOrder={order.total}
+              onPress={() => navigation.navigate('OrderDetail', order)}
+            />
+          );
+        })}
+        {pastOrder.length == 0 && !loadingSkeleton && (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ILNodata />
+            <Gap height={10} />
+            <Text>No data Order</Text>
+          </View>
+        )}
+      </ScrollView>
+      {loadingSkeleton && <Loading order />}
+    </>
   );
 };
 

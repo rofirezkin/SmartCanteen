@@ -114,7 +114,7 @@ const Home = ({navigation}) => {
   }, []);
   var nameCanteen = '';
 
-  console.log('jalan berapa kali');
+  console.log('jalan run');
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -143,7 +143,9 @@ const Home = ({navigation}) => {
                   <OptionUser
                     iconData="delivery"
                     data="Delivery"
-                    onPress={() => navigation.navigate('Delivery')}
+                    onPress={() =>
+                      navigation.navigate('Maintenance', 'Delivery')
+                    }
                   />
                   <OptionUser
                     color="#FEA34F"
@@ -157,7 +159,9 @@ const Home = ({navigation}) => {
                     color="#21B0ED"
                     iconData="takeAway"
                     data="Take Away"
-                    onPress={() => navigation.navigate('Canteen', 'Take Away')}
+                    onPress={() =>
+                      navigation.navigate('Maintenance', 'Take Away')
+                    }
                   />
                   <OptionUser
                     onPress={() => navigation.navigate('Canteen', 'Dine In')}

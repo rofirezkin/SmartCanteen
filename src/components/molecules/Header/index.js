@@ -1,8 +1,10 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {IcBack} from '../../../assets';
 
-const Header = ({title, subtTitle, onPress, onBack}) => {
+const Header = ({title, subtTitle, onPress, onBack, detail}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       {onBack && (
@@ -17,6 +19,15 @@ const Header = ({title, subtTitle, onPress, onBack}) => {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtTitle}>{subtTitle}</Text>
       </View>
+      {detail && (
+        <View style={{flex: 1}}>
+          <TouchableOpacity onPress={() => navigation.navigate('HelpCenter')}>
+            <Text style={{textAlign: 'right', fontSize: 16, color: '#FEA34F'}}>
+              Help ?
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };

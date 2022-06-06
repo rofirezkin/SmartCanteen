@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {useDispatch, useSelector} from 'react-redux';
-import {Button, Gap, Header, TextInput} from '../../components';
+import {Button, Gap, Header, Link, TextInput} from '../../components';
 import {setLoading, useRequestLogin} from '../../redux/action';
 
 import {
@@ -157,7 +157,12 @@ const SignIn = ({navigation, route}) => {
         />
         <Gap height={24} />
         <Button label="Sign In" onPress={onSubmit} />
-        <Gap height={13} />
+        <Gap height={24} />
+        <Link
+          align="center"
+          title="Help Center"
+          onPress={() => navigation.navigate('HelpCenter')}
+        />
       </View>
     </View>
   );

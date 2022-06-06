@@ -20,8 +20,10 @@ import {setLoading} from '../../redux/action';
 
 const QRCodeGenerator = ({navigation, route}) => {
   const paramData = route.params;
+  const [clickMyOrder, setClickMyOrder] = useState(false);
   const dispatch = useDispatch();
   console.log('param data', paramData);
+
   const [gambar, setGambar] = useState('');
 
   const dataQr = {
@@ -127,6 +129,7 @@ const QRCodeGenerator = ({navigation, route}) => {
 
     RNFetchBlob.fs.writeFile(path, Base64Code[1], 'base64').then(res => {
       console.log('File : ', res);
+      setClickMyOrder(true);
       Alert.alert('Image', 'Image Downloaded Successfully');
     });
   };
@@ -159,38 +162,34 @@ const QRCodeGenerator = ({navigation, route}) => {
         <Gap height={20} />
         <View style={{paddingHorizontal: 19}}>
           <Text style={styles.subtitle}>
-            You can upload proof of payment on the page: My Order {'->'} Order
-            Details {'->'} Upload Proof of Payment
+            Download Qris and upload your proof of payment by clicking View My
+            Order. You only have 15 minutes to upload your proof of payment.
           </Text>
         </View>
         <Gap height={20} />
         <View>
+          <Text style={{color: 'red', textAlign: 'center'}}>Required *</Text>
           <Link
             align="center"
             title="Download QRIS"
             onPress={checkPermission}
           />
 
-          {!paramData.order && (
+          {!paramData.order && clickMyOrder && (
             <View>
               <Gap height={20} />
+
+              <Gap height={20} />
               <Button
-                label="Order Other Food"
                 onPress={() =>
                   navigation.reset({
                     index: 0,
-
-                    routes: [{name: 'MainApp'}],
+                    routes: [
+                      {name: 'OrderDetail', params: paramData.detailData[0]},
+                    ],
                   })
                 }
-              />
-              <Gap height={20} />
-              <Button
-                onPress={() =>
-                  navigation.replace('MainApp', {screen: 'Transaction'})
-                }
                 label="View My Order"
-                color="#8D92A3"
               />
             </View>
           )}

@@ -4,10 +4,11 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import {ILSuccessOrder} from '../../assets';
 import {Button, Gap, Header} from '../../components';
 import NotifService from '../../utils/notification/NotifService';
+import Number from '../../utils/Number/Number';
 
 const SuccessOrder = ({navigation, route}) => {
   const dataOrder = route.params;
-  console.log('data order', dataOrder);
+  console.log('data order', dataOrder.detailData);
 
   const onNotif = notif => {
     Alert.alert(notif.title, notif.message);
@@ -27,8 +28,9 @@ const SuccessOrder = ({navigation, route}) => {
           </Text>
           {dataOrder.methodPayment == 'Cash' && (
             <Text style={{fontSize: 16, textAlign: 'center'}}>
-              Please pay Rp{dataOrder.total} to the tenant/driver. View my order
-              for more information
+              Please pay {` `}
+              <Number number={dataOrder.total} /> {` `}
+              to the tenant. View my order for more information
             </Text>
           )}
 
@@ -38,22 +40,17 @@ const SuccessOrder = ({navigation, route}) => {
         </View>
         <Gap height={15} />
         <View>
-          <Button
-            label="Order Other Food"
-            onPress={() =>
-              navigation.reset({
-                index: 0,
-                routes: [{name: 'MainApp'}],
-              })
-            }
-          />
           <Gap height={20} />
           <Button
             onPress={() =>
-              navigation.replace('MainApp', {screen: 'Transaction'})
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {name: 'OrderDetail', params: dataOrder.detailData[0]},
+                ],
+              })
             }
             label="View My Order"
-            color="#8D92A3"
           />
         </View>
       </View>

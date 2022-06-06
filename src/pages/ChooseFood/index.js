@@ -87,7 +87,7 @@ const ChooseFood = ({navigation, route}) => {
             onPress={() =>
               navigation.navigate('OrderSummary', allCart[idTenant])
             }
-            TotalOrder={calculationData('totalOrder')}
+            totalOrder={calculationData('totalOrder')}
             totalItem={calculationData('totalItem')}
           />
         )}

@@ -54,6 +54,7 @@ const InProgress = () => {
     setRefreshing(false);
   };
 
+  console.log('inprogress', inProgress);
   return (
     <>
       <ScrollView
@@ -62,7 +63,7 @@ const InProgress = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
         {inProgress.map(order => {
-          order.numberId = numberId;
+          order.nim = numberId;
           return (
             <ItemListFood
               urlPhoto={order.profile_photo_path}
@@ -114,7 +115,7 @@ const Feedback = () => {
     dispatch(getFeedbackOrder(numberId));
     setRefreshing(false);
   };
-
+  console.log('inprogress', feedback);
   return (
     <>
       <ScrollView
@@ -123,7 +124,7 @@ const Feedback = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
         {feedback.map(order => {
-          order.numberId = numberId;
+          order.nim = numberId;
           return (
             <ItemListFood
               urlPhoto={order.profile_photo_path}
@@ -167,8 +168,11 @@ const PastOrder = () => {
   const {numberId} = useSelector(state => state.globalReducer);
 
   useEffect(() => {
-    dispatch(getPastOrders(numberId));
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(getPastOrders(numberId));
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -184,7 +188,7 @@ const PastOrder = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
         {pastOrder.map(order => {
-          order.numberId = numberId;
+          order.nim = numberId;
           return (
             <ItemListFood
               urlPhoto={order.profile_photo_path}

@@ -128,7 +128,7 @@ export const useRequestLogin =
             } else {
               Alert.alert(
                 'Oops!',
-                `Akun anda tidak dikenali, hubungi admin (issue profile) ${err?.response?.message}`,
+                `Akun anda tidak dikenali, hubungi admin (issue profile) ${err?.response?.data.message}`,
               );
             }
 

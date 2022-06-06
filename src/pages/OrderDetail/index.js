@@ -25,10 +25,15 @@ import {
   skeletonDetailFood,
   skeletonDetailTransaction,
 } from '../../components/skeleton/skeletonHome';
-import {setLoading, uploadPembayaranAction} from '../../redux/action';
+import {
+  postConfirmAndFeddbackTenant,
+  setLoading,
+  uploadPembayaranAction,
+} from '../../redux/action';
 import {showMessage} from '../../utils';
 import {ENDPOINT_API_SMART_CANTEEN} from '../../utils/API/httpClient';
 import {getData} from '../../utils/AsyncStoreServices';
+import useForm from '../../utils/useForm';
 
 const OrderDetail = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -40,20 +45,24 @@ const OrderDetail = ({navigation, route}) => {
   const [errorGetData, setErrorGetData] = useState(false);
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
   const [photoProofPayment, setPhotoProofPayment] = useState(null);
+  const [qrStringTenant, setQrStringTenant] = useState('');
+  const [noTable, setNoTable] = useState('');
+  const [statusMenu, setStatusMenu] = useState('');
+  const [methodUser, setMethodUser] = useState('');
 
   const params = route.params;
 
-  console.log('kodeee', params);
-  console.log('num id', params.numberId);
-  console.log('num idfsf', params.created_at);
-
-  useEffect(() => {
+  const getDetailData = () => {
+    console.log('paramss --------------- ', params);
+    console.log(
+      `apiii ---- ${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=${params.nim}&status=${params.status}`,
+    );
     getData('token')
       .then(resToken => {
         setToken(resToken.value);
         axios
           .get(
-            `${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=${params.numberId}&status=${params.status}`,
+            `${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=${params.nim}&status=${params.status}`,
             {
               headers: {
                 Authorization: `Bearer ${resToken.value}`,
@@ -65,8 +74,12 @@ const OrderDetail = ({navigation, route}) => {
             setLoadingSkeleton(false);
             const dataOrder = res.data.data;
             setPhotoProofPayment(res.data.data[0].photo_bukti_pembayaran);
-
+            setQrStringTenant(dataOrder[0].qr_string);
+            setNoTable(dataOrder[0].no_table);
             setPaymentMethod(dataOrder[0].is_cash);
+            setMethodUser(dataOrder[0].method);
+            setStatusMenu(dataOrder[0].status);
+
             setDetailData(res.data.data);
           })
           .catch(err => {
@@ -80,6 +93,12 @@ const OrderDetail = ({navigation, route}) => {
         setLoadingSkeleton(false);
         console.log('gagal get token');
       });
+  };
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getDetailData();
+    });
+    return unsubscribe;
 
     // dispatch(getDetailProgress(params.nim, params.idTenant));
   }, [params]);
@@ -91,7 +110,7 @@ const OrderDetail = ({navigation, route}) => {
     totalItem += +detailData[i].total;
   }
   const dataQr = {
-    qrString: params.qr_string,
+    qrString: qrStringTenant,
     total: totalPrice,
     namaTenant: params.nama_tenant,
     order: true,
@@ -149,6 +168,33 @@ const OrderDetail = ({navigation, route}) => {
       });
   };
 
+  const confirmAcceptandFeedbackTenant = () => {
+    setLoadingSkeleton(true);
+    const status = {
+      status: 'FEEDBACK',
+    };
+    params.status = 'FEEDBACK';
+    axios
+      .post(
+        `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus?kode_transaksi=${params.kode_transaksi}&status=FEEDBACK`,
+        status,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .then(res => {
+        showMessage('Confirmation Success', 'success');
+        getDetailData();
+      })
+      .catch(err => {
+        dispatch(setLoadingSkeleton(false));
+        showMessage('error get data detail tenant, hubungi Admin ');
+        console.log('resss', err.response);
+      });
+  };
+
   const addPhoto = () => {
     launchImageLibrary(
       {
@@ -161,7 +207,6 @@ const OrderDetail = ({navigation, route}) => {
         } else {
           console.log('reessspone image', response);
           const source = `data:${response.assets[0].type};base64, ${response.assets[0].base64}`;
-
           console.log('urri', response.assets[0]);
           setDataPhoto(source);
           setFileSelected(true);
@@ -169,6 +214,8 @@ const OrderDetail = ({navigation, route}) => {
       },
     );
   };
+
+  console.log('prof of payment ', photoProofPayment);
 
   const uploadProofPayment = () => {
     const kodeTransaksi = params.kode_transaksi;
@@ -188,12 +235,29 @@ const OrderDetail = ({navigation, route}) => {
 
   return (
     <ScrollView>
-      <Header
-        title="Order Detail"
-        onBack
-        subtTitle="You deserve better meal"
-        onPress={() => navigation.goBack()}
-      />
+      {params.orderView == true ? (
+        <Header
+          detail
+          title="Order Detail"
+          onBack
+          subtTitle="You deserve better meal"
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'MainApp'}],
+            })
+          }
+        />
+      ) : (
+        <Header
+          detail
+          title="Order Detail"
+          onBack
+          subtTitle="You deserve better meal"
+          onPress={() => navigation.goBack()}
+        />
+      )}
+
       <SkeletonContent
         containerStyle={{flex: 1}}
         isLoading={loadingSkeleton}
@@ -203,37 +267,38 @@ const OrderDetail = ({navigation, route}) => {
             <>
               <View style={styles.container}>
                 <View>
-                  {detailData.map(res => {
+                  {detailData.map((res, index) => {
                     return (
-                      <>
+                      <View key={`${res.name}-${index}`}>
                         <ItemListFood
                           type="product"
                           items={res.quantity}
-                          canteen={res.method}
+                          // canteen={res.method}
                           totalOrder={res.total}
                           name={res.name}
                           key={res.name}
                           // status={params.status}
                           urlPhoto={res.picturePath}
                         />
-                      </>
+                      </View>
                     );
                   })}
                 </View>
                 <View style={styles.detailCard}>
                   <Text style={styles.text}>Detail Transaction</Text>
+                  <Gap height={10} />
                   <ItemValue title={`Nama Kantin`} name={params.nama_tenant} />
                   <ItemValue
                     title={`Lokasi Kantin`}
                     name={params.lokasi_kantin}
                   />
-                  <ItemValue
-                    title={`Total Price ${params.quantity} Item`}
-                    value={totalItem}
-                  />
-                  <ItemValue title={`Tax`} value="1.000" />
-                  <ItemValue title={`Services Price`} value="2.000" />
-                  <ItemValue title={`Total`} colorValue value={totalPrice} />
+                  {methodUser == 'Dine In' && (
+                    <ItemValue
+                      title={`No. Table`}
+                      name={` Number  ${noTable}`}
+                    />
+                  )}
+                  <ItemValue title={`Method `} name={methodUser} />
                   {paymentMethod == 0 && (
                     <Link
                       title="Show QRIS Tenant"
@@ -246,6 +311,19 @@ const OrderDetail = ({navigation, route}) => {
                   <Gap height={15} />
                 </View>
               </View>
+              <View style={styles.container}>
+                <View style={styles.detailCard}>
+                  <Text style={styles.text}>Total Transaction</Text>
+                  <Gap height={10} />
+                  <ItemValue
+                    title={`Total Price ${params.quantity} Item`}
+                    value={totalItem}
+                  />
+                  <ItemValue title={`Tax`} value="1.000" />
+                  <ItemValue title={`Services Price`} value="2.000" />
+                  <ItemValue title={`Total`} colorValue value={totalPrice} />
+                </View>
+              </View>
               {paymentMethod == 0 &&
                 photoProofPayment == null &&
                 params.status !== 'CANCEL ORDER' &&
@@ -256,7 +334,7 @@ const OrderDetail = ({navigation, route}) => {
                     fileSelected={fileSelected}
                   />
                 )}
-              {photoProofPayment != null && (
+              {photoProofPayment != '' && photoProofPayment != null && (
                 <View style={styles.container}>
                   <View style={styles.detailCard}>
                     <Link
@@ -274,10 +352,11 @@ const OrderDetail = ({navigation, route}) => {
                 <View style={styles.detailCard}>
                   <Text style={styles.text}>Order Status</Text>
                   <Gap height={15} />
+
                   <ItemValue
                     title={`Kode Transaksi:  ${params.kode_transaksi}`}
-                    colorValue={params.status}
-                    name={params.status}
+                    colorValue={statusMenu}
+                    name={statusMenu}
                   />
 
                   <ItemValue
@@ -297,6 +376,14 @@ const OrderDetail = ({navigation, route}) => {
                     textColor="red"
                     color="white"
                     onPress={onCancel}
+                  />
+                )}
+                {params.status === 'COMPLETED' && (
+                  <Button
+                    label="Accept My Order"
+                    textColor="red"
+                    color="white"
+                    onPress={confirmAcceptandFeedbackTenant}
                   />
                 )}
                 {params.status === 'FEEDBACK' && (

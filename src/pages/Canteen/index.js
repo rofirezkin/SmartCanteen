@@ -3,6 +3,7 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {DummyCanteen, DummyFood2} from '../../assets';
 import {DetailCanteen, Gap, Header} from '../../components';
+import {lokasiKantin} from '../../data';
 
 const Canteen = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -10,6 +11,8 @@ const Canteen = ({navigation, route}) => {
   const method = {
     method: route.params,
   };
+
+  console.log(lokasiKantin);
 
   dispatch({type: 'SET_OPTION_USER', value: method});
   return (
@@ -26,60 +29,18 @@ const Canteen = ({navigation, route}) => {
           <Text style={styles.titleCanteen}>
             Welcome to Tel-U Canteen, pick your location
           </Text>
-          <DetailCanteen
-            name="Kantin Fakultas Ilmu Terapan"
-            avatar={DummyFood2}
-            onPress={() =>
-              navigation.navigate(
-                'FoodCourt',
-                (nameCanteen = 'Fakultas Ilmu Terapan'),
-              )
-            }
-          />
-          <DetailCanteen
-            avatar={DummyCanteen}
-            name="Fakultas Teknik"
-            onPress={() =>
-              navigation.navigate(
-                'FoodCourt',
-                (nameCanteen = 'Fakultas Teknik'),
-              )
-            }
-          />
-          <DetailCanteen
-            avatar={DummyFood2}
-            name="Fakultas Ekonomi dan Bisnis"
-            onPress={() =>
-              navigation.navigate(
-                'FoodCourt',
-                (nameCanteen = 'Fakultas Ekonomi dan Bisnis'),
-              )
-            }
-          />
-          <DetailCanteen
-            avatar={DummyCanteen}
-            name="Asrama Putra"
-            onPress={() =>
-              navigation.navigate('FoodCourt', (nameCanteen = 'Asrama Putra'))
-            }
-          />
-          <DetailCanteen
-            avatar={DummyCanteen}
-            name="Asrama Putri"
-            onPress={() =>
-              navigation.navigate('FoodCourt', (nameCanteen = 'Asrama Putri'))
-            }
-          />
-          <DetailCanteen
-            avatar={DummyCanteen}
-            name="Gedung Kuliah Umum"
-            onPress={() =>
-              navigation.navigate(
-                'FoodCourt',
-                (nameCanteen = 'Gedung Kuliah Umum'),
-              )
-            }
-          />
+          {lokasiKantin.map((res, index) => {
+            return (
+              <DetailCanteen
+                key={`${res.title}-${index}`}
+                name={res.title}
+                avatar={res.img}
+                onPress={() =>
+                  navigation.navigate('FoodCourt', (nameCanteen = res.title))
+                }
+              />
+            );
+          })}
         </View>
         <Gap height={20} />
       </View>

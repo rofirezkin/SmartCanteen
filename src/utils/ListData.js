@@ -37,16 +37,16 @@ export const method = [
     label: 'Dine In',
     value: 'Dine In',
   },
-  {
-    id: 2,
-    label: 'Delivery',
-    value: 'Delivery',
-  },
-  {
-    id: 3,
-    label: 'Take Away',
-    value: 'Take Away',
-  },
+  // {
+  //   id: 2,
+  //   label: 'Delivery',
+  //   value: 'Delivery',
+  // },
+  // {
+  //   id: 3,
+  //   label: 'Take Away',
+  //   value: 'Take Away',
+  // },
 ];
 
 export const paymentMethod = [
@@ -61,3 +61,17 @@ export const paymentMethod = [
     value: 'QRIS Payment',
   },
 ];
+
+export const noMeja = () => {
+  const jumlah = 20;
+  const dataMeja = [];
+  for (let i = 1; i < jumlah + 1; i++) {
+    const data = {
+      id: i,
+      label: `Table No. ${i}`,
+      value: `${i}`,
+    };
+    dataMeja.push(data);
+  }
+  return dataMeja;
+};

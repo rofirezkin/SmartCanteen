@@ -2,8 +2,9 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ICCart} from '../../../assets';
 import {connect} from 'react-redux';
+import Number from '../../../utils/Number/Number';
 
-const ShoppingCart = ({onPress, totalItem, TotalOrder}) => {
+const ShoppingCart = ({onPress, totalItem, totalOrder}) => {
   return (
     <TouchableOpacity
       style={styles.buttonTab}
@@ -12,7 +13,7 @@ const ShoppingCart = ({onPress, totalItem, TotalOrder}) => {
       <View style={{flexDirection: 'row'}}>
         <ICCart />
         <Text style={styles.textButton}>
-          {totalItem} Items - Rp{TotalOrder}
+          {totalItem} Items - <Number number={totalOrder} />
         </Text>
       </View>
       <Text style={styles.textButton}>Order Now</Text>

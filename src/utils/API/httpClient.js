@@ -5,8 +5,10 @@ export const ENDPOINT = 'https://gateway.telkomuniversity.ac.id/issueauth';
 export const ENDPOINT_PROFILE =
   'https://gateway.telkomuniversity.ac.id/issueprofile';
 export const ENDPOINT_ROLE = 'https://gateway.telkomuniversity.ac.id/issuerole';
-export const ENDPOINT_API_SMART_CANTEEN = 'http://27.112.78.169/api/';
-export const ENDPOINT_SMART_CANTEEN = 'http://27.112.78.169';
+// export const ENDPOINT_API_SMART_CANTEEN = 'http://27.112.78.169/api/';
+// export const ENDPOINT_SMART_CANTEEN = 'http://27.112.78.169';
+export const ENDPOINT_API_SMART_CANTEEN = 'http://103.183.75.233/api/';
+export const ENDPOINT_SMART_CANTEEN = 'http://103.183.75.233';
 
 const headersResponseAPITELKOM = (methodH = '', payloadH, tokenH = '') => {
   switch (methodH) {

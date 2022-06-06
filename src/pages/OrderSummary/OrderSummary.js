@@ -15,7 +15,7 @@ import {
 } from '../../utils/API/httpClient';
 import {getData, getUser, storeData} from '../../utils/AsyncStoreServices';
 import Number from '../../utils/Number/Number';
-import {listData, method, paymentMethod} from '../../utils/ListData';
+import {listData, method, noMeja, paymentMethod} from '../../utils/ListData';
 import useForm from '../../utils/useForm';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -34,6 +34,7 @@ const OrderSummary = ({navigation, route}) => {
     Alert.alert(notif.title, notif.message);
     navigation.replace('MainApp', {screen: 'Transaction'});
   };
+  console.log('data meja ', noMeja());
   const notif = new NotifService(onNotif);
   const params = route.params;
   const deviceToken = params.data.device_token;
@@ -106,6 +107,7 @@ const OrderSummary = ({navigation, route}) => {
     detailLocation:
       methodUser.method == 'Delivery' ? methodUser.speclocation : '',
     paymentMethod: 'Cash',
+    noTable: '1',
   });
   const [profile, setProfile] = useState({
     fullName: '',
@@ -169,6 +171,7 @@ const OrderSummary = ({navigation, route}) => {
       phoneNumber: profile.phone,
       is_cash: form.paymentMethod == 'Cash' ? 1 : 0,
       total: arrayData[i].totalOrder,
+      no_table: form.noTable,
     };
     sendData.push(data);
   }
@@ -187,7 +190,6 @@ const OrderSummary = ({navigation, route}) => {
       },
     };
     const notifJSON = JSON.stringify(notifData);
-    console.log('notifjson', notifJSON);
 
     dispatch(
       postTransaction(
@@ -201,6 +203,8 @@ const OrderSummary = ({navigation, route}) => {
         token,
         qrString,
         namaTenant,
+        lokasiTenant,
+        deviceToken,
       ),
     );
   };
@@ -233,6 +237,8 @@ const OrderSummary = ({navigation, route}) => {
         token,
         qrString,
         namaTenant,
+        lokasiTenant,
+        deviceToken,
       ),
     );
   };
@@ -332,6 +338,18 @@ const OrderSummary = ({navigation, route}) => {
               selectItem={method}
             />
             <Gap height={10} />
+            {form.methodUser === 'Dine In' && (
+              <View>
+                <Gap height={10} />
+                <Select
+                  order
+                  label="No. Table"
+                  value={form.noTable}
+                  onValueChange={value => setForm('noTable', value)}
+                  selectItem={noMeja()}
+                />
+              </View>
+            )}
             {form.methodUser === 'Delivery' && (
               <View>
                 <Select

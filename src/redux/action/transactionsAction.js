@@ -410,7 +410,7 @@ export const postTransaction =
               showMessage(err?.message);
             } else {
               showMessage(
-                `${err?.response?.data?.message} on Transaction API` ||
+                `${err?.response?.data?.message} on Transaction send notif API` ||
                   'Terjadi Kesalahan di Transaction API',
               );
             }
@@ -423,9 +423,11 @@ export const postTransaction =
           showMessage(err?.message);
         } else {
           showMessage(
-            `${err?.response?.data?.message} on Transaction API` ||
+            `${err?.response?.data} on Transaction post API` ||
               'Terjadi Kesalahan di Transaction API',
           );
+          Alert.alert('error', `error get data transaction ${err.message}`);
+          Alert.alert('error', `error get data transaction ${err.response}`);
         }
         console.log(err.response);
       });
@@ -508,8 +510,8 @@ export const postTransactionCart =
               showMessage(err?.message);
             } else {
               showMessage(
-                `${err?.response?.data?.message} on post transaction cart API` ||
-                  'Terjadi Kesalahan di post transaction cart API',
+                `${err?.response?.data?.message} on Transaction send notif API` ||
+                  'Terjadi Kesalahan di Transaction API',
               );
             }
           });
@@ -521,9 +523,11 @@ export const postTransactionCart =
           showMessage(err?.message);
         } else {
           showMessage(
-            `${err?.response?.data?.message} on transaction API` ||
+            `${err?.response?.data} on post -- transaction API` ||
               'Terjadi Kesalahan di transaction API',
           );
+          Alert.alert('error', `error get data transaction ${err.response}`);
+          Alert.alert('error', `error get data transaction ${err.message}`);
         }
         console.log('erro pada post transaction cart', err.response);
       });

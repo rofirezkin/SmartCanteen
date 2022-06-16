@@ -410,7 +410,7 @@ export const postTransaction =
               showMessage(err?.message);
             } else {
               showMessage(
-                `${err?.response?.data?.message} on Transaction API` ||
+                `${err?.response?.data?.message} on send token, please login again, Transaction API` ||
                   'Terjadi Kesalahan di Transaction API',
               );
             }
@@ -508,7 +508,7 @@ export const postTransactionCart =
               showMessage(err?.message);
             } else {
               showMessage(
-                `${err?.response?.data?.message} on post transaction cart API` ||
+                `${err?.response?.data?.message} on send token, please login again, Transaction API` ||
                   'Terjadi Kesalahan di post transaction cart API',
               );
             }
@@ -521,7 +521,7 @@ export const postTransactionCart =
           showMessage(err?.message);
         } else {
           showMessage(
-            `${err?.response?.data?.message} on transaction API` ||
+            `${err?.response?.data?.message} on transaction cart API` ||
               'Terjadi Kesalahan di transaction API',
           );
         }

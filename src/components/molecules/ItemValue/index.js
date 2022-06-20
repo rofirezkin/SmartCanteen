@@ -59,7 +59,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: 13,
     color:
-      colorValue == 'CANCEL ORDER' ? 'red' : colorValue ? '#1ABC9C' : 'black',
+      colorValue == 'CANCEL ORDER'
+        ? 'red'
+        : colorValue == 'PENDING'
+        ? '#DAA92C'
+        : colorValue
+        ? '#1ABC9C'
+        : 'black',
     fontFamily: 'Poppins-Regular',
     fontWeight: '600',
 

@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  RefreshControl,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -37,6 +38,7 @@ import useForm from '../../utils/useForm';
 
 const OrderDetail = ({navigation, route}) => {
   const dispatch = useDispatch();
+  const [refresh, setRefresh] = useState(false);
   const [detailData, setDetailData] = useState([]);
   const [token, setToken] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
@@ -49,14 +51,12 @@ const OrderDetail = ({navigation, route}) => {
   const [noTable, setNoTable] = useState('');
   const [statusMenu, setStatusMenu] = useState('');
   const [methodUser, setMethodUser] = useState('');
+  const [kodeUniq, setKodeUniq] = useState();
+  const [statusPembayaranQris, setStatusPembayaranQris] = useState('');
 
   const params = route.params;
 
   const getDetailData = () => {
-    console.log('paramss --------------- ', params);
-    console.log(
-      `apiii ---- ${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=${params.nim}&status=${params.status}`,
-    );
     getData('token')
       .then(resToken => {
         setToken(resToken.value);
@@ -70,7 +70,7 @@ const OrderDetail = ({navigation, route}) => {
             },
           )
           .then(res => {
-            console.log('ressssss ini detail', res.data);
+            console.log('dataaa ', res.data.data);
             setLoadingSkeleton(false);
             const dataOrder = res.data.data;
             setPhotoProofPayment(res.data.data[0].photo_bukti_pembayaran);
@@ -79,6 +79,8 @@ const OrderDetail = ({navigation, route}) => {
             setPaymentMethod(dataOrder[0].is_cash);
             setMethodUser(dataOrder[0].method);
             setStatusMenu(dataOrder[0].status);
+            setKodeUniq(dataOrder[0].kode_uniq);
+            setStatusPembayaranQris(dataOrder[0].status_pembayaran_qris);
 
             setDetailData(res.data.data);
           })
@@ -103,15 +105,16 @@ const OrderDetail = ({navigation, route}) => {
     // dispatch(getDetailProgress(params.nim, params.idTenant));
   }, [params]);
 
-  var totalPrice = 3000;
+  var totalPrice = 0;
   var totalItem = 0;
   for (let i = 0; i < detailData.length; i++) {
     totalPrice += +detailData[i].total;
     totalItem += +detailData[i].total;
   }
+  var taxPersentase = (11 / 100) * totalPrice;
   const dataQr = {
     qrString: qrStringTenant,
-    total: totalPrice,
+    total: totalPrice + taxPersentase + parseInt(kodeUniq),
     namaTenant: params.nama_tenant,
     order: true,
   };
@@ -215,26 +218,35 @@ const OrderDetail = ({navigation, route}) => {
     );
   };
 
-  console.log('prof of payment ', photoProofPayment);
+  // const uploadProofPayment = () => {
+  //   const kodeTransaksi = params.kode_transaksi;
+  //   const idTenant = params.id_tenant;
+  //   dispatch(setLoading(true));
+  //   console.log('dataaaa phh', dataPhoto);
+  //   dispatch(
+  //     uploadPembayaranAction(
+  //       dataPhoto,
+  //       token,
+  //       kodeTransaksi,
+  //       navigation,
+  //       idTenant,
+  //     ),
+  //   );
+  // };
 
-  const uploadProofPayment = () => {
-    const kodeTransaksi = params.kode_transaksi;
-    const idTenant = params.id_tenant;
-    dispatch(setLoading(true));
-    console.log('dataaaa phh', dataPhoto);
-    dispatch(
-      uploadPembayaranAction(
-        dataPhoto,
-        token,
-        kodeTransaksi,
-        navigation,
-        idTenant,
-      ),
-    );
-  };
+  const onRefresh = React.useCallback(() => {
+    setLoadingSkeleton(true);
+    setRefresh(true);
+    getDetailData();
 
+    setRefresh(false);
+  }, []);
   return (
-    <ScrollView>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+      }>
       {params.orderView == true ? (
         <Header
           detail
@@ -301,7 +313,7 @@ const OrderDetail = ({navigation, route}) => {
                   <ItemValue title={`Method `} name={methodUser} />
                   {paymentMethod == 0 && (
                     <Link
-                      title="Show QRIS Tenant"
+                      title="Show QRIS Tenant for payment"
                       linkPayment
                       onPress={() =>
                         navigation.navigate('QRCodeGenerator', dataQr)
@@ -319,12 +331,16 @@ const OrderDetail = ({navigation, route}) => {
                     title={`Total Price ${params.quantity} Item`}
                     value={totalItem}
                   />
-                  <ItemValue title={`Tax`} value="1.000" />
-                  <ItemValue title={`Services Price`} value="2.000" />
-                  <ItemValue title={`Total`} colorValue value={totalPrice} />
+                  <ItemValue title={`Tax 11%`} value={taxPersentase} />
+                  <ItemValue title={`Uniq Code`} name={kodeUniq} />
+                  <ItemValue
+                    title={`Total to be paid + Uniq Code`}
+                    colorValue
+                    value={totalPrice + taxPersentase + parseInt(kodeUniq)}
+                  />
                 </View>
               </View>
-              {paymentMethod == 0 &&
+              {/* {paymentMethod == 0 &&
                 photoProofPayment == null &&
                 params.status !== 'CANCEL ORDER' &&
                 params.status !== 'DELIVERED' && (
@@ -333,8 +349,8 @@ const OrderDetail = ({navigation, route}) => {
                     onPress={uploadProofPayment}
                     fileSelected={fileSelected}
                   />
-                )}
-              {photoProofPayment != '' && photoProofPayment != null && (
+                )} */}
+              {/* {photoProofPayment != '' && photoProofPayment != null && (
                 <View style={styles.container}>
                   <View style={styles.detailCard}>
                     <Link
@@ -346,7 +362,7 @@ const OrderDetail = ({navigation, route}) => {
                     />
                   </View>
                 </View>
-              )}
+              )} */}
 
               <View style={styles.container}>
                 <View style={styles.detailCard}>
@@ -354,9 +370,14 @@ const OrderDetail = ({navigation, route}) => {
                   <Gap height={15} />
 
                   <ItemValue
-                    title={`Kode Transaksi:  ${params.kode_transaksi}`}
+                    title={`Action Canteen:`}
                     colorValue={statusMenu}
                     name={statusMenu}
+                  />
+                  <ItemValue
+                    title={`Qris payment status:`}
+                    colorValue={statusPembayaranQris}
+                    name={statusPembayaranQris}
                   />
 
                   <ItemValue
@@ -364,7 +385,15 @@ const OrderDetail = ({navigation, route}) => {
                     colorValue="DELIVERED"
                     name={paymentMethod == 1 ? 'Cash' : 'QRIS Payment'}
                   />
-                  <ItemValue title={`Created at`} name={params.created_at} />
+                  <ItemValue
+                    title={`Tanggal Transaksi`}
+                    name={params.created_at}
+                  />
+                  <ItemValue
+                    title={`Kode Transaksi`}
+                    name={params.kode_transaksi}
+                  />
+
                   <Gap height={15} />
                 </View>
               </View>

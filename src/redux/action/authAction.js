@@ -60,11 +60,15 @@ export const useRequestLogin =
 
                 console.log('resul role', res.data);
 
-                console.log('deviceToken', device_token);
+                console.log(
+                  'deviceToken --------------',
+                  issueProfile.numberid,
+                );
                 const userData = {
                   nama: issueProfile.user,
                   is_login: '1',
                   device_token: device_token,
+                  nim: issueProfile.numberid,
                 };
                 console.log('user data', userData);
 

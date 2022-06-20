@@ -19,7 +19,7 @@ import {listData, method, noMeja, paymentMethod} from '../../utils/ListData';
 import useForm from '../../utils/useForm';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {getChatTime, getUidTime, showMessage} from '../../utils';
+import {getUidTime, showMessage} from '../../utils';
 import {
   postTransaction,
   postTransactionCart,
@@ -34,18 +34,17 @@ const OrderSummary = ({navigation, route}) => {
     Alert.alert(notif.title, notif.message);
     navigation.replace('MainApp', {screen: 'Transaction'});
   };
-  console.log('data meja ', noMeja());
   const notif = new NotifService(onNotif);
   const params = route.params;
   const deviceToken = params.data.device_token;
   const dispatch = useDispatch();
-  const {cartItems, optionReducer, registerReducer} = useSelector(
-    state => state,
-  );
+  const {cartItems, optionReducer, globalReducer} = useSelector(state => state);
+
   const methodUser = optionReducer;
   const allCart = cartItems.allCart;
   const [getKodeTransaksi, setGetKodeTransaksi] = useState('');
   const [showWarningOpen, SetshowWarningOpen] = useState(false);
+  const [kodeUnik, setKodeUnik] = useState('');
 
   const [userApk, setUserApk] = useState('');
   const [token, setToken] = useState('');
@@ -67,22 +66,32 @@ const OrderSummary = ({navigation, route}) => {
     qrString = params.qr_string;
   }
 
-  console.log('data tnenatt', params.qr_string);
-
   useEffect(() => {
     dispatch(setLoading(true));
     user();
     getData('token').then(resToken => {
       setToken(resToken.value);
       axios
-        .get(`${ENDPOINT_API_SMART_CANTEEN}transactions/getKode`, {
-          headers: {
-            Authorization: `Bearer ${resToken.value}`,
+        .get(
+          `${ENDPOINT_API_SMART_CANTEEN}transactions/getKode?nim=${globalReducer.numberId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${resToken.value}`,
+            },
           },
-        })
+        )
         .then(res => {
           dispatch(setLoading(false));
+          console.log('res dataa --- kode ', res.data.data);
           setGetKodeTransaksi(res.data.data);
+
+          axios
+            .get(
+              `${ENDPOINT_API_SMART_CANTEEN}transactions/getUniqCost?nim=${globalReducer.numberId}`,
+            )
+            .then(res => {
+              setKodeUnik(res.data.data);
+            });
           getData('userApk').then(res => {
             setUserApk(res.value);
           });
@@ -94,8 +103,6 @@ const OrderSummary = ({navigation, route}) => {
     });
   }, []);
 
-  console.log('data parammm order summary', params.data);
-
   const [text, onChangeText] = React.useState('');
 
   const [form, setForm] = useForm({
@@ -106,7 +113,7 @@ const OrderSummary = ({navigation, route}) => {
         : 'Fakultas Ilmu Terapan',
     detailLocation:
       methodUser.method == 'Delivery' ? methodUser.speclocation : '',
-    paymentMethod: 'Cash',
+    paymentMethod: 'QRIS Payment',
     noTable: '1',
   });
   const [profile, setProfile] = useState({
@@ -127,13 +134,16 @@ const OrderSummary = ({navigation, route}) => {
       totalItem += arrayData[i].totalItem;
     }
 
-    const totalPrice = dataNilai + 2000 + 1000;
+    const taxPersentase = (11 / 100) * dataNilai;
+    const totalPrice = dataNilai + taxPersentase;
     if (condition == 'item') {
       return totalItem;
     } else if (condition == 'total') {
       return totalPrice;
     } else if (condition == 'order') {
       return dataNilai;
+    } else if (condition == 'tax') {
+      return taxPersentase;
     }
   };
 
@@ -168,10 +178,18 @@ const OrderSummary = ({navigation, route}) => {
       quantity: arrayData[i].totalItem,
       created_at: dateForTransaction,
       catatan: text == '' ? 'tidak ada' : text,
-      phoneNumber: profile.phone,
+      phoneNumber:
+        profile.phone == undefined
+          ? 'tidak ada no Hp'
+          : profile.phone == ''
+          ? 'tidak ada no Hp'
+          : profile.phone,
       is_cash: form.paymentMethod == 'Cash' ? 1 : 0,
       total: arrayData[i].totalOrder,
       no_table: form.noTable,
+      kode_uniq: kodeUnik,
+      total_order: sumData('total') + kodeUnik,
+      tax: sumData('tax'),
     };
     sendData.push(data);
   }
@@ -199,7 +217,7 @@ const OrderSummary = ({navigation, route}) => {
         navigation,
         paymentMethod,
         notifJSON,
-        sumData('total'),
+        sumData('total') + kodeUnik,
         token,
         qrString,
         namaTenant,
@@ -222,7 +240,7 @@ const OrderSummary = ({navigation, route}) => {
       },
     };
     const notifJSON = JSON.stringify(notifData);
-
+    console.log('send data nomor ', sendData);
     dispatch(
       postTransactionCart(
         sendData,
@@ -233,7 +251,7 @@ const OrderSummary = ({navigation, route}) => {
         allCart,
         notifJSON,
         arrayData,
-        sumData('total'),
+        sumData('total') + kodeUnik,
         token,
         qrString,
         namaTenant,
@@ -250,8 +268,6 @@ const OrderSummary = ({navigation, route}) => {
   const onSubmitDeleteCart = async () => {
     apiSubmitCart();
   };
-
-  console.log('is cash ', form.paymentMethod);
 
   return (
     <ScrollView>
@@ -392,13 +408,16 @@ const OrderSummary = ({navigation, route}) => {
               title={`Subtotal Item (${sumData('item')} Item)`}
               value={sumData('order')}
             />
-            <ItemValue title="Tax 10%" value={1000} />
-            <ItemValue title="Services Price" value={2000} />
+            <ItemValue title="Tax 11%" value={sumData('tax')} />
+            <ItemValue title="Uniq Code" name={kodeUnik} />
+
+            <ItemValue title="Total Price" value={sumData('total')} />
             <ItemValue
-              title="Total Price"
+              title="Total to be paid + Uniq Code"
               colorValue
-              value={sumData('total')}
+              value={sumData('total') + kodeUnik}
             />
+
             <Gap height={15} />
           </View>
         </View>

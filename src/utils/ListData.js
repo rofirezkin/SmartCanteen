@@ -50,11 +50,11 @@ export const method = [
 ];
 
 export const paymentMethod = [
-  {
-    id: 1,
-    label: 'Cash',
-    value: 'Cash',
-  },
+  // {
+  //   id: 1,
+  //   label: 'Cash',
+  //   value: 'Cash',
+  // },
   {
     id: 2,
     label: 'QRIS Payment',

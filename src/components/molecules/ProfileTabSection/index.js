@@ -1,7 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/core';
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {deleteUser, getData, setUser} from '../../../utils/AsyncStoreServices';
 
@@ -41,21 +48,24 @@ const Account = () => {
       nama: userName.nama,
       is_login: '0',
       device_token: userName.device_token,
+      nim: globalReducer.numberId,
     };
 
-    await deleteUser();
+    console.log('ddddaaaata ', userData);
     axios
       .post(`${ENDPOINT_API_SMART_CANTEEN}userapk`, userData)
       .then(res => {
         AsyncStorage.removeItem('dataCart');
         AsyncStorage.removeItem('token');
         AsyncStorage.removeItem('userApk');
+        deleteUser();
         dispatch(setLoading(false));
         navigation.reset({index: 0, routes: [{name: 'SignIn'}]});
       })
       .catch(err => {
         dispatch(setLoading(false));
-        console.log('errorr di bagian post userAPK', err);
+        Alert.alert(`${err?.response?.data?.data} in logout API`);
+        console.log('errorr di bagian post userAPK', err?.response.data.data);
       });
   };
   return (

@@ -311,7 +311,7 @@ const OrderDetail = ({navigation, route}) => {
                     />
                   )}
                   <ItemValue title={`Method `} name={methodUser} />
-                  {paymentMethod == 0 && (
+                  {paymentMethod == 0 && statusPembayaranQris === 'PENDING' && (
                     <Link
                       title="Show QRIS Tenant for payment"
                       linkPayment
@@ -376,8 +376,16 @@ const OrderDetail = ({navigation, route}) => {
                   />
                   <ItemValue
                     title={`Qris payment status:`}
-                    colorValue={statusPembayaranQris}
-                    name={statusPembayaranQris}
+                    colorValue={
+                      params.status === 'CANCEL ORDER'
+                        ? 'CANCEL ORDER'
+                        : statusPembayaranQris
+                    }
+                    name={
+                      params.status === 'CANCEL ORDER'
+                        ? 'CANCEL ORDER'
+                        : statusPembayaranQris
+                    }
                   />
 
                   <ItemValue
@@ -399,14 +407,15 @@ const OrderDetail = ({navigation, route}) => {
               </View>
 
               <View style={styles.detailCard}>
-                {params.status === 'PENDING' && (
-                  <Button
-                    label="Cancel My Order"
-                    textColor="red"
-                    color="white"
-                    onPress={onCancel}
-                  />
-                )}
+                {params.status === 'PENDING' &&
+                  statusPembayaranQris === 'PENDING' && (
+                    <Button
+                      label="Cancel My Order"
+                      textColor="red"
+                      color="white"
+                      onPress={onCancel}
+                    />
+                  )}
                 {params.status === 'COMPLETED' && (
                   <Button
                     label="Accept My Order"

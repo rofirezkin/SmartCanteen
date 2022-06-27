@@ -6,10 +6,9 @@ import {
   StyleSheet,
   Text,
   RefreshControl,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -19,18 +18,9 @@ import {
   ItemListFood,
   ItemValue,
   Link,
-  UploadProofPayment,
 } from '../../components';
-import {
-  skeletonChooseFood,
-  skeletonDetailFood,
-  skeletonDetailTransaction,
-} from '../../components/skeleton/skeletonHome';
-import {
-  postConfirmAndFeddbackTenant,
-  setLoading,
-  uploadPembayaranAction,
-} from '../../redux/action';
+import {skeletonDetailTransaction} from '../../components/skeleton/skeletonHome';
+import {setLoading, setLoadingSkeleton} from '../../redux/action';
 import {showMessage} from '../../utils';
 import {ENDPOINT_API_SMART_CANTEEN} from '../../utils/API/httpClient';
 import {getData} from '../../utils/AsyncStoreServices';
@@ -42,8 +32,8 @@ const OrderDetail = ({navigation, route}) => {
   const [detailData, setDetailData] = useState([]);
   const [token, setToken] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
-  const [dataPhoto, setDataPhoto] = useState('');
-  const [fileSelected, setFileSelected] = useState(false);
+  // const [dataPhoto, setDataPhoto] = useState('');
+  // const [fileSelected, setFileSelected] = useState(false);
   const [errorGetData, setErrorGetData] = useState(false);
   const [loadingSkeleton, setLoadingSkeleton] = useState(true);
   const [photoProofPayment, setPhotoProofPayment] = useState(null);
@@ -62,7 +52,7 @@ const OrderDetail = ({navigation, route}) => {
         setToken(resToken.value);
         axios
           .get(
-            `${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=${params.nim}&status=${params.status}`,
+            `${ENDPOINT_API_SMART_CANTEEN}transactions/user/detail?kode_transaksi=${params.kode_transaksi}&nim=${params.nim}`,
             {
               headers: {
                 Authorization: `Bearer ${resToken.value}`,
@@ -125,7 +115,7 @@ const OrderDetail = ({navigation, route}) => {
     dispatch(setLoading(true));
     const dataSubmit = await axios({
       method: 'POST',
-      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus?kode_transaksi=${params.kode_transaksi}&status=CANCEL`,
+      url: `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus?kode_transaksi=${params.kode_transaksi}`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -176,10 +166,10 @@ const OrderDetail = ({navigation, route}) => {
     const status = {
       status: 'FEEDBACK',
     };
-    params.status = 'FEEDBACK';
+
     axios
       .post(
-        `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus?kode_transaksi=${params.kode_transaksi}&status=FEEDBACK`,
+        `${ENDPOINT_API_SMART_CANTEEN}transactions/user/updateStatus?kode_transaksi=${params.kode_transaksi}`,
         status,
         {
           headers: {
@@ -198,25 +188,25 @@ const OrderDetail = ({navigation, route}) => {
       });
   };
 
-  const addPhoto = () => {
-    launchImageLibrary(
-      {
-        quality: 0.5,
-        includeBase64: true,
-      },
-      response => {
-        if (response.didCancel || response.error) {
-          showMessage('Anda tidak memilih photo');
-        } else {
-          console.log('reessspone image', response);
-          const source = `data:${response.assets[0].type};base64, ${response.assets[0].base64}`;
-          console.log('urri', response.assets[0]);
-          setDataPhoto(source);
-          setFileSelected(true);
-        }
-      },
-    );
-  };
+  // const addPhoto = () => {
+  //   launchImageLibrary(
+  //     {
+  //       quality: 0.5,
+  //       includeBase64: true,
+  //     },
+  //     response => {
+  //       if (response.didCancel || response.error) {
+  //         showMessage('Anda tidak memilih photo');
+  //       } else {
+  //         console.log('reessspone image', response);
+  //         const source = `data:${response.assets[0].type};base64, ${response.assets[0].base64}`;
+  //         console.log('urri', response.assets[0]);
+  //         setDataPhoto(source);
+  //         setFileSelected(true);
+  //       }
+  //     },
+  //   );
+  // };
 
   // const uploadProofPayment = () => {
   //   const kodeTransaksi = params.kode_transaksi;

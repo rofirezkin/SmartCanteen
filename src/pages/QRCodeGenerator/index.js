@@ -134,6 +134,7 @@ const QRCodeGenerator = ({navigation, route}) => {
     });
   };
 
+  console.log('userr dataa ---------', paramData.detailData[0]);
   return (
     <View style={styles.page}>
       {paramData.order && (

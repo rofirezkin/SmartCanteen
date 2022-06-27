@@ -45,7 +45,10 @@ const InProgress = () => {
   const {numberId} = useSelector(state => state.globalReducer);
 
   useEffect(() => {
-    dispatch(getInProgress(numberId));
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(getInProgress(numberId));
+    });
+    return unsubscribe;
   }, []);
 
   const onRefresh = () => {
@@ -107,7 +110,10 @@ const Feedback = () => {
   const {numberId} = useSelector(state => state.globalReducer);
 
   useEffect(() => {
-    dispatch(getFeedbackOrder(numberId));
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(getFeedbackOrder(numberId));
+    });
+    return unsubscribe;
   }, []);
 
   const onRefresh = () => {

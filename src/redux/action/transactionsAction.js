@@ -376,7 +376,7 @@ export const postTransaction =
             },
           })
           .then(res => {
-            notif.localNotif();
+            notif.localNotif(detailData[0]);
 
             const dataOrder = {
               methodPayment: form.paymentMethod,
@@ -474,7 +474,8 @@ export const postTransactionCart =
           })
           .then(res => {
             dispatch(setLoading(false));
-            notif.localNotif();
+            notif.localNotif(detailData[0]);
+
             delete allCart[arrayData[0].id_tenant];
 
             const dataOrder = {

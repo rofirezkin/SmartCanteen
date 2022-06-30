@@ -51,7 +51,7 @@ const MainApp = ({route}) => {
   const {numberId} = useSelector(state => state.globalReducer);
   const dispatch = useDispatch();
 
-  React.useCallback(() => {
+  useEffect(() => {
     dispatch(getInProgressBadges(numberId));
   }, [numberId]);
   var cntTransaction = 0;

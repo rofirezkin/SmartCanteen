@@ -76,7 +76,7 @@ const Home = ({navigation}) => {
         'Notification caused app to open from background state:',
         remoteMessage.data,
       );
-      navigation.replace('MainApp', {screen: 'Transaction'});
+      navigation.navigate('OrderDetail', remoteMessage.data);
     });
 
     // Check whether an initial notification is available
@@ -86,9 +86,9 @@ const Home = ({navigation}) => {
         if (remoteMessage) {
           console.log(
             'Notification caused app to open from quit state:',
-            remoteMessage.notification,
+            remoteMessage.data,
           );
-          navigation.replace('MainApp', {screen: 'Transaction'});
+          navigation.navigate('OrderDetail', remoteMessage.data);
           setInitialRoute('MainApp'); // e.g. "Settings"
         }
       });

@@ -30,15 +30,12 @@ import NotifService from '../../utils/notification/NotifService';
 import axios from 'axios';
 
 const OrderSummary = ({navigation, route}) => {
-  const onNotif = notif => {
-    Alert.alert(notif.title, notif.message);
-    navigation.replace('MainApp', {screen: 'Transaction'});
-  };
-  const notif = new NotifService(onNotif);
+  const notif = new NotifService();
   const params = route.params;
   const deviceToken = params.data.device_token;
   const dispatch = useDispatch();
-  const {cartItems, optionReducer, globalReducer} = useSelector(state => state);
+  const {cartItems, optionReducer, globalReducer, registerReducer} =
+    useSelector(state => state);
 
   const methodUser = optionReducer;
   const allCart = cartItems.allCart;
@@ -194,10 +191,26 @@ const OrderSummary = ({navigation, route}) => {
     sendData.push(data);
   }
 
+  console.log('device token userr -------- ', registerReducer.device_token);
   const apiSubmit = async () => {
+    const dataForDetailTenant = {
+      status: 'PENDING',
+      kode_transaksi: getKodeTransaksi,
+      device_token: registerReducer.device_token,
+      nama_pelanggan: profile.fullName,
+      quantity: sumData('item'),
+      method:
+        form.methodUser == 'Delivery'
+          ? `${form.methodUser}, location : ${form.location}, detail location : ${form.detailLocation}`
+          : form.methodUser,
+      created_at: dateForTransaction,
+      is_cash: form.paymentMethod == 'Cash' ? 1 : 0,
+    };
+    console.log('data for tenant --- ', dataForDetailTenant);
     const notifData = {
       to: deviceToken,
       collapse_key: 'type_a',
+      data: dataForDetailTenant,
       notification: {
         android: {
           sound: 'default',
@@ -227,9 +240,24 @@ const OrderSummary = ({navigation, route}) => {
     );
   };
   const apiSubmitCart = async () => {
+    const dataForDetailTenant = {
+      status: 'PENDING',
+      kode_transaksi: getKodeTransaksi,
+      device_token: registerReducer.device_token,
+      nama_pelanggan: profile.fullName,
+      quantity: sumData('item'),
+      method:
+        form.methodUser == 'Delivery'
+          ? `${form.methodUser}, location : ${form.location}, detail location : ${form.detailLocation}`
+          : form.methodUser,
+      created_at: dateForTransaction,
+      is_cash: form.paymentMethod == 'Cash' ? 1 : 0,
+    };
+    console.log('data for tenant --- ', dataForDetailTenant);
     const notifData = {
       to: params.device_token,
       collapse_key: 'type_a',
+      data: dataForDetailTenant,
       notification: {
         android: {
           sound: 'default',

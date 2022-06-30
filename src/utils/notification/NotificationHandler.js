@@ -1,11 +1,28 @@
 import {useNavigation} from '@react-navigation/native';
 import {Component} from 'react';
 import PushNotification from 'react-native-push-notification';
+import {navigate} from '../../RootNavigation';
+import NotifService from './NotifService';
 
 class NotificationHandler extends Component {
   onNotification(notification) {
     console.log('NotificationHandler:', notification);
-
+    const notifData = new NotifService();
+    if (
+      notification.subtitle !== 'Anda Telah Memesan Makanan' &&
+      notification.userInteraction === false
+    ) {
+      notifData.localNotifForeground(
+        notification.data,
+        notification.title,
+        notification.message,
+      );
+    }
+    if (notification.userInteraction) {
+      // onAction replacement here
+      console.log('NotificationHandler: keduaaa ', notification.data);
+      navigate('OrderDetail', notification.data);
+    }
     if (typeof this._onNotification === 'function') {
       this._onNotification(notification);
     }
@@ -49,6 +66,15 @@ PushNotification.configure({
 
   // (required) Called when a remote or local notification is opened or received
   onNotification: handler.onNotification.bind(handler),
+  // onNotification: function (notification) {
+  //   console.log('NOTIFICATION:', notification);
+  //   const notifData = new NotifService();
+  //   notifData.localNotifForeground(notification.title, notification.message);
+  //   if (notification.userInteraction) {
+  //     // onAction replacement here
+  //     navigate('MainApp');
+  //   }
+  // },
 
   // (optional) Called when Action is pressed (Android)
   onAction: handler.onAction.bind(handler),
